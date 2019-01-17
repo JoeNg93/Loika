@@ -1,6 +1,8 @@
 # Loika
 
-## How to start
+## Front-end development
+
+First of all, run `cd front-end/` in your Terminal, then do the steps below:
 
 1. Run `npm install` to install dependencies
 2. Run `npm start` to start the server, please keep it running
