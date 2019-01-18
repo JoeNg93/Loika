@@ -1,0 +1,28 @@
+{
+  "name": "loika",
+  "version": "1.0.0",
+  "description": "Back-end side for loika",
+  "scripts": {
+    "start": "nodemon -e js,graphql -x node src/index.js",
+    "dev": "nodemon -e js,graphql -x node --inspect src/index.js",
+    "test": "jest",
+    "deploy": "prisma deploy --env-file variables.env"
+  },
+  "keywords": [
+    "loika"
+  ],
+  "author": "Nghi Nguyen",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^6.2.0",
+    "graphql": "^14.1.1",
+    "graphql-yoga": "^1.17.0",
+    "jsonwebtoken": "^8.4.0",
+    "nodemon": "^1.18.9",
+    "npm-run-all": "^4.1.5",
+    "prisma": "^1.24.0",
+    "prisma-binding": "^2.2.14",
+    "stripe": "^6.20.1"
+  }
+}
