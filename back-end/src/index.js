@@ -1,5 +1,6 @@
 require('dotenv').config({ path: 'variables.env' });
 const createServer = require('./createServer');
+const { formatError } = require('apollo-errors');
 const db = require('./db');
 
 const server = createServer();
@@ -13,6 +14,7 @@ server.start(
       credentials: true,
       origin: process.env.FRONTEND_URL,
     },
+    formatError,
   },
   (deets) => {
     console.log(`Server is now running on port http:/localhost:${deets.port}`);
