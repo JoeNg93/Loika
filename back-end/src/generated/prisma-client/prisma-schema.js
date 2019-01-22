@@ -1,4 +1,5 @@
-type Address {
+module.exports = {
+        typeDefs: /* GraphQL */ `type Address {
   id: ID!
   addressLine1: String!
   addressLine2: String
@@ -1719,3 +1720,6 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
 }
+`
+      }
+    
