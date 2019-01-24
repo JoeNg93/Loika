@@ -22,13 +22,13 @@ export default class SweetCarousel extends React.Component {
       <Animated.View 
           style={[ styles.container,
           { transform: [
-        {
-          scale: animatedValue.interpolate({
-            inputRange: [index - 1, index, index + 1],
-            outputRange: [.6, 1.0, .6],
-            extrapolate: 'clamp',
-          }),
-        }
+          {
+            scale: animatedValue.interpolate({
+              inputRange: [index - 1, index, index + 1],
+              outputRange: [.6, 1.0, .6],
+              extrapolate: 'clamp',
+            }),
+          }
       ],
     }]}>
         <View>
@@ -58,17 +58,27 @@ export default class SweetCarousel extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: width,
-    height: width*1.5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'visible'
-  },
+  container: Platform.select({
+    ios: {
+      width: width,
+      height: width*1.5,
+      justifyContent: 'center',
+      alignItems: 'center',
+      overflow: 'visible',
+      paddingTop: 70
+    },
+    android: {
+      width: width,
+      height: width*1.5,
+      justifyContent: 'center',
+      alignItems: 'center',
+      overflow: 'visible'
+    }
+  }),
 	image: Platform.select({
     ios: {
-      width: width - 95,
-      height: width - 75,
+      width: width - 70,
+      height: width - 50,
       overflow: 'visible',
     },
     android: {
@@ -77,30 +87,54 @@ const styles = StyleSheet.create({
       overflow: 'visible',
     },
   }),
-  priceTag: {
-    position: 'absolute',
-    width: 75,
-    height: 75,
-    left: 217,
-    top: -30,
-		borderRadius: 38,
-    backgroundColor: '#AA3C3B',
-    shadowRadius: 4,
-    shadowOffset: {height: 0, width: 4},
-    shadowColor: 'rgba(91, 91, 91, 0.25)',
-    elevation: 4
-  },
-  priceText: {
-    paddingTop: 22,
-    paddingLeft: 10,
-
-    //fontFamily: 'Raleway',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 22,
-
-    color: '#FFFFFF',
-  },
+  priceTag: Platform.select({
+    ios: {
+      position: 'absolute',
+      width: 70,
+      height: 70,
+      left: 197,
+      top: -10,
+      borderRadius: 38,
+      backgroundColor: '#AA3C3B',
+      shadowRadius: 4,
+      shadowOffset: {height: 0, width: 4},
+      shadowColor: 'rgba(91, 91, 91, 0.25)'
+    },
+    android: {
+      position: 'absolute',
+      width: 75,
+      height: 75,
+      left: 217,
+      top: -30,
+      borderRadius: 38,
+      backgroundColor: '#AA3C3B',
+      elevation: 4
+    }
+  }),
+  priceText: Platform.select({
+    ios: {
+      paddingTop: 22,
+      paddingLeft: 10,
+  
+      //fontFamily: 'Raleway',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      fontSize: 20,
+  
+      color: '#FFFFFF',
+    },
+    android: {
+      paddingTop: 22,
+      paddingLeft: 10,
+  
+      //fontFamily: 'Raleway',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      fontSize: 22,
+  
+      color: '#FFFFFF',
+    }
+  }),
   textTag: {
     width: 127,
     height: 27,

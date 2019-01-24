@@ -4,7 +4,8 @@ import {
   View,
   Dimensions,
   Image,
-  Text
+  Text,
+  TouchableOpacity
 } from "react-native";
 import { Constants } from 'expo';
 import SideSwipe from 'react-native-sideswipe';
@@ -34,22 +35,26 @@ export default class SubscriptionSelectionScreen extends React.Component {
 				<View style={{flex: 1}}>
           <View style={styles.circle}></View>
           <View style={styles.topBar}>
-            <Image 
-              style={{width: 16, height: 16}}
-              source={require('../assets/images/previous.png')}
+            <TouchableOpacity>
+              <Image 
+                style={{width: 16, height: 16}}
+                source={require('../assets/images/previous.png')}
               />
+            </TouchableOpacity>
             <Text style={styles.topText}>Choose your subscription</Text>
-            <Image 
-              style={{width: 18, height: 18}}
-              source={require('../assets/images/cart.png')}
+            <TouchableOpacity>
+              <Image 
+                style={{width: 18, height: 18}}
+                source={require('../assets/images/cart.png')}
               />
+            </TouchableOpacity>
           </View>
         </View>
 				<View style={{flex: 9}}>
           <SideSwipe
             index={this.state.currentIndex}
             itemWidth={Carousel.WIDTH}
-            threshold={Carousel.WIDTH / 6}
+            threshold={5}
             style={{ width }}
             contentContainerStyle={{  paddingTop: 20 }}
             data={boxes}
@@ -68,20 +73,20 @@ export default class SubscriptionSelectionScreen extends React.Component {
           />
         </View>
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <View style={{alignItems: 'center'}}>
+          <TouchableOpacity style={{alignItems: 'center'}}>
             <View style={styles.plusCircle}>
               <Image
                 style={styles.plus}
                 source={require('../assets/images/plus.png')}
               />
             </View>
-          </View>
+          </TouchableOpacity>
           <Text style={styles.total}>TOTAL: 549€</Text>
         </View>
         <View style={[{flex: 1}, styles.bottom]}>
-          <View style={styles.orderButton}>
+          <TouchableOpacity style={styles.orderButton}>
             <Text style={styles.orderText}>Confirm order</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 			</View>
 		);
