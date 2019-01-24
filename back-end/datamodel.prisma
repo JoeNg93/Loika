@@ -1,18 +1,11 @@
 type Image {
   id: ID! @unique
-  itemId: String
   url: String!
-}
-
-type Unit {
-  id: ID! @unique
-  label: String!
 }
 
 type Address {
   id: ID! @unique
-  addressLine1: String!
-  addressLine2: String
+  address: String!
   city: String!
   postcode: Int
   country: String!
@@ -24,35 +17,9 @@ type User {
   email: String!
   phone: String!
   billingAddress: Address! @relation(name: "UserBillingAddress")
-  shippingAddress: Address! @relation(name: "UserShippingAddress")
+  shippingAddress: [Address!]! @relation(name: "UserShippingAddresses")
   paymentId: String
   avatar: Image
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type Farm {
-  id: ID! @unique
-  title: String!
-  email: String!
-  phone: String
-  website: String
-  address: Address
-  thumbnailImage: Image! @relation(name: "FarmThumbnailImage")
-  largeImages: [Image!]! @relation(name: "FarmLargesImages")
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type Product {
-  id: ID! @unique
-  title: String!
-  shortDescription: String!
-  longDescription: String!
-  thumbnailImage: Image! @relation(name: "ProductThumbnailImage")
-  largeImages: [Image!]! @relation(name: "ProductLargesImages")
-  unit: Unit!
-  farm: Farm
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -63,30 +30,22 @@ type Subscription {
   shortDescription: String!
   longDescription: String!
   totalPrice: Int!
-  mealPrice: Int
+  mealPrice: Int!
   thumbnailImage: Image! @relation(name: "SubscriptionThumbnailImage")
-  largeImages: [Image!] @relation(name: "SubscriptionLargesImages")
-  items: [SubscriptionItem]!
+  largeImage: Image! @relation(name: "SubscriptionLargeImage")
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-type SubscriptionItem {
-  id: ID! @unique
-  subscriptionId: String!
-  productId: String!
-  quantity: Int!
-  price: Int!
-}
-
 type Order {
   id: ID! @unique
-  userId: String!
-  subscriptionId: String!
+  user: User!
+  subscriptions: [Subscription!]!
   billingAddress: Address! @relation(name: "OrderBillingAddress")
   shippingAddress: Address! @relation(name: "OrderShippingAddress")
-  deliveryDate: DateTime
-  paymentDate: DateTime
+  deliveryTime: String!
+  deliveryDayOfWeek: String!
+  paymentDate: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
