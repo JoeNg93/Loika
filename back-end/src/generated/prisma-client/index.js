@@ -9,10 +9,6 @@ var models = [
     embedded: false
   },
   {
-    name: "Farm",
-    embedded: false
-  },
-  {
     name: "Image",
     embedded: false
   },
@@ -21,19 +17,7 @@ var models = [
     embedded: false
   },
   {
-    name: "Product",
-    embedded: false
-  },
-  {
     name: "Subscription",
-    embedded: false
-  },
-  {
-    name: "SubscriptionItem",
-    embedded: false
-  },
-  {
-    name: "Unit",
     embedded: false
   },
   {
