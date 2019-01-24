@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, View, Text, Image } from 'react-native';
-import { LinearGradient } from 'expo';
-// import OnboardingText from './OnboardingText';
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 const styles = StyleSheet.create({
@@ -17,6 +14,24 @@ const styles = StyleSheet.create({
       height: 320,
       marginTop: 15,
       resizeMode: 'contain'
+    },
+    image2: {
+        width: 320,
+        height: 320,
+        marginTop: 15,
+        resizeMode: 'contain'
+    },
+    image3: {
+        width: 320,
+        height: 320,
+        marginTop: 15,
+        resizeMode: 'contain'
+    },
+    image4: {
+        width: 320,
+        height: 320,
+        marginTop: 15,
+        resizeMode: 'contain'
     },
     text: {
       color: '#000000',
@@ -55,37 +70,33 @@ const slides = [
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt eiusmod tempor eiusmod tempor',
       image: require('../assets/images/slide1.png'),
       imageStyle: styles.image,
-      colors: ['#282828', '#000000'],
     },
     {
       key: 'somethun1',
       title: 'We pick it up from farm',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt eiusmod tempor eiusmod tempor',
       image: require('../assets/images/slide2.png'),
-      imageStyle: styles.image,
-      colors: ['#A3A1FF', '#3A3897'],
+      imageStyle: styles.image2,
     },
     {
       key: 'somethun2',
       title: 'We deliver it to you',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt eiusmod tempor eiusmod tempor',
       image: require('../assets/images/slide3.png'),
-      imageStyle: styles.image,
-      colors: ['#29ABE2', '#4F00BC'],
+      imageStyle: styles.image3,
     },
     {
       key: 'somethun3',
       title: 'Enjoy the freshness',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt eiusmod tempor eiusmod tempor',
       image: require('../assets/images/slide4.png'),
-      imageStyle: styles.image,
-      colors: ['#29ABE2', '#4F00BC'],
+      imageStyle: styles.image4,
       hidePagination: true
     },
   ];
   
 
-class OnboardingTextContainer extends Component {
+class OnboardingScreen extends Component {
     _renderItem = props => (
         <View style={[styles.mainContent, {
             paddingTop: props.topSpacer,
@@ -116,4 +127,4 @@ class OnboardingTextContainer extends Component {
     }
 }
 
-export default OnboardingTextContainer;
+export default OnboardingScreen;
