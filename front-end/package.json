@@ -5,7 +5,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
+    "test": "node ./node_modules/jest/bin/jest.js --watchAll",
+    "postinstall": "cp ./lib_patches/react-native-app-intro-slider/AppIntroSlider.js ./node_modules/react-native-app-intro-slider/AppIntroSlider.js"
   },
   "jest": {
     "preset": "jest-expo"
