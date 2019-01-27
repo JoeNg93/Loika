@@ -2,10 +2,24 @@ require('dotenv').config({ path: 'variables.env' });
 const createServer = require('./createServer');
 const { formatError } = require('apollo-errors');
 
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+
 const server = createServer();
 
-// TODO Use express middlware to handle cookies (JWT)
-// TODO Use express middlware to populate current user
+// Use express middlware to handle cookies (JWT)
+server.express.use(cookieParser());
+// Use express middlware to populate current user
+// Decode JWT to get user id per each request
+server.express.use((req, res, next) => {
+  const { token } = req.cookies;
+  if (token) {
+    const { userId } = jwt.verify(token, process.env.APP_SECRET);
+    // put the userId onto the req for future requests to access
+    req.userId = userId;
+  }
+  next();
+});
 
 server.start(
   {

@@ -166,6 +166,15 @@ input AddressUpdateManyWithWhereNestedInput {
   data: AddressUpdateManyDataInput!
 }
 
+input AddressUpdateOneInput {
+  create: AddressCreateInput
+  update: AddressUpdateDataInput
+  upsert: AddressUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: AddressWhereUniqueInput
+}
+
 input AddressUpdateOneRequiredInput {
   create: AddressCreateInput
   update: AddressUpdateDataInput
@@ -589,6 +598,11 @@ type PageInfo {
   endCursor: String
 }
 
+enum Permission {
+  ADMIN
+  USER
+}
+
 type Query {
   address(where: AddressWhereUniqueInput!): Address
   addresses(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address]!
@@ -927,8 +941,12 @@ type User {
   id: ID!
   name: String!
   email: String!
-  phone: String!
-  billingAddress: Address!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: [Permission!]!
+  phone: String
+  billingAddress: Address
   shippingAddress(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address!]
   paymentId: String
   avatar: Image
@@ -945,8 +963,12 @@ type UserConnection {
 input UserCreateInput {
   name: String!
   email: String!
-  phone: String!
-  billingAddress: AddressCreateOneInput!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  phone: String
+  billingAddress: AddressCreateOneInput
   shippingAddress: AddressCreateManyInput
   paymentId: String
   avatar: ImageCreateOneInput
@@ -955,6 +977,10 @@ input UserCreateInput {
 input UserCreateOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
+}
+
+input UserCreatepermissionsInput {
+  set: [Permission!]
 }
 
 type UserEdge {
@@ -969,6 +995,12 @@ enum UserOrderByInput {
   name_DESC
   email_ASC
   email_DESC
+  password_ASC
+  password_DESC
+  resetToken_ASC
+  resetToken_DESC
+  resetTokenExpiry_ASC
+  resetTokenExpiry_DESC
   phone_ASC
   phone_DESC
   paymentId_ASC
@@ -982,8 +1014,12 @@ enum UserOrderByInput {
 input UserUpdateDataInput {
   name: String
   email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
   phone: String
-  billingAddress: AddressUpdateOneRequiredInput
+  billingAddress: AddressUpdateOneInput
   shippingAddress: AddressUpdateManyInput
   paymentId: String
   avatar: ImageUpdateOneInput
@@ -992,8 +1028,12 @@ input UserUpdateDataInput {
 input UserUpdateInput {
   name: String
   email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
   phone: String
-  billingAddress: AddressUpdateOneRequiredInput
+  billingAddress: AddressUpdateOneInput
   shippingAddress: AddressUpdateManyInput
   paymentId: String
   avatar: ImageUpdateOneInput
@@ -1002,6 +1042,10 @@ input UserUpdateInput {
 input UserUpdateManyMutationInput {
   name: String
   email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
   phone: String
   paymentId: String
 }
@@ -1011,6 +1055,10 @@ input UserUpdateOneRequiredInput {
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
   connect: UserWhereUniqueInput
+}
+
+input UserUpdatepermissionsInput {
+  set: [Permission!]
 }
 
 input UserUpsertNestedInput {
@@ -1061,6 +1109,42 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  resetToken: String
+  resetToken_not: String
+  resetToken_in: [String!]
+  resetToken_not_in: [String!]
+  resetToken_lt: String
+  resetToken_lte: String
+  resetToken_gt: String
+  resetToken_gte: String
+  resetToken_contains: String
+  resetToken_not_contains: String
+  resetToken_starts_with: String
+  resetToken_not_starts_with: String
+  resetToken_ends_with: String
+  resetToken_not_ends_with: String
+  resetTokenExpiry: Float
+  resetTokenExpiry_not: Float
+  resetTokenExpiry_in: [Float!]
+  resetTokenExpiry_not_in: [Float!]
+  resetTokenExpiry_lt: Float
+  resetTokenExpiry_lte: Float
+  resetTokenExpiry_gt: Float
+  resetTokenExpiry_gte: Float
   phone: String
   phone_not: String
   phone_in: [String!]
@@ -1117,6 +1201,7 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
+  email: String
 }
 `
       }
