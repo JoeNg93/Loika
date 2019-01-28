@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { prisma } = require("../generated/prisma-client");
 
 const Mutations = {
@@ -17,8 +18,13 @@ const Mutations = {
       },
       info
     );
+    // create JWT
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
+      expiresIn: 1000 * 60 * 60 * 24 * 30
+    });
 
-    return user;
+    // Return token only
+    return token;
   },
 
   async signin(parent, { email, password }, ctx, info) {
@@ -32,9 +38,13 @@ const Mutations = {
     if (!valid) {
       throw new Error("Invalid Password!");
     }
-    // 3. Return the user
-    return user;
-  }
+    // 3. generate the JWT Token
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
+      expiresIn: 1000 * 60 * 60 * 24 * 30
+    });
+    // 4. return token only
+    return token;
+  },
 };
 
 module.exports = Mutations;
