@@ -7,12 +7,10 @@ const cookieParser = require('cookie-parser');
 
 const server = createServer();
 
-// Use express middlware to handle cookies (JWT)
-server.express.use(cookieParser());
 // Use express middlware to populate current user
 // Decode JWT to get user id per each request
 server.express.use((req, res, next) => {
-  const { token } = req.cookies;
+  const token = req.headers.Authorization;
   if (token) {
     const { userId } = jwt.verify(token, process.env.APP_SECRET);
     // put the userId onto the req for future requests to access

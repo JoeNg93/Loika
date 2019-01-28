@@ -1,5 +1,4 @@
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const { prisma } = require("../generated/prisma-client");
 
 const Mutations = {
@@ -18,13 +17,6 @@ const Mutations = {
       },
       info
     );
-    // create JWT
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-    // set JWT as cookie in res
-    ctx.response.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 30 // 30 days
-    });
 
     return user;
   },
@@ -40,20 +32,8 @@ const Mutations = {
     if (!valid) {
       throw new Error("Invalid Password!");
     }
-    // 3. generate the JWT Token
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-    // 4. Set the cookie with the token
-    ctx.response.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 30 // 30 days
-    });
-    // 5. Return the user
+    // 3. Return the user
     return user;
-  },
-
-  signout(parent, args, ctx, info) {
-    ctx.response.clearCookie("token");
-    return { message: "Goodbye!" };
   }
 };
 
