@@ -11,4 +11,8 @@ export default {
   warningText: '#666804',
   noticeBackground: tintColor,
   noticeText: '#fff',
+
+  mediumCarmine: '#AA3C3B',
+  lightCardboard: '#E8DFCA',
+  macaroniCheese: '#FCB79A',
 };
