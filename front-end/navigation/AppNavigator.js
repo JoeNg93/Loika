@@ -1,7 +1,7 @@
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import MainTabNavigator from './MainTabNavigator';
-import AuthStack from '../screens/AuthScreens/AuthStack';
+import MainScreenNavigator from '../screens/MainScreens/MainScreenNavigator';
+import AuthNavigator from '../screens/AuthScreens/AuthNavigator';
 import OnboardingScreen from '../screens/OnboardingScreens/OnboardingScreen';
 import EntryScreen from '../screens/EntryScreen/EntryScreen';
 
@@ -12,8 +12,8 @@ export default createAppContainer(
       // Read more at https://reactnavigation.org/docs/en/auth-flow.html
       Entry: EntryScreen,
       Onboarding: OnboardingScreen,
-      Auth: AuthStack,
-      Main: MainTabNavigator,
+      Auth: AuthNavigator,
+      Main: MainScreenNavigator,
     },
     { initialRouteName: 'Entry' }
   )
