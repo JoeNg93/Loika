@@ -3,7 +3,7 @@ import LoginScreen from './LoginScreen';
 
 export default class LoginScreenContainer extends React.Component {
   onPressLogin = () => {
-    console.log('LOGIN');
+    this.props.navigation.navigate('Main');
   };
 
   onPressSignup = () => {
