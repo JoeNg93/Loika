@@ -84,12 +84,6 @@ const Mutations = {
     // 2. Create a new address
     const address = await prisma.createAddress(
       {
-        // This is how to create a relationship between the Address and the User
-        user: {
-          connect: {
-            id: ctx.request.userId
-          }
-        },
         ...args
       },
       info
