@@ -23,9 +23,9 @@ const MySubscriptionStack = createStackNavigator(
   }
 );
 
-MySubscriptionStack.navigationOptions = {
-  tabBarLabel: 'My Subscriptions',
-  tabBarIcon: ({ focused }) => (
+MySubscriptionStack.navigationOptions = ({ navigation }) => {
+  const tabBarLabel = 'My Subscriptions';
+  const tabBarIcon = ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
@@ -34,7 +34,10 @@ MySubscriptionStack.navigationOptions = {
           : 'md-information-circle'
       }
     />
-  ),
+  );
+  const tabBarVisible = navigation.state.index === 0 ? true : false;
+
+  return { tabBarLabel, tabBarIcon, tabBarVisible };
 };
 
 const OrderHistoryStack = createStackNavigator({
