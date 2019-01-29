@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
-export default function MySubscriptionScreen(props) {
+export default function MySubscriptionScreen({ onPressAddSubscription }) {
   return (
     <View style={styles.container}>
       <Text>MY SUBSCRIPTION</Text>
+      <Button onPress={onPressAddSubscription} title="Add Subscription" />
     </View>
   );
 }

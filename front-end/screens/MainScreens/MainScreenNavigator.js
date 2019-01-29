@@ -6,13 +6,22 @@ import {
 } from 'react-navigation';
 
 import TabBarIcon from '../../components/TabBarIcon';
-import MySubscriptionScreen from './MySubscriptionScreens/MySubscriptionScreen';
+
+import MySubscriptionScreenContainer from './MySubscriptionScreens/MySubscriptionScreenContainer';
+import SubscriptionSelectionScreen from './MySubscriptionScreens/AddSubscriptionScreens/SubscriptionSelectionScreen';
+
 import OrderHistoryScreen from './OrderHistoryScreens/OrderHistoryScreen';
 import UserProfileScreen from './UserProfileScreens/UserProfileScreen';
 
-const MySubscriptionStack = createStackNavigator({
-  Home: MySubscriptionScreen,
-});
+const MySubscriptionStack = createStackNavigator(
+  {
+    Home: MySubscriptionScreenContainer,
+    AddSubscription: SubscriptionSelectionScreen,
+  },
+  {
+    initialRouteName: 'Home',
+  }
+);
 
 MySubscriptionStack.navigationOptions = {
   tabBarLabel: 'My Subscriptions',
