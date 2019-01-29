@@ -13,6 +13,10 @@ var models = [
     embedded: false
   },
   {
+    name: "ImageType",
+    embedded: false
+  },
+  {
     name: "Order",
     embedded: false
   },

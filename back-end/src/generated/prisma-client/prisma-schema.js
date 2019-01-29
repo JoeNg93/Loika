@@ -1,10 +1,13 @@
 module.exports = {
         typeDefs: /* GraphQL */ `type Address {
   id: ID!
-  address: String!
+  street1: String!
+  street2: String
   city: String!
-  postcode: Int
+  postcode: Int!
   country: String!
+  user: User!
+  isBilling: Boolean!
 }
 
 type AddressConnection {
@@ -14,20 +17,32 @@ type AddressConnection {
 }
 
 input AddressCreateInput {
-  address: String!
+  street1: String!
+  street2: String
   city: String!
-  postcode: Int
+  postcode: Int!
   country: String!
+  user: UserCreateOneWithoutAddressesInput!
+  isBilling: Boolean
 }
 
-input AddressCreateManyInput {
-  create: [AddressCreateInput!]
+input AddressCreateManyWithoutUserInput {
+  create: [AddressCreateWithoutUserInput!]
   connect: [AddressWhereUniqueInput!]
 }
 
 input AddressCreateOneInput {
   create: AddressCreateInput
   connect: AddressWhereUniqueInput
+}
+
+input AddressCreateWithoutUserInput {
+  street1: String!
+  street2: String
+  city: String!
+  postcode: Int!
+  country: String!
+  isBilling: Boolean
 }
 
 type AddressEdge {
@@ -38,14 +53,18 @@ type AddressEdge {
 enum AddressOrderByInput {
   id_ASC
   id_DESC
-  address_ASC
-  address_DESC
+  street1_ASC
+  street1_DESC
+  street2_ASC
+  street2_DESC
   city_ASC
   city_DESC
   postcode_ASC
   postcode_DESC
   country_ASC
   country_DESC
+  isBilling_ASC
+  isBilling_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -67,20 +86,34 @@ input AddressScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  address: String
-  address_not: String
-  address_in: [String!]
-  address_not_in: [String!]
-  address_lt: String
-  address_lte: String
-  address_gt: String
-  address_gte: String
-  address_contains: String
-  address_not_contains: String
-  address_starts_with: String
-  address_not_starts_with: String
-  address_ends_with: String
-  address_not_ends_with: String
+  street1: String
+  street1_not: String
+  street1_in: [String!]
+  street1_not_in: [String!]
+  street1_lt: String
+  street1_lte: String
+  street1_gt: String
+  street1_gte: String
+  street1_contains: String
+  street1_not_contains: String
+  street1_starts_with: String
+  street1_not_starts_with: String
+  street1_ends_with: String
+  street1_not_ends_with: String
+  street2: String
+  street2_not: String
+  street2_in: [String!]
+  street2_not_in: [String!]
+  street2_lt: String
+  street2_lte: String
+  street2_gt: String
+  street2_gte: String
+  street2_contains: String
+  street2_not_contains: String
+  street2_starts_with: String
+  street2_not_starts_with: String
+  street2_ends_with: String
+  street2_not_ends_with: String
   city: String
   city_not: String
   city_in: [String!]
@@ -117,62 +150,65 @@ input AddressScalarWhereInput {
   country_not_starts_with: String
   country_ends_with: String
   country_not_ends_with: String
+  isBilling: Boolean
+  isBilling_not: Boolean
   AND: [AddressScalarWhereInput!]
   OR: [AddressScalarWhereInput!]
   NOT: [AddressScalarWhereInput!]
 }
 
 input AddressUpdateDataInput {
-  address: String
+  street1: String
+  street2: String
   city: String
   postcode: Int
   country: String
+  user: UserUpdateOneRequiredWithoutAddressesInput
+  isBilling: Boolean
 }
 
 input AddressUpdateInput {
-  address: String
+  street1: String
+  street2: String
   city: String
   postcode: Int
   country: String
+  user: UserUpdateOneRequiredWithoutAddressesInput
+  isBilling: Boolean
 }
 
 input AddressUpdateManyDataInput {
-  address: String
+  street1: String
+  street2: String
   city: String
   postcode: Int
   country: String
-}
-
-input AddressUpdateManyInput {
-  create: [AddressCreateInput!]
-  update: [AddressUpdateWithWhereUniqueNestedInput!]
-  upsert: [AddressUpsertWithWhereUniqueNestedInput!]
-  delete: [AddressWhereUniqueInput!]
-  connect: [AddressWhereUniqueInput!]
-  disconnect: [AddressWhereUniqueInput!]
-  deleteMany: [AddressScalarWhereInput!]
-  updateMany: [AddressUpdateManyWithWhereNestedInput!]
+  isBilling: Boolean
 }
 
 input AddressUpdateManyMutationInput {
-  address: String
+  street1: String
+  street2: String
   city: String
   postcode: Int
   country: String
+  isBilling: Boolean
+}
+
+input AddressUpdateManyWithoutUserInput {
+  create: [AddressCreateWithoutUserInput!]
+  delete: [AddressWhereUniqueInput!]
+  connect: [AddressWhereUniqueInput!]
+  disconnect: [AddressWhereUniqueInput!]
+  update: [AddressUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [AddressUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [AddressScalarWhereInput!]
+  updateMany: [AddressUpdateManyWithWhereNestedInput!]
 }
 
 input AddressUpdateManyWithWhereNestedInput {
   where: AddressScalarWhereInput!
   data: AddressUpdateManyDataInput!
-}
-
-input AddressUpdateOneInput {
-  create: AddressCreateInput
-  update: AddressUpdateDataInput
-  upsert: AddressUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: AddressWhereUniqueInput
 }
 
 input AddressUpdateOneRequiredInput {
@@ -182,9 +218,18 @@ input AddressUpdateOneRequiredInput {
   connect: AddressWhereUniqueInput
 }
 
-input AddressUpdateWithWhereUniqueNestedInput {
+input AddressUpdateWithoutUserDataInput {
+  street1: String
+  street2: String
+  city: String
+  postcode: Int
+  country: String
+  isBilling: Boolean
+}
+
+input AddressUpdateWithWhereUniqueWithoutUserInput {
   where: AddressWhereUniqueInput!
-  data: AddressUpdateDataInput!
+  data: AddressUpdateWithoutUserDataInput!
 }
 
 input AddressUpsertNestedInput {
@@ -192,10 +237,10 @@ input AddressUpsertNestedInput {
   create: AddressCreateInput!
 }
 
-input AddressUpsertWithWhereUniqueNestedInput {
+input AddressUpsertWithWhereUniqueWithoutUserInput {
   where: AddressWhereUniqueInput!
-  update: AddressUpdateDataInput!
-  create: AddressCreateInput!
+  update: AddressUpdateWithoutUserDataInput!
+  create: AddressCreateWithoutUserInput!
 }
 
 input AddressWhereInput {
@@ -213,20 +258,34 @@ input AddressWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  address: String
-  address_not: String
-  address_in: [String!]
-  address_not_in: [String!]
-  address_lt: String
-  address_lte: String
-  address_gt: String
-  address_gte: String
-  address_contains: String
-  address_not_contains: String
-  address_starts_with: String
-  address_not_starts_with: String
-  address_ends_with: String
-  address_not_ends_with: String
+  street1: String
+  street1_not: String
+  street1_in: [String!]
+  street1_not_in: [String!]
+  street1_lt: String
+  street1_lte: String
+  street1_gt: String
+  street1_gte: String
+  street1_contains: String
+  street1_not_contains: String
+  street1_starts_with: String
+  street1_not_starts_with: String
+  street1_ends_with: String
+  street1_not_ends_with: String
+  street2: String
+  street2_not: String
+  street2_in: [String!]
+  street2_not_in: [String!]
+  street2_lt: String
+  street2_lte: String
+  street2_gt: String
+  street2_gte: String
+  street2_contains: String
+  street2_not_contains: String
+  street2_starts_with: String
+  street2_not_starts_with: String
+  street2_ends_with: String
+  street2_not_ends_with: String
   city: String
   city_not: String
   city_in: [String!]
@@ -263,6 +322,9 @@ input AddressWhereInput {
   country_not_starts_with: String
   country_ends_with: String
   country_not_ends_with: String
+  user: UserWhereInput
+  isBilling: Boolean
+  isBilling_not: Boolean
   AND: [AddressWhereInput!]
   OR: [AddressWhereInput!]
   NOT: [AddressWhereInput!]
@@ -301,6 +363,7 @@ scalar DateTime
 type Image {
   id: ID!
   url: String!
+  type: ImageType!
 }
 
 type ImageConnection {
@@ -311,6 +374,12 @@ type ImageConnection {
 
 input ImageCreateInput {
   url: String!
+  type: ImageType!
+}
+
+input ImageCreateManyInput {
+  create: [ImageCreateInput!]
+  connect: [ImageWhereUniqueInput!]
 }
 
 input ImageCreateOneInput {
@@ -328,22 +397,91 @@ enum ImageOrderByInput {
   id_DESC
   url_ASC
   url_DESC
+  type_ASC
+  type_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
+input ImageScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  url: String
+  url_not: String
+  url_in: [String!]
+  url_not_in: [String!]
+  url_lt: String
+  url_lte: String
+  url_gt: String
+  url_gte: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
+  type: ImageType
+  type_not: ImageType
+  type_in: [ImageType!]
+  type_not_in: [ImageType!]
+  AND: [ImageScalarWhereInput!]
+  OR: [ImageScalarWhereInput!]
+  NOT: [ImageScalarWhereInput!]
+}
+
+enum ImageType {
+  THUMBNAIL
+  LARGE
+}
+
 input ImageUpdateDataInput {
   url: String
+  type: ImageType
 }
 
 input ImageUpdateInput {
   url: String
+  type: ImageType
+}
+
+input ImageUpdateManyDataInput {
+  url: String
+  type: ImageType
+}
+
+input ImageUpdateManyInput {
+  create: [ImageCreateInput!]
+  update: [ImageUpdateWithWhereUniqueNestedInput!]
+  upsert: [ImageUpsertWithWhereUniqueNestedInput!]
+  delete: [ImageWhereUniqueInput!]
+  connect: [ImageWhereUniqueInput!]
+  disconnect: [ImageWhereUniqueInput!]
+  deleteMany: [ImageScalarWhereInput!]
+  updateMany: [ImageUpdateManyWithWhereNestedInput!]
 }
 
 input ImageUpdateManyMutationInput {
   url: String
+  type: ImageType
+}
+
+input ImageUpdateManyWithWhereNestedInput {
+  where: ImageScalarWhereInput!
+  data: ImageUpdateManyDataInput!
 }
 
 input ImageUpdateOneInput {
@@ -355,14 +493,18 @@ input ImageUpdateOneInput {
   connect: ImageWhereUniqueInput
 }
 
-input ImageUpdateOneRequiredInput {
-  create: ImageCreateInput
-  update: ImageUpdateDataInput
-  upsert: ImageUpsertNestedInput
-  connect: ImageWhereUniqueInput
+input ImageUpdateWithWhereUniqueNestedInput {
+  where: ImageWhereUniqueInput!
+  data: ImageUpdateDataInput!
 }
 
 input ImageUpsertNestedInput {
+  update: ImageUpdateDataInput!
+  create: ImageCreateInput!
+}
+
+input ImageUpsertWithWhereUniqueNestedInput {
+  where: ImageWhereUniqueInput!
   update: ImageUpdateDataInput!
   create: ImageCreateInput!
 }
@@ -396,6 +538,10 @@ input ImageWhereInput {
   url_not_starts_with: String
   url_ends_with: String
   url_not_ends_with: String
+  type: ImageType
+  type_not: ImageType
+  type_in: [ImageType!]
+  type_not_in: [ImageType!]
   AND: [ImageWhereInput!]
   OR: [ImageWhereInput!]
   NOT: [ImageWhereInput!]
@@ -448,7 +594,6 @@ type Order {
   id: ID!
   user: User!
   subscriptions(where: SubscriptionWhereInput, orderBy: SubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Subscription!]
-  billingAddress: Address!
   shippingAddress: Address!
   deliveryTime: String!
   deliveryDayOfWeek: String!
@@ -466,7 +611,6 @@ type OrderConnection {
 input OrderCreateInput {
   user: UserCreateOneInput!
   subscriptions: SubscriptionCreateManyInput
-  billingAddress: AddressCreateOneInput!
   shippingAddress: AddressCreateOneInput!
   deliveryTime: String!
   deliveryDayOfWeek: String!
@@ -496,7 +640,6 @@ enum OrderOrderByInput {
 input OrderUpdateInput {
   user: UserUpdateOneRequiredInput
   subscriptions: SubscriptionUpdateManyInput
-  billingAddress: AddressUpdateOneRequiredInput
   shippingAddress: AddressUpdateOneRequiredInput
   deliveryTime: String
   deliveryDayOfWeek: String
@@ -528,7 +671,6 @@ input OrderWhereInput {
   subscriptions_every: SubscriptionWhereInput
   subscriptions_some: SubscriptionWhereInput
   subscriptions_none: SubscriptionWhereInput
-  billingAddress: AddressWhereInput
   shippingAddress: AddressWhereInput
   deliveryTime: String
   deliveryTime_not: String
@@ -629,8 +771,7 @@ type Subscription {
   longDescription: String!
   totalPrice: Int!
   mealPrice: Int!
-  thumbnailImage: Image!
-  largeImage: Image!
+  images(where: ImageWhereInput, orderBy: ImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Image!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -647,8 +788,7 @@ input SubscriptionCreateInput {
   longDescription: String!
   totalPrice: Int!
   mealPrice: Int!
-  thumbnailImage: ImageCreateOneInput!
-  largeImage: ImageCreateOneInput!
+  images: ImageCreateManyInput
 }
 
 input SubscriptionCreateManyInput {
@@ -780,8 +920,7 @@ input SubscriptionUpdateDataInput {
   longDescription: String
   totalPrice: Int
   mealPrice: Int
-  thumbnailImage: ImageUpdateOneRequiredInput
-  largeImage: ImageUpdateOneRequiredInput
+  images: ImageUpdateManyInput
 }
 
 input SubscriptionUpdateInput {
@@ -790,8 +929,7 @@ input SubscriptionUpdateInput {
   longDescription: String
   totalPrice: Int
   mealPrice: Int
-  thumbnailImage: ImageUpdateOneRequiredInput
-  largeImage: ImageUpdateOneRequiredInput
+  images: ImageUpdateManyInput
 }
 
 input SubscriptionUpdateManyDataInput {
@@ -910,8 +1048,9 @@ input SubscriptionWhereInput {
   mealPrice_lte: Int
   mealPrice_gt: Int
   mealPrice_gte: Int
-  thumbnailImage: ImageWhereInput
-  largeImage: ImageWhereInput
+  images_every: ImageWhereInput
+  images_some: ImageWhereInput
+  images_none: ImageWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -946,8 +1085,7 @@ type User {
   resetTokenExpiry: Float
   permissions: [Permission!]!
   phone: String
-  billingAddress: Address
-  shippingAddress(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address!]
+  addresses(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address!]
   paymentId: String
   avatar: Image
   createdAt: DateTime!
@@ -968,8 +1106,7 @@ input UserCreateInput {
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
   phone: String
-  billingAddress: AddressCreateOneInput
-  shippingAddress: AddressCreateManyInput
+  addresses: AddressCreateManyWithoutUserInput
   paymentId: String
   avatar: ImageCreateOneInput
 }
@@ -979,8 +1116,25 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutAddressesInput {
+  create: UserCreateWithoutAddressesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreatepermissionsInput {
   set: [Permission!]
+}
+
+input UserCreateWithoutAddressesInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  phone: String
+  paymentId: String
+  avatar: ImageCreateOneInput
 }
 
 type UserEdge {
@@ -1019,8 +1173,7 @@ input UserUpdateDataInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   phone: String
-  billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateManyInput
+  addresses: AddressUpdateManyWithoutUserInput
   paymentId: String
   avatar: ImageUpdateOneInput
 }
@@ -1033,8 +1186,7 @@ input UserUpdateInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   phone: String
-  billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateManyInput
+  addresses: AddressUpdateManyWithoutUserInput
   paymentId: String
   avatar: ImageUpdateOneInput
 }
@@ -1057,13 +1209,37 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutAddressesInput {
+  create: UserCreateWithoutAddressesInput
+  update: UserUpdateWithoutAddressesDataInput
+  upsert: UserUpsertWithoutAddressesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
+}
+
+input UserUpdateWithoutAddressesDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  phone: String
+  paymentId: String
+  avatar: ImageUpdateOneInput
 }
 
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutAddressesInput {
+  update: UserUpdateWithoutAddressesDataInput!
+  create: UserCreateWithoutAddressesInput!
 }
 
 input UserWhereInput {
@@ -1159,10 +1335,9 @@ input UserWhereInput {
   phone_not_starts_with: String
   phone_ends_with: String
   phone_not_ends_with: String
-  billingAddress: AddressWhereInput
-  shippingAddress_every: AddressWhereInput
-  shippingAddress_some: AddressWhereInput
-  shippingAddress_none: AddressWhereInput
+  addresses_every: AddressWhereInput
+  addresses_some: AddressWhereInput
+  addresses_none: AddressWhereInput
   paymentId: String
   paymentId_not: String
   paymentId_in: [String!]
