@@ -1,10 +1,17 @@
 # import * from './generated/prisma.graphql'
 
 type Mutation {
+  # user
   signup(email: String!, password: String!, name: String!): String
   signin(email: String!, password: String!): String
+
+  # address with CRUD
+  createAddress(street1: String!, street2: String, city: String!, postcode: Int, country: String!): Address!
+  updateAddress(id: ID!, street1: String, street2: String, city: String, postcode: Int, country: String): Address!
+  deleteAddress(id: ID!): Address!
 }
 
 type Query {
   me: User
+  readAddress(id: ID!): Address
 }

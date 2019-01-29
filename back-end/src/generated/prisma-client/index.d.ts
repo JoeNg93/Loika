@@ -290,8 +290,10 @@ export type ImageOrderByInput =
 export type AddressOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "address_ASC"
-  | "address_DESC"
+  | "street1_ASC"
+  | "street1_DESC"
+  | "street2_ASC"
+  | "street2_DESC"
   | "city_ASC"
   | "city_DESC"
   | "postcode_ASC"
@@ -360,7 +362,8 @@ export type UserOrderByInput =
   | "updatedAt_DESC";
 
 export interface AddressUpdateManyMutationInput {
-  address?: String;
+  street1?: String;
+  street2?: String;
   city?: String;
   postcode?: Int;
   country?: String;
@@ -395,7 +398,8 @@ export interface UserUpdatepermissionsInput {
 }
 
 export interface AddressUpdateManyDataInput {
-  address?: String;
+  street1?: String;
+  street2?: String;
   city?: String;
   postcode?: Int;
   country?: String;
@@ -439,20 +443,34 @@ export interface AddressScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  address?: String;
-  address_not?: String;
-  address_in?: String[] | String;
-  address_not_in?: String[] | String;
-  address_lt?: String;
-  address_lte?: String;
-  address_gt?: String;
-  address_gte?: String;
-  address_contains?: String;
-  address_not_contains?: String;
-  address_starts_with?: String;
-  address_not_starts_with?: String;
-  address_ends_with?: String;
-  address_not_ends_with?: String;
+  street1?: String;
+  street1_not?: String;
+  street1_in?: String[] | String;
+  street1_not_in?: String[] | String;
+  street1_lt?: String;
+  street1_lte?: String;
+  street1_gt?: String;
+  street1_gte?: String;
+  street1_contains?: String;
+  street1_not_contains?: String;
+  street1_starts_with?: String;
+  street1_not_starts_with?: String;
+  street1_ends_with?: String;
+  street1_not_ends_with?: String;
+  street2?: String;
+  street2_not?: String;
+  street2_in?: String[] | String;
+  street2_not_in?: String[] | String;
+  street2_lt?: String;
+  street2_lte?: String;
+  street2_gt?: String;
+  street2_gte?: String;
+  street2_contains?: String;
+  street2_not_contains?: String;
+  street2_starts_with?: String;
+  street2_not_starts_with?: String;
+  street2_ends_with?: String;
+  street2_not_ends_with?: String;
   city?: String;
   city_not?: String;
   city_in?: String[] | String;
@@ -524,9 +542,10 @@ export interface SubscriptionUpdateManyWithWhereNestedInput {
 }
 
 export interface AddressCreateInput {
-  address: String;
+  street1: String;
+  street2?: String;
   city: String;
-  postcode?: Int;
+  postcode: Int;
   country: String;
 }
 
@@ -545,20 +564,34 @@ export interface AddressWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  address?: String;
-  address_not?: String;
-  address_in?: String[] | String;
-  address_not_in?: String[] | String;
-  address_lt?: String;
-  address_lte?: String;
-  address_gt?: String;
-  address_gte?: String;
-  address_contains?: String;
-  address_not_contains?: String;
-  address_starts_with?: String;
-  address_not_starts_with?: String;
-  address_ends_with?: String;
-  address_not_ends_with?: String;
+  street1?: String;
+  street1_not?: String;
+  street1_in?: String[] | String;
+  street1_not_in?: String[] | String;
+  street1_lt?: String;
+  street1_lte?: String;
+  street1_gt?: String;
+  street1_gte?: String;
+  street1_contains?: String;
+  street1_not_contains?: String;
+  street1_starts_with?: String;
+  street1_not_starts_with?: String;
+  street1_ends_with?: String;
+  street1_not_ends_with?: String;
+  street2?: String;
+  street2_not?: String;
+  street2_in?: String[] | String;
+  street2_not_in?: String[] | String;
+  street2_lt?: String;
+  street2_lte?: String;
+  street2_gt?: String;
+  street2_gte?: String;
+  street2_contains?: String;
+  street2_not_contains?: String;
+  street2_starts_with?: String;
+  street2_not_starts_with?: String;
+  street2_ends_with?: String;
+  street2_not_ends_with?: String;
   city?: String;
   city_not?: String;
   city_in?: String[] | String;
@@ -601,7 +634,8 @@ export interface AddressWhereInput {
 }
 
 export interface AddressUpdateInput {
-  address?: String;
+  street1?: String;
+  street2?: String;
   city?: String;
   postcode?: Int;
   country?: String;
@@ -844,7 +878,8 @@ export type SubscriptionWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface AddressUpdateDataInput {
-  address?: String;
+  street1?: String;
+  street2?: String;
   city?: String;
   postcode?: Int;
   country?: String;
@@ -1728,15 +1763,17 @@ export interface SubscriptionEdgeSubscription
 
 export interface Address {
   id: ID_Output;
-  address: String;
+  street1: String;
+  street2?: String;
   city: String;
-  postcode?: Int;
+  postcode: Int;
   country: String;
 }
 
 export interface AddressPromise extends Promise<Address>, Fragmentable {
   id: () => Promise<ID_Output>;
-  address: () => Promise<String>;
+  street1: () => Promise<String>;
+  street2: () => Promise<String>;
   city: () => Promise<String>;
   postcode: () => Promise<Int>;
   country: () => Promise<String>;
@@ -1746,7 +1783,8 @@ export interface AddressSubscription
   extends Promise<AsyncIterator<Address>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  address: () => Promise<AsyncIterator<String>>;
+  street1: () => Promise<AsyncIterator<String>>;
+  street2: () => Promise<AsyncIterator<String>>;
   city: () => Promise<AsyncIterator<String>>;
   postcode: () => Promise<AsyncIterator<Int>>;
   country: () => Promise<AsyncIterator<String>>;

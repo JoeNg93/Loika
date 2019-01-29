@@ -10,9 +10,10 @@ type Image {
 
 type Address {
   id: ID! @unique
-  address: String!
+  street1: String!
+  street2: String
   city: String!
-  postcode: Int
+  postcode: Int!
   country: String!
 }
 
