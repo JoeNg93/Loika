@@ -14,8 +14,10 @@
   "license": "ISC",
   "dependencies": {
     "apollo-errors": "^1.9.0",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^6.2.0",
     "graphql-yoga": "^1.17.0",
+    "jsonwebtoken": "^8.4.0",
     "prisma": "^1.24.0"
   },
   "devDependencies": {
