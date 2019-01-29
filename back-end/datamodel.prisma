@@ -3,15 +3,9 @@ enum Permission {
   USER
 }
 
-enum ImageType {
-  THUMBNAIL
-  LARGE
-}
-
 type Image {
   id: ID! @unique
   url: String!
-  type: ImageType!
 }
 
 type Address {
@@ -21,8 +15,6 @@ type Address {
   city: String!
   postcode: Int!
   country: String!
-  user: User!
-  isBilling: Boolean! @default(value: "false")
 }
 
 type User {
@@ -34,7 +26,8 @@ type User {
   resetTokenExpiry: Float
   permissions: [Permission]
   phone: String
-  addresses: [Address!]!
+  billingAddress: Address @relation(name: "UserBillingAddress")
+  shippingAddress: [Address!] @relation(name: "UserShippingAddresses")
   paymentId: String
   avatar: Image
   createdAt: DateTime!
@@ -48,7 +41,8 @@ type Subscription {
   longDescription: String!
   totalPrice: Int!
   mealPrice: Int!
-  images: [Image!]!
+  thumbnailImage: Image! @relation(name: "SubscriptionThumbnailImage")
+  largeImage: Image! @relation(name: "SubscriptionLargeImage")
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -57,7 +51,8 @@ type Order {
   id: ID! @unique
   user: User!
   subscriptions: [Subscription!]!
-  shippingAddress: Address!
+  billingAddress: Address! @relation(name: "OrderBillingAddress")
+  shippingAddress: Address! @relation(name: "OrderShippingAddress")
   deliveryTime: String!
   deliveryDayOfWeek: String!
   paymentDate: DateTime!

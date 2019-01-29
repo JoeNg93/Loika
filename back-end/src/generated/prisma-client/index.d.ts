@@ -263,17 +263,8 @@ export interface Subscription {
   longDescription: (args?: {}) => () => Promise<AsyncIterator<String>>;
   totalPrice: (args?: {}) => () => Promise<AsyncIterator<Int>>;
   mealPrice: (args?: {}) => () => Promise<AsyncIterator<Int>>;
-  images: (
-    args?: {
-      where?: ImageWhereInput;
-      orderBy?: ImageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => Promise<AsyncIterator<ImageSubscription>>;
+  thumbnailImage: (args?: {}) => ImageSubscription;
+  largeImage: (args?: {}) => ImageSubscription;
   createdAt: (args?: {}) => () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: (args?: {}) => () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -286,9 +277,15 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type ImageType = "THUMBNAIL" | "LARGE";
-
-export type Permission = "ADMIN" | "USER";
+export type ImageOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "url_ASC"
+  | "url_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
 
 export type AddressOrderByInput =
   | "id_ASC"
@@ -303,24 +300,12 @@ export type AddressOrderByInput =
   | "postcode_DESC"
   | "country_ASC"
   | "country_DESC"
-  | "isBilling_ASC"
-  | "isBilling_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type ImageOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "url_ASC"
-  | "url_DESC"
-  | "type_ASC"
-  | "type_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+export type Permission = "ADMIN" | "USER";
 
 export type SubscriptionOrderByInput =
   | "id_ASC"
@@ -376,16 +361,12 @@ export type UserOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface UserUpdateWithoutAddressesDataInput {
-  name?: String;
-  email?: String;
-  password?: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserUpdatepermissionsInput;
-  phone?: String;
-  paymentId?: String;
-  avatar?: ImageUpdateOneInput;
+export interface AddressUpdateManyMutationInput {
+  street1?: String;
+  street2?: String;
+  city?: String;
+  postcode?: Int;
+  country?: String;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -399,18 +380,583 @@ export interface UserUpdateManyMutationInput {
   paymentId?: String;
 }
 
-export interface ImageUpsertNestedInput {
-  update: ImageUpdateDataInput;
-  create: ImageCreateInput;
+export interface ImageUpdateInput {
+  url?: String;
 }
 
 export type AddressWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface UserUpsertWithoutAddressesInput {
-  update: UserUpdateWithoutAddressesDataInput;
-  create: UserCreateWithoutAddressesInput;
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+}>;
+
+export interface UserUpdatepermissionsInput {
+  set?: Permission[] | Permission;
+}
+
+export interface AddressUpdateManyDataInput {
+  street1?: String;
+  street2?: String;
+  city?: String;
+  postcode?: Int;
+  country?: String;
+}
+
+export interface ImageUpdateManyMutationInput {
+  url?: String;
+}
+
+export interface AddressUpdateManyWithWhereNestedInput {
+  where: AddressScalarWhereInput;
+  data: AddressUpdateManyDataInput;
+}
+
+export interface UserUpdateInput {
+  name?: String;
+  email?: String;
+  password?: String;
+  resetToken?: String;
+  resetTokenExpiry?: Float;
+  permissions?: UserUpdatepermissionsInput;
+  phone?: String;
+  billingAddress?: AddressUpdateOneInput;
+  shippingAddress?: AddressUpdateManyInput;
+  paymentId?: String;
+  avatar?: ImageUpdateOneInput;
+}
+
+export interface AddressScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  street1?: String;
+  street1_not?: String;
+  street1_in?: String[] | String;
+  street1_not_in?: String[] | String;
+  street1_lt?: String;
+  street1_lte?: String;
+  street1_gt?: String;
+  street1_gte?: String;
+  street1_contains?: String;
+  street1_not_contains?: String;
+  street1_starts_with?: String;
+  street1_not_starts_with?: String;
+  street1_ends_with?: String;
+  street1_not_ends_with?: String;
+  street2?: String;
+  street2_not?: String;
+  street2_in?: String[] | String;
+  street2_not_in?: String[] | String;
+  street2_lt?: String;
+  street2_lte?: String;
+  street2_gt?: String;
+  street2_gte?: String;
+  street2_contains?: String;
+  street2_not_contains?: String;
+  street2_starts_with?: String;
+  street2_not_starts_with?: String;
+  street2_ends_with?: String;
+  street2_not_ends_with?: String;
+  city?: String;
+  city_not?: String;
+  city_in?: String[] | String;
+  city_not_in?: String[] | String;
+  city_lt?: String;
+  city_lte?: String;
+  city_gt?: String;
+  city_gte?: String;
+  city_contains?: String;
+  city_not_contains?: String;
+  city_starts_with?: String;
+  city_not_starts_with?: String;
+  city_ends_with?: String;
+  city_not_ends_with?: String;
+  postcode?: Int;
+  postcode_not?: Int;
+  postcode_in?: Int[] | Int;
+  postcode_not_in?: Int[] | Int;
+  postcode_lt?: Int;
+  postcode_lte?: Int;
+  postcode_gt?: Int;
+  postcode_gte?: Int;
+  country?: String;
+  country_not?: String;
+  country_in?: String[] | String;
+  country_not_in?: String[] | String;
+  country_lt?: String;
+  country_lte?: String;
+  country_gt?: String;
+  country_gte?: String;
+  country_contains?: String;
+  country_not_contains?: String;
+  country_starts_with?: String;
+  country_not_starts_with?: String;
+  country_ends_with?: String;
+  country_not_ends_with?: String;
+  AND?: AddressScalarWhereInput[] | AddressScalarWhereInput;
+  OR?: AddressScalarWhereInput[] | AddressScalarWhereInput;
+  NOT?: AddressScalarWhereInput[] | AddressScalarWhereInput;
+}
+
+export interface SubscriptionUpdateManyMutationInput {
+  title?: String;
+  shortDescription?: String;
+  longDescription?: String;
+  totalPrice?: Int;
+  mealPrice?: Int;
+}
+
+export interface AddressUpsertWithWhereUniqueNestedInput {
+  where: AddressWhereUniqueInput;
+  update: AddressUpdateDataInput;
+  create: AddressCreateInput;
+}
+
+export interface OrderUpdateManyMutationInput {
+  deliveryTime?: String;
+  deliveryDayOfWeek?: String;
+  paymentDate?: DateTimeInput;
+}
+
+export type OrderWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SubscriptionUpdateManyWithWhereNestedInput {
+  where: SubscriptionScalarWhereInput;
+  data: SubscriptionUpdateManyDataInput;
+}
+
+export interface AddressCreateInput {
+  street1: String;
+  street2?: String;
+  city: String;
+  postcode: Int;
+  country: String;
+}
+
+export interface AddressWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  street1?: String;
+  street1_not?: String;
+  street1_in?: String[] | String;
+  street1_not_in?: String[] | String;
+  street1_lt?: String;
+  street1_lte?: String;
+  street1_gt?: String;
+  street1_gte?: String;
+  street1_contains?: String;
+  street1_not_contains?: String;
+  street1_starts_with?: String;
+  street1_not_starts_with?: String;
+  street1_ends_with?: String;
+  street1_not_ends_with?: String;
+  street2?: String;
+  street2_not?: String;
+  street2_in?: String[] | String;
+  street2_not_in?: String[] | String;
+  street2_lt?: String;
+  street2_lte?: String;
+  street2_gt?: String;
+  street2_gte?: String;
+  street2_contains?: String;
+  street2_not_contains?: String;
+  street2_starts_with?: String;
+  street2_not_starts_with?: String;
+  street2_ends_with?: String;
+  street2_not_ends_with?: String;
+  city?: String;
+  city_not?: String;
+  city_in?: String[] | String;
+  city_not_in?: String[] | String;
+  city_lt?: String;
+  city_lte?: String;
+  city_gt?: String;
+  city_gte?: String;
+  city_contains?: String;
+  city_not_contains?: String;
+  city_starts_with?: String;
+  city_not_starts_with?: String;
+  city_ends_with?: String;
+  city_not_ends_with?: String;
+  postcode?: Int;
+  postcode_not?: Int;
+  postcode_in?: Int[] | Int;
+  postcode_not_in?: Int[] | Int;
+  postcode_lt?: Int;
+  postcode_lte?: Int;
+  postcode_gt?: Int;
+  postcode_gte?: Int;
+  country?: String;
+  country_not?: String;
+  country_in?: String[] | String;
+  country_not_in?: String[] | String;
+  country_lt?: String;
+  country_lte?: String;
+  country_gt?: String;
+  country_gte?: String;
+  country_contains?: String;
+  country_not_contains?: String;
+  country_starts_with?: String;
+  country_not_starts_with?: String;
+  country_ends_with?: String;
+  country_not_ends_with?: String;
+  AND?: AddressWhereInput[] | AddressWhereInput;
+  OR?: AddressWhereInput[] | AddressWhereInput;
+  NOT?: AddressWhereInput[] | AddressWhereInput;
+}
+
+export interface AddressUpdateInput {
+  street1?: String;
+  street2?: String;
+  city?: String;
+  postcode?: Int;
+  country?: String;
+}
+
+export interface SubscriptionWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  shortDescription?: String;
+  shortDescription_not?: String;
+  shortDescription_in?: String[] | String;
+  shortDescription_not_in?: String[] | String;
+  shortDescription_lt?: String;
+  shortDescription_lte?: String;
+  shortDescription_gt?: String;
+  shortDescription_gte?: String;
+  shortDescription_contains?: String;
+  shortDescription_not_contains?: String;
+  shortDescription_starts_with?: String;
+  shortDescription_not_starts_with?: String;
+  shortDescription_ends_with?: String;
+  shortDescription_not_ends_with?: String;
+  longDescription?: String;
+  longDescription_not?: String;
+  longDescription_in?: String[] | String;
+  longDescription_not_in?: String[] | String;
+  longDescription_lt?: String;
+  longDescription_lte?: String;
+  longDescription_gt?: String;
+  longDescription_gte?: String;
+  longDescription_contains?: String;
+  longDescription_not_contains?: String;
+  longDescription_starts_with?: String;
+  longDescription_not_starts_with?: String;
+  longDescription_ends_with?: String;
+  longDescription_not_ends_with?: String;
+  totalPrice?: Int;
+  totalPrice_not?: Int;
+  totalPrice_in?: Int[] | Int;
+  totalPrice_not_in?: Int[] | Int;
+  totalPrice_lt?: Int;
+  totalPrice_lte?: Int;
+  totalPrice_gt?: Int;
+  totalPrice_gte?: Int;
+  mealPrice?: Int;
+  mealPrice_not?: Int;
+  mealPrice_in?: Int[] | Int;
+  mealPrice_not_in?: Int[] | Int;
+  mealPrice_lt?: Int;
+  mealPrice_lte?: Int;
+  mealPrice_gt?: Int;
+  mealPrice_gte?: Int;
+  thumbnailImage?: ImageWhereInput;
+  largeImage?: ImageWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: SubscriptionWhereInput[] | SubscriptionWhereInput;
+  OR?: SubscriptionWhereInput[] | SubscriptionWhereInput;
+  NOT?: SubscriptionWhereInput[] | SubscriptionWhereInput;
+}
+
+export interface AddressUpdateWithWhereUniqueNestedInput {
+  where: AddressWhereUniqueInput;
+  data: AddressUpdateDataInput;
+}
+
+export interface OrderWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  user?: UserWhereInput;
+  subscriptions_every?: SubscriptionWhereInput;
+  subscriptions_some?: SubscriptionWhereInput;
+  subscriptions_none?: SubscriptionWhereInput;
+  billingAddress?: AddressWhereInput;
+  shippingAddress?: AddressWhereInput;
+  deliveryTime?: String;
+  deliveryTime_not?: String;
+  deliveryTime_in?: String[] | String;
+  deliveryTime_not_in?: String[] | String;
+  deliveryTime_lt?: String;
+  deliveryTime_lte?: String;
+  deliveryTime_gt?: String;
+  deliveryTime_gte?: String;
+  deliveryTime_contains?: String;
+  deliveryTime_not_contains?: String;
+  deliveryTime_starts_with?: String;
+  deliveryTime_not_starts_with?: String;
+  deliveryTime_ends_with?: String;
+  deliveryTime_not_ends_with?: String;
+  deliveryDayOfWeek?: String;
+  deliveryDayOfWeek_not?: String;
+  deliveryDayOfWeek_in?: String[] | String;
+  deliveryDayOfWeek_not_in?: String[] | String;
+  deliveryDayOfWeek_lt?: String;
+  deliveryDayOfWeek_lte?: String;
+  deliveryDayOfWeek_gt?: String;
+  deliveryDayOfWeek_gte?: String;
+  deliveryDayOfWeek_contains?: String;
+  deliveryDayOfWeek_not_contains?: String;
+  deliveryDayOfWeek_starts_with?: String;
+  deliveryDayOfWeek_not_starts_with?: String;
+  deliveryDayOfWeek_ends_with?: String;
+  deliveryDayOfWeek_not_ends_with?: String;
+  paymentDate?: DateTimeInput;
+  paymentDate_not?: DateTimeInput;
+  paymentDate_in?: DateTimeInput[] | DateTimeInput;
+  paymentDate_not_in?: DateTimeInput[] | DateTimeInput;
+  paymentDate_lt?: DateTimeInput;
+  paymentDate_lte?: DateTimeInput;
+  paymentDate_gt?: DateTimeInput;
+  paymentDate_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: OrderWhereInput[] | OrderWhereInput;
+  OR?: OrderWhereInput[] | OrderWhereInput;
+  NOT?: OrderWhereInput[] | OrderWhereInput;
+}
+
+export interface AddressUpdateManyInput {
+  create?: AddressCreateInput[] | AddressCreateInput;
+  update?:
+    | AddressUpdateWithWhereUniqueNestedInput[]
+    | AddressUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | AddressUpsertWithWhereUniqueNestedInput[]
+    | AddressUpsertWithWhereUniqueNestedInput;
+  delete?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
+  connect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
+  disconnect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
+  deleteMany?: AddressScalarWhereInput[] | AddressScalarWhereInput;
+  updateMany?:
+    | AddressUpdateManyWithWhereNestedInput[]
+    | AddressUpdateManyWithWhereNestedInput;
+}
+
+export interface SubscriptionUpdateDataInput {
+  title?: String;
+  shortDescription?: String;
+  longDescription?: String;
+  totalPrice?: Int;
+  mealPrice?: Int;
+  thumbnailImage?: ImageUpdateOneRequiredInput;
+  largeImage?: ImageUpdateOneRequiredInput;
+}
+
+export interface AddressUpsertNestedInput {
+  update: AddressUpdateDataInput;
+  create: AddressCreateInput;
+}
+
+export interface SubscriptionUpdateManyInput {
+  create?: SubscriptionCreateInput[] | SubscriptionCreateInput;
+  update?:
+    | SubscriptionUpdateWithWhereUniqueNestedInput[]
+    | SubscriptionUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | SubscriptionUpsertWithWhereUniqueNestedInput[]
+    | SubscriptionUpsertWithWhereUniqueNestedInput;
+  delete?: SubscriptionWhereUniqueInput[] | SubscriptionWhereUniqueInput;
+  connect?: SubscriptionWhereUniqueInput[] | SubscriptionWhereUniqueInput;
+  disconnect?: SubscriptionWhereUniqueInput[] | SubscriptionWhereUniqueInput;
+  deleteMany?: SubscriptionScalarWhereInput[] | SubscriptionScalarWhereInput;
+  updateMany?:
+    | SubscriptionUpdateManyWithWhereNestedInput[]
+    | SubscriptionUpdateManyWithWhereNestedInput;
+}
+
+export interface ImageCreateInput {
+  url: String;
+}
+
+export type SubscriptionWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface AddressUpdateDataInput {
+  street1?: String;
+  street2?: String;
+  city?: String;
+  postcode?: Int;
+  country?: String;
+}
+
+export interface ImageUpdateDataInput {
+  url?: String;
+}
+
+export interface AddressUpdateOneInput {
+  create?: AddressCreateInput;
+  update?: AddressUpdateDataInput;
+  upsert?: AddressUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: AddressWhereUniqueInput;
+}
+
+export type ImageWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface OrderCreateInput {
+  user: UserCreateOneInput;
+  subscriptions?: SubscriptionCreateManyInput;
+  billingAddress: AddressCreateOneInput;
+  shippingAddress: AddressCreateOneInput;
+  deliveryTime: String;
+  deliveryDayOfWeek: String;
+  paymentDate: DateTimeInput;
+}
+
+export interface SubscriptionUpdateInput {
+  title?: String;
+  shortDescription?: String;
+  longDescription?: String;
+  totalPrice?: Int;
+  mealPrice?: Int;
+  thumbnailImage?: ImageUpdateOneRequiredInput;
+  largeImage?: ImageUpdateOneRequiredInput;
+}
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface SubscriptionUpdateManyDataInput {
+  title?: String;
+  shortDescription?: String;
+  longDescription?: String;
+  totalPrice?: Int;
+  mealPrice?: Int;
+}
+
+export interface UserCreateInput {
+  name: String;
+  email: String;
+  password: String;
+  resetToken?: String;
+  resetTokenExpiry?: Float;
+  permissions?: UserCreatepermissionsInput;
+  phone?: String;
+  billingAddress?: AddressCreateOneInput;
+  shippingAddress?: AddressCreateManyInput;
+  paymentId?: String;
+  avatar?: ImageCreateOneInput;
+}
+
+export interface SubscriptionUpsertWithWhereUniqueNestedInput {
+  where: SubscriptionWhereUniqueInput;
+  update: SubscriptionUpdateDataInput;
+  create: SubscriptionCreateInput;
+}
+
+export interface UserCreatepermissionsInput {
+  set?: Permission[] | Permission;
 }
 
 export interface UserWhereInput {
@@ -506,9 +1052,10 @@ export interface UserWhereInput {
   phone_not_starts_with?: String;
   phone_ends_with?: String;
   phone_not_ends_with?: String;
-  addresses_every?: AddressWhereInput;
-  addresses_some?: AddressWhereInput;
-  addresses_none?: AddressWhereInput;
+  billingAddress?: AddressWhereInput;
+  shippingAddress_every?: AddressWhereInput;
+  shippingAddress_some?: AddressWhereInput;
+  shippingAddress_none?: AddressWhereInput;
   paymentId?: String;
   paymentId_not?: String;
   paymentId_in?: String[] | String;
@@ -545,163 +1092,8 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface AddressUpdateManyMutationInput {
-  street1?: String;
-  street2?: String;
-  city?: String;
-  postcode?: Int;
-  country?: String;
-  isBilling?: Boolean;
-}
-
-export interface AddressWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  street1?: String;
-  street1_not?: String;
-  street1_in?: String[] | String;
-  street1_not_in?: String[] | String;
-  street1_lt?: String;
-  street1_lte?: String;
-  street1_gt?: String;
-  street1_gte?: String;
-  street1_contains?: String;
-  street1_not_contains?: String;
-  street1_starts_with?: String;
-  street1_not_starts_with?: String;
-  street1_ends_with?: String;
-  street1_not_ends_with?: String;
-  street2?: String;
-  street2_not?: String;
-  street2_in?: String[] | String;
-  street2_not_in?: String[] | String;
-  street2_lt?: String;
-  street2_lte?: String;
-  street2_gt?: String;
-  street2_gte?: String;
-  street2_contains?: String;
-  street2_not_contains?: String;
-  street2_starts_with?: String;
-  street2_not_starts_with?: String;
-  street2_ends_with?: String;
-  street2_not_ends_with?: String;
-  city?: String;
-  city_not?: String;
-  city_in?: String[] | String;
-  city_not_in?: String[] | String;
-  city_lt?: String;
-  city_lte?: String;
-  city_gt?: String;
-  city_gte?: String;
-  city_contains?: String;
-  city_not_contains?: String;
-  city_starts_with?: String;
-  city_not_starts_with?: String;
-  city_ends_with?: String;
-  city_not_ends_with?: String;
-  postcode?: Int;
-  postcode_not?: Int;
-  postcode_in?: Int[] | Int;
-  postcode_not_in?: Int[] | Int;
-  postcode_lt?: Int;
-  postcode_lte?: Int;
-  postcode_gt?: Int;
-  postcode_gte?: Int;
-  country?: String;
-  country_not?: String;
-  country_in?: String[] | String;
-  country_not_in?: String[] | String;
-  country_lt?: String;
-  country_lte?: String;
-  country_gt?: String;
-  country_gte?: String;
-  country_contains?: String;
-  country_not_contains?: String;
-  country_starts_with?: String;
-  country_not_starts_with?: String;
-  country_ends_with?: String;
-  country_not_ends_with?: String;
-  user?: UserWhereInput;
-  isBilling?: Boolean;
-  isBilling_not?: Boolean;
-  AND?: AddressWhereInput[] | AddressWhereInput;
-  OR?: AddressWhereInput[] | AddressWhereInput;
-  NOT?: AddressWhereInput[] | AddressWhereInput;
-}
-
-export interface UserCreatepermissionsInput {
-  set?: Permission[] | Permission;
-}
-
-export interface AddressUpdateWithoutUserDataInput {
-  street1?: String;
-  street2?: String;
-  city?: String;
-  postcode?: Int;
-  country?: String;
-  isBilling?: Boolean;
-}
-
-export interface ImageCreateOneInput {
-  create?: ImageCreateInput;
-  connect?: ImageWhereUniqueInput;
-}
-
-export interface SubscriptionUpdateManyMutationInput {
-  title?: String;
-  shortDescription?: String;
-  longDescription?: String;
-  totalPrice?: Int;
-  mealPrice?: Int;
-}
-
-export interface ImageCreateInput {
-  url: String;
-  type: ImageType;
-}
-
-export type ImageWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface AddressUpdateInput {
-  street1?: String;
-  street2?: String;
-  city?: String;
-  postcode?: Int;
-  country?: String;
-  user?: UserUpdateOneRequiredWithoutAddressesInput;
-  isBilling?: Boolean;
-}
-
-export interface AddressUpsertNestedInput {
-  update: AddressUpdateDataInput;
-  create: AddressCreateInput;
-}
-
-export interface UserUpdateOneRequiredWithoutAddressesInput {
-  create?: UserCreateWithoutAddressesInput;
-  update?: UserUpdateWithoutAddressesDataInput;
-  upsert?: UserUpsertWithoutAddressesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface AddressUpdateOneRequiredInput {
+export interface AddressCreateOneInput {
   create?: AddressCreateInput;
-  update?: AddressUpdateDataInput;
-  upsert?: AddressUpsertNestedInput;
   connect?: AddressWhereUniqueInput;
 }
 
@@ -710,21 +1102,9 @@ export interface UserUpsertNestedInput {
   create: UserCreateInput;
 }
 
-export interface SubscriptionUpdateManyDataInput {
-  title?: String;
-  shortDescription?: String;
-  longDescription?: String;
-  totalPrice?: Int;
-  mealPrice?: Int;
-}
-
-export interface UserUpdatepermissionsInput {
-  set?: Permission[] | Permission;
-}
-
-export interface SubscriptionUpdateManyWithWhereNestedInput {
-  where: SubscriptionScalarWhereInput;
-  data: SubscriptionUpdateManyDataInput;
+export interface AddressCreateManyInput {
+  create?: AddressCreateInput[] | AddressCreateInput;
+  connect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
 }
 
 export interface ImageUpdateOneInput {
@@ -734,6 +1114,76 @@ export interface ImageUpdateOneInput {
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: ImageWhereUniqueInput;
+}
+
+export interface ImageCreateOneInput {
+  create?: ImageCreateInput;
+  connect?: ImageWhereUniqueInput;
+}
+
+export interface AddressUpdateOneRequiredInput {
+  create?: AddressCreateInput;
+  update?: AddressUpdateDataInput;
+  upsert?: AddressUpsertNestedInput;
+  connect?: AddressWhereUniqueInput;
+}
+
+export interface SubscriptionCreateManyInput {
+  create?: SubscriptionCreateInput[] | SubscriptionCreateInput;
+  connect?: SubscriptionWhereUniqueInput[] | SubscriptionWhereUniqueInput;
+}
+
+export interface ImageUpdateOneRequiredInput {
+  create?: ImageCreateInput;
+  update?: ImageUpdateDataInput;
+  upsert?: ImageUpsertNestedInput;
+  connect?: ImageWhereUniqueInput;
+}
+
+export interface UserUpdateDataInput {
+  name?: String;
+  email?: String;
+  password?: String;
+  resetToken?: String;
+  resetTokenExpiry?: Float;
+  permissions?: UserUpdatepermissionsInput;
+  phone?: String;
+  billingAddress?: AddressUpdateOneInput;
+  shippingAddress?: AddressUpdateManyInput;
+  paymentId?: String;
+  avatar?: ImageUpdateOneInput;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface OrderUpdateInput {
+  user?: UserUpdateOneRequiredInput;
+  subscriptions?: SubscriptionUpdateManyInput;
+  billingAddress?: AddressUpdateOneRequiredInput;
+  shippingAddress?: AddressUpdateOneRequiredInput;
+  deliveryTime?: String;
+  deliveryDayOfWeek?: String;
+  paymentDate?: DateTimeInput;
+}
+
+export interface SubscriptionCreateInput {
+  title: String;
+  shortDescription: String;
+  longDescription: String;
+  totalPrice: Int;
+  mealPrice: Int;
+  thumbnailImage: ImageCreateOneInput;
+  largeImage: ImageCreateOneInput;
+}
+
+export interface SubscriptionUpdateWithWhereUniqueNestedInput {
+  where: SubscriptionWhereUniqueInput;
+  data: SubscriptionUpdateDataInput;
 }
 
 export interface SubscriptionScalarWhereInput {
@@ -830,16 +1280,6 @@ export interface SubscriptionScalarWhereInput {
   NOT?: SubscriptionScalarWhereInput[] | SubscriptionScalarWhereInput;
 }
 
-export interface ImageUpdateDataInput {
-  url?: String;
-  type?: ImageType;
-}
-
-export interface ImageUpdateManyDataInput {
-  url?: String;
-  type?: ImageType;
-}
-
 export interface ImageWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
@@ -869,702 +1309,41 @@ export interface ImageWhereInput {
   url_not_starts_with?: String;
   url_ends_with?: String;
   url_not_ends_with?: String;
-  type?: ImageType;
-  type_not?: ImageType;
-  type_in?: ImageType[] | ImageType;
-  type_not_in?: ImageType[] | ImageType;
   AND?: ImageWhereInput[] | ImageWhereInput;
   OR?: ImageWhereInput[] | ImageWhereInput;
   NOT?: ImageWhereInput[] | ImageWhereInput;
 }
 
-export type SubscriptionWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface AddressUpdateManyDataInput {
-  street1?: String;
-  street2?: String;
-  city?: String;
-  postcode?: Int;
-  country?: String;
-  isBilling?: Boolean;
-}
-
-export interface ImageUpsertWithWhereUniqueNestedInput {
-  where: ImageWhereUniqueInput;
+export interface ImageUpsertNestedInput {
   update: ImageUpdateDataInput;
   create: ImageCreateInput;
-}
-
-export interface AddressUpdateManyWithWhereNestedInput {
-  where: AddressScalarWhereInput;
-  data: AddressUpdateManyDataInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-}>;
-
-export interface AddressScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  street1?: String;
-  street1_not?: String;
-  street1_in?: String[] | String;
-  street1_not_in?: String[] | String;
-  street1_lt?: String;
-  street1_lte?: String;
-  street1_gt?: String;
-  street1_gte?: String;
-  street1_contains?: String;
-  street1_not_contains?: String;
-  street1_starts_with?: String;
-  street1_not_starts_with?: String;
-  street1_ends_with?: String;
-  street1_not_ends_with?: String;
-  street2?: String;
-  street2_not?: String;
-  street2_in?: String[] | String;
-  street2_not_in?: String[] | String;
-  street2_lt?: String;
-  street2_lte?: String;
-  street2_gt?: String;
-  street2_gte?: String;
-  street2_contains?: String;
-  street2_not_contains?: String;
-  street2_starts_with?: String;
-  street2_not_starts_with?: String;
-  street2_ends_with?: String;
-  street2_not_ends_with?: String;
-  city?: String;
-  city_not?: String;
-  city_in?: String[] | String;
-  city_not_in?: String[] | String;
-  city_lt?: String;
-  city_lte?: String;
-  city_gt?: String;
-  city_gte?: String;
-  city_contains?: String;
-  city_not_contains?: String;
-  city_starts_with?: String;
-  city_not_starts_with?: String;
-  city_ends_with?: String;
-  city_not_ends_with?: String;
-  postcode?: Int;
-  postcode_not?: Int;
-  postcode_in?: Int[] | Int;
-  postcode_not_in?: Int[] | Int;
-  postcode_lt?: Int;
-  postcode_lte?: Int;
-  postcode_gt?: Int;
-  postcode_gte?: Int;
-  country?: String;
-  country_not?: String;
-  country_in?: String[] | String;
-  country_not_in?: String[] | String;
-  country_lt?: String;
-  country_lte?: String;
-  country_gt?: String;
-  country_gte?: String;
-  country_contains?: String;
-  country_not_contains?: String;
-  country_starts_with?: String;
-  country_not_starts_with?: String;
-  country_ends_with?: String;
-  country_not_ends_with?: String;
-  isBilling?: Boolean;
-  isBilling_not?: Boolean;
-  AND?: AddressScalarWhereInput[] | AddressScalarWhereInput;
-  OR?: AddressScalarWhereInput[] | AddressScalarWhereInput;
-  NOT?: AddressScalarWhereInput[] | AddressScalarWhereInput;
-}
-
-export interface SubscriptionUpdateDataInput {
-  title?: String;
-  shortDescription?: String;
-  longDescription?: String;
-  totalPrice?: Int;
-  mealPrice?: Int;
-  images?: ImageUpdateManyInput;
-}
-
-export interface AddressUpsertWithWhereUniqueWithoutUserInput {
-  where: AddressWhereUniqueInput;
-  update: AddressUpdateWithoutUserDataInput;
-  create: AddressCreateWithoutUserInput;
-}
-
-export interface SubscriptionUpdateManyInput {
-  create?: SubscriptionCreateInput[] | SubscriptionCreateInput;
-  update?:
-    | SubscriptionUpdateWithWhereUniqueNestedInput[]
-    | SubscriptionUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | SubscriptionUpsertWithWhereUniqueNestedInput[]
-    | SubscriptionUpsertWithWhereUniqueNestedInput;
-  delete?: SubscriptionWhereUniqueInput[] | SubscriptionWhereUniqueInput;
-  connect?: SubscriptionWhereUniqueInput[] | SubscriptionWhereUniqueInput;
-  disconnect?: SubscriptionWhereUniqueInput[] | SubscriptionWhereUniqueInput;
-  deleteMany?: SubscriptionScalarWhereInput[] | SubscriptionScalarWhereInput;
-  updateMany?:
-    | SubscriptionUpdateManyWithWhereNestedInput[]
-    | SubscriptionUpdateManyWithWhereNestedInput;
-}
-
-export interface ImageUpdateInput {
-  url?: String;
-  type?: ImageType;
-}
-
-export interface AddressCreateInput {
-  street1: String;
-  street2?: String;
-  city: String;
-  postcode: Int;
-  country: String;
-  user: UserCreateOneWithoutAddressesInput;
-  isBilling?: Boolean;
-}
-
-export interface ImageUpdateManyMutationInput {
-  url?: String;
-  type?: ImageType;
-}
-
-export interface UserCreateWithoutAddressesInput {
-  name: String;
-  email: String;
-  password: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserCreatepermissionsInput;
-  phone?: String;
-  paymentId?: String;
-  avatar?: ImageCreateOneInput;
-}
-
-export interface OrderCreateInput {
-  user: UserCreateOneInput;
-  subscriptions?: SubscriptionCreateManyInput;
-  shippingAddress: AddressCreateOneInput;
-  deliveryTime: String;
-  deliveryDayOfWeek: String;
-  paymentDate: DateTimeInput;
-}
-
-export interface SubscriptionUpdateInput {
-  title?: String;
-  shortDescription?: String;
-  longDescription?: String;
-  totalPrice?: Int;
-  mealPrice?: Int;
-  images?: ImageUpdateManyInput;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface AddressUpdateDataInput {
-  street1?: String;
-  street2?: String;
-  city?: String;
-  postcode?: Int;
-  country?: String;
-  user?: UserUpdateOneRequiredWithoutAddressesInput;
-  isBilling?: Boolean;
-}
-
-export interface UserCreateInput {
-  name: String;
-  email: String;
-  password: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserCreatepermissionsInput;
-  phone?: String;
-  addresses?: AddressCreateManyWithoutUserInput;
-  paymentId?: String;
-  avatar?: ImageCreateOneInput;
-}
-
-export interface SubscriptionWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  shortDescription?: String;
-  shortDescription_not?: String;
-  shortDescription_in?: String[] | String;
-  shortDescription_not_in?: String[] | String;
-  shortDescription_lt?: String;
-  shortDescription_lte?: String;
-  shortDescription_gt?: String;
-  shortDescription_gte?: String;
-  shortDescription_contains?: String;
-  shortDescription_not_contains?: String;
-  shortDescription_starts_with?: String;
-  shortDescription_not_starts_with?: String;
-  shortDescription_ends_with?: String;
-  shortDescription_not_ends_with?: String;
-  longDescription?: String;
-  longDescription_not?: String;
-  longDescription_in?: String[] | String;
-  longDescription_not_in?: String[] | String;
-  longDescription_lt?: String;
-  longDescription_lte?: String;
-  longDescription_gt?: String;
-  longDescription_gte?: String;
-  longDescription_contains?: String;
-  longDescription_not_contains?: String;
-  longDescription_starts_with?: String;
-  longDescription_not_starts_with?: String;
-  longDescription_ends_with?: String;
-  longDescription_not_ends_with?: String;
-  totalPrice?: Int;
-  totalPrice_not?: Int;
-  totalPrice_in?: Int[] | Int;
-  totalPrice_not_in?: Int[] | Int;
-  totalPrice_lt?: Int;
-  totalPrice_lte?: Int;
-  totalPrice_gt?: Int;
-  totalPrice_gte?: Int;
-  mealPrice?: Int;
-  mealPrice_not?: Int;
-  mealPrice_in?: Int[] | Int;
-  mealPrice_not_in?: Int[] | Int;
-  mealPrice_lt?: Int;
-  mealPrice_lte?: Int;
-  mealPrice_gt?: Int;
-  mealPrice_gte?: Int;
-  images_every?: ImageWhereInput;
-  images_some?: ImageWhereInput;
-  images_none?: ImageWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: SubscriptionWhereInput[] | SubscriptionWhereInput;
-  OR?: SubscriptionWhereInput[] | SubscriptionWhereInput;
-  NOT?: SubscriptionWhereInput[] | SubscriptionWhereInput;
-}
-
-export interface AddressCreateManyWithoutUserInput {
-  create?: AddressCreateWithoutUserInput[] | AddressCreateWithoutUserInput;
-  connect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
-}
-
-export interface SubscriptionUpsertWithWhereUniqueNestedInput {
-  where: SubscriptionWhereUniqueInput;
-  update: SubscriptionUpdateDataInput;
-  create: SubscriptionCreateInput;
-}
-
-export interface AddressCreateWithoutUserInput {
-  street1: String;
-  street2?: String;
-  city: String;
-  postcode: Int;
-  country: String;
-  isBilling?: Boolean;
-}
-
-export interface ImageScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  url?: String;
-  url_not?: String;
-  url_in?: String[] | String;
-  url_not_in?: String[] | String;
-  url_lt?: String;
-  url_lte?: String;
-  url_gt?: String;
-  url_gte?: String;
-  url_contains?: String;
-  url_not_contains?: String;
-  url_starts_with?: String;
-  url_not_starts_with?: String;
-  url_ends_with?: String;
-  url_not_ends_with?: String;
-  type?: ImageType;
-  type_not?: ImageType;
-  type_in?: ImageType[] | ImageType;
-  type_not_in?: ImageType[] | ImageType;
-  AND?: ImageScalarWhereInput[] | ImageScalarWhereInput;
-  OR?: ImageScalarWhereInput[] | ImageScalarWhereInput;
-  NOT?: ImageScalarWhereInput[] | ImageScalarWhereInput;
-}
-
-export interface SubscriptionCreateManyInput {
-  create?: SubscriptionCreateInput[] | SubscriptionCreateInput;
-  connect?: SubscriptionWhereUniqueInput[] | SubscriptionWhereUniqueInput;
-}
-
-export interface ImageUpdateManyInput {
-  create?: ImageCreateInput[] | ImageCreateInput;
-  update?:
-    | ImageUpdateWithWhereUniqueNestedInput[]
-    | ImageUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | ImageUpsertWithWhereUniqueNestedInput[]
-    | ImageUpsertWithWhereUniqueNestedInput;
-  delete?: ImageWhereUniqueInput[] | ImageWhereUniqueInput;
-  connect?: ImageWhereUniqueInput[] | ImageWhereUniqueInput;
-  disconnect?: ImageWhereUniqueInput[] | ImageWhereUniqueInput;
-  deleteMany?: ImageScalarWhereInput[] | ImageScalarWhereInput;
-  updateMany?:
-    | ImageUpdateManyWithWhereNestedInput[]
-    | ImageUpdateManyWithWhereNestedInput;
-}
-
-export interface UserCreateOneWithoutAddressesInput {
-  create?: UserCreateWithoutAddressesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface AddressUpdateWithWhereUniqueWithoutUserInput {
-  where: AddressWhereUniqueInput;
-  data: AddressUpdateWithoutUserDataInput;
-}
-
-export interface ImageCreateManyInput {
-  create?: ImageCreateInput[] | ImageCreateInput;
-  connect?: ImageWhereUniqueInput[] | ImageWhereUniqueInput;
-}
-
-export interface SubscriptionCreateInput {
-  title: String;
-  shortDescription: String;
-  longDescription: String;
-  totalPrice: Int;
-  mealPrice: Int;
-  images?: ImageCreateManyInput;
-}
-
-export interface AddressCreateOneInput {
-  create?: AddressCreateInput;
-  connect?: AddressWhereUniqueInput;
-}
-
-export interface OrderUpdateManyMutationInput {
-  deliveryTime?: String;
-  deliveryDayOfWeek?: String;
-  paymentDate?: DateTimeInput;
-}
-
-export interface OrderWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  user?: UserWhereInput;
-  subscriptions_every?: SubscriptionWhereInput;
-  subscriptions_some?: SubscriptionWhereInput;
-  subscriptions_none?: SubscriptionWhereInput;
-  shippingAddress?: AddressWhereInput;
-  deliveryTime?: String;
-  deliveryTime_not?: String;
-  deliveryTime_in?: String[] | String;
-  deliveryTime_not_in?: String[] | String;
-  deliveryTime_lt?: String;
-  deliveryTime_lte?: String;
-  deliveryTime_gt?: String;
-  deliveryTime_gte?: String;
-  deliveryTime_contains?: String;
-  deliveryTime_not_contains?: String;
-  deliveryTime_starts_with?: String;
-  deliveryTime_not_starts_with?: String;
-  deliveryTime_ends_with?: String;
-  deliveryTime_not_ends_with?: String;
-  deliveryDayOfWeek?: String;
-  deliveryDayOfWeek_not?: String;
-  deliveryDayOfWeek_in?: String[] | String;
-  deliveryDayOfWeek_not_in?: String[] | String;
-  deliveryDayOfWeek_lt?: String;
-  deliveryDayOfWeek_lte?: String;
-  deliveryDayOfWeek_gt?: String;
-  deliveryDayOfWeek_gte?: String;
-  deliveryDayOfWeek_contains?: String;
-  deliveryDayOfWeek_not_contains?: String;
-  deliveryDayOfWeek_starts_with?: String;
-  deliveryDayOfWeek_not_starts_with?: String;
-  deliveryDayOfWeek_ends_with?: String;
-  deliveryDayOfWeek_not_ends_with?: String;
-  paymentDate?: DateTimeInput;
-  paymentDate_not?: DateTimeInput;
-  paymentDate_in?: DateTimeInput[] | DateTimeInput;
-  paymentDate_not_in?: DateTimeInput[] | DateTimeInput;
-  paymentDate_lt?: DateTimeInput;
-  paymentDate_lte?: DateTimeInput;
-  paymentDate_gt?: DateTimeInput;
-  paymentDate_gte?: DateTimeInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: OrderWhereInput[] | OrderWhereInput;
-  OR?: OrderWhereInput[] | OrderWhereInput;
-  NOT?: OrderWhereInput[] | OrderWhereInput;
-}
-
-export interface AddressUpdateManyWithoutUserInput {
-  create?: AddressCreateWithoutUserInput[] | AddressCreateWithoutUserInput;
-  delete?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
-  connect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
-  disconnect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
-  update?:
-    | AddressUpdateWithWhereUniqueWithoutUserInput[]
-    | AddressUpdateWithWhereUniqueWithoutUserInput;
-  upsert?:
-    | AddressUpsertWithWhereUniqueWithoutUserInput[]
-    | AddressUpsertWithWhereUniqueWithoutUserInput;
-  deleteMany?: AddressScalarWhereInput[] | AddressScalarWhereInput;
-  updateMany?:
-    | AddressUpdateManyWithWhereNestedInput[]
-    | AddressUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpdateDataInput {
-  name?: String;
-  email?: String;
-  password?: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserUpdatepermissionsInput;
-  phone?: String;
-  addresses?: AddressUpdateManyWithoutUserInput;
-  paymentId?: String;
-  avatar?: ImageUpdateOneInput;
-}
-
-export interface UserUpdateOneRequiredInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface OrderUpdateInput {
-  user?: UserUpdateOneRequiredInput;
-  subscriptions?: SubscriptionUpdateManyInput;
-  shippingAddress?: AddressUpdateOneRequiredInput;
-  deliveryTime?: String;
-  deliveryDayOfWeek?: String;
-  paymentDate?: DateTimeInput;
-}
-
-export interface ImageUpdateManyWithWhereNestedInput {
-  where: ImageScalarWhereInput;
-  data: ImageUpdateManyDataInput;
-}
-
-export type OrderWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpdateInput {
-  name?: String;
-  email?: String;
-  password?: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserUpdatepermissionsInput;
-  phone?: String;
-  addresses?: AddressUpdateManyWithoutUserInput;
-  paymentId?: String;
-  avatar?: ImageUpdateOneInput;
-}
-
-export interface SubscriptionUpdateWithWhereUniqueNestedInput {
-  where: SubscriptionWhereUniqueInput;
-  data: SubscriptionUpdateDataInput;
-}
-
-export interface ImageUpdateWithWhereUniqueNestedInput {
-  where: ImageWhereUniqueInput;
-  data: ImageUpdateDataInput;
 }
 
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface BatchPayload {
-  count: Long;
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
 }
 
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
     Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface Image {
-  id: ID_Output;
-  url: String;
-  type: ImageType;
-}
-
-export interface ImagePromise extends Promise<Image>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  url: () => Promise<String>;
-  type: () => Promise<ImageType>;
-}
-
-export interface ImageSubscription
-  extends Promise<AsyncIterator<Image>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  url: () => Promise<AsyncIterator<String>>;
-  type: () => Promise<AsyncIterator<ImageType>>;
-}
-
-export interface SubscriptionEdge {
-  node: Subscription;
-  cursor: String;
-}
-
-export interface SubscriptionEdgePromise
-  extends Promise<SubscriptionEdge>,
-    Fragmentable {
-  node: <T = SubscriptionPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface SubscriptionEdgeSubscription
-  extends Promise<AsyncIterator<SubscriptionEdge>>,
-    Fragmentable {
-  node: <T = SubscriptionSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ImageEdge {
-  node: Image;
-  cursor: String;
-}
-
-export interface ImageEdgePromise extends Promise<ImageEdge>, Fragmentable {
-  node: <T = ImagePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ImageEdgeSubscription
-  extends Promise<AsyncIterator<ImageEdge>>,
-    Fragmentable {
-  node: <T = ImageSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface SubscriptionConnection {
-  pageInfo: PageInfo;
-  edges: SubscriptionEdge[];
-}
-
-export interface SubscriptionConnectionPromise
-  extends Promise<SubscriptionConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<SubscriptionEdge>>() => T;
-  aggregate: <T = AggregateSubscriptionPromise>() => T;
-}
-
-export interface SubscriptionConnectionSubscription
-  extends Promise<AsyncIterator<SubscriptionConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<SubscriptionEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateSubscriptionSubscription>() => T;
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface OrderEdge {
@@ -1584,22 +1363,6 @@ export interface OrderEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateOrder {
-  count: Int;
-}
-
-export interface AggregateOrderPromise
-  extends Promise<AggregateOrder>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateOrderSubscription
-  extends Promise<AsyncIterator<AggregateOrder>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface AddressEdge {
   node: Address;
   cursor: String;
@@ -1615,43 +1378,6 @@ export interface AddressEdgeSubscription
     Fragmentable {
   node: <T = AddressSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AddressConnection {
-  pageInfo: PageInfo;
-  edges: AddressEdge[];
-}
-
-export interface AddressConnectionPromise
-  extends Promise<AddressConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<AddressEdge>>() => T;
-  aggregate: <T = AggregateAddressPromise>() => T;
-}
-
-export interface AddressConnectionSubscription
-  extends Promise<AsyncIterator<AddressConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<AddressEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateAddressSubscription>() => T;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface OrderConnection {
@@ -1675,6 +1401,71 @@ export interface OrderConnectionSubscription
   aggregate: <T = AggregateOrderSubscription>() => T;
 }
 
+export interface AggregateAddress {
+  count: Int;
+}
+
+export interface AggregateAddressPromise
+  extends Promise<AggregateAddress>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAddressSubscription
+  extends Promise<AsyncIterator<AggregateAddress>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Image {
+  id: ID_Output;
+  url: String;
+}
+
+export interface ImagePromise extends Promise<Image>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  url: () => Promise<String>;
+}
+
+export interface ImageSubscription
+  extends Promise<AsyncIterator<Image>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  url: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateImage {
+  count: Int;
+}
+
+export interface AggregateImagePromise
+  extends Promise<AggregateImage>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateImageSubscription
+  extends Promise<AsyncIterator<AggregateImage>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
 export interface UserConnection {
   pageInfo: PageInfo;
   edges: UserEdge[];
@@ -1696,6 +1487,22 @@ export interface UserConnectionSubscription
   aggregate: <T = AggregateUserSubscription>() => T;
 }
 
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface AggregateSubscription {
   count: Int;
 }
@@ -1712,20 +1519,46 @@ export interface AggregateSubscriptionSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface AggregateImage {
-  count: Int;
+export interface AddressConnection {
+  pageInfo: PageInfo;
+  edges: AddressEdge[];
 }
 
-export interface AggregateImagePromise
-  extends Promise<AggregateImage>,
+export interface AddressConnectionPromise
+  extends Promise<AddressConnection>,
     Fragmentable {
-  count: () => Promise<Int>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<AddressEdge>>() => T;
+  aggregate: <T = AggregateAddressPromise>() => T;
 }
 
-export interface AggregateImageSubscription
-  extends Promise<AsyncIterator<AggregateImage>>,
+export interface AddressConnectionSubscription
+  extends Promise<AsyncIterator<AddressConnection>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<AddressEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateAddressSubscription>() => T;
+}
+
+export interface SubscriptionConnection {
+  pageInfo: PageInfo;
+  edges: SubscriptionEdge[];
+}
+
+export interface SubscriptionConnectionPromise
+  extends Promise<SubscriptionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SubscriptionEdge>>() => T;
+  aggregate: <T = AggregateSubscriptionPromise>() => T;
+}
+
+export interface SubscriptionConnectionSubscription
+  extends Promise<AsyncIterator<SubscriptionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SubscriptionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSubscriptionSubscription>() => T;
 }
 
 export interface Order {
@@ -1751,6 +1584,7 @@ export interface OrderPromise extends Promise<Order>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  billingAddress: <T = AddressPromise>() => T;
   shippingAddress: <T = AddressPromise>() => T;
   deliveryTime: () => Promise<String>;
   deliveryDayOfWeek: () => Promise<String>;
@@ -1775,33 +1609,13 @@ export interface OrderSubscription
       last?: Int;
     }
   ) => T;
+  billingAddress: <T = AddressSubscription>() => T;
   shippingAddress: <T = AddressSubscription>() => T;
   deliveryTime: () => Promise<AsyncIterator<String>>;
   deliveryDayOfWeek: () => Promise<AsyncIterator<String>>;
   paymentDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface ImageConnection {
-  pageInfo: PageInfo;
-  edges: ImageEdge[];
-}
-
-export interface ImageConnectionPromise
-  extends Promise<ImageConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ImageEdge>>() => T;
-  aggregate: <T = AggregateImagePromise>() => T;
-}
-
-export interface ImageConnectionSubscription
-  extends Promise<AsyncIterator<ImageConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ImageEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateImageSubscription>() => T;
 }
 
 export interface User {
@@ -1827,7 +1641,8 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   resetTokenExpiry: () => Promise<Float>;
   permissions: () => Promise<Permission[]>;
   phone: () => Promise<String>;
-  addresses: <T = FragmentableArray<Address>>(
+  billingAddress: <T = AddressPromise>() => T;
+  shippingAddress: <T = FragmentableArray<Address>>(
     args?: {
       where?: AddressWhereInput;
       orderBy?: AddressOrderByInput;
@@ -1855,7 +1670,8 @@ export interface UserSubscription
   resetTokenExpiry: () => Promise<AsyncIterator<Float>>;
   permissions: () => Promise<AsyncIterator<Permission[]>>;
   phone: () => Promise<AsyncIterator<String>>;
-  addresses: <T = Promise<AsyncIterator<AddressSubscription>>>(
+  billingAddress: <T = AddressSubscription>() => T;
+  shippingAddress: <T = Promise<AsyncIterator<AddressSubscription>>>(
     args?: {
       where?: AddressWhereInput;
       orderBy?: AddressOrderByInput;
@@ -1872,27 +1688,77 @@ export interface UserSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
+export interface ImageEdge {
+  node: Image;
+  cursor: String;
 }
 
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
+export interface ImageEdgePromise extends Promise<ImageEdge>, Fragmentable {
+  node: <T = ImagePromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
+export interface ImageEdgeSubscription
+  extends Promise<AsyncIterator<ImageEdge>>,
     Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
+  node: <T = ImageSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ImageConnection {
+  pageInfo: PageInfo;
+  edges: ImageEdge[];
+}
+
+export interface ImageConnectionPromise
+  extends Promise<ImageConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ImageEdge>>() => T;
+  aggregate: <T = AggregateImagePromise>() => T;
+}
+
+export interface ImageConnectionSubscription
+  extends Promise<AsyncIterator<ImageConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ImageEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateImageSubscription>() => T;
+}
+
+export interface AggregateOrder {
+  count: Int;
+}
+
+export interface AggregateOrderPromise
+  extends Promise<AggregateOrder>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateOrderSubscription
+  extends Promise<AsyncIterator<AggregateOrder>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SubscriptionEdge {
+  node: Subscription;
+  cursor: String;
+}
+
+export interface SubscriptionEdgePromise
+  extends Promise<SubscriptionEdge>,
+    Fragmentable {
+  node: <T = SubscriptionPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SubscriptionEdgeSubscription
+  extends Promise<AsyncIterator<SubscriptionEdge>>,
+    Fragmentable {
+  node: <T = SubscriptionSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Address {
@@ -1902,7 +1768,6 @@ export interface Address {
   city: String;
   postcode: Int;
   country: String;
-  isBilling: Boolean;
 }
 
 export interface AddressPromise extends Promise<Address>, Fragmentable {
@@ -1912,8 +1777,6 @@ export interface AddressPromise extends Promise<Address>, Fragmentable {
   city: () => Promise<String>;
   postcode: () => Promise<Int>;
   country: () => Promise<String>;
-  user: <T = UserPromise>() => T;
-  isBilling: () => Promise<Boolean>;
 }
 
 export interface AddressSubscription
@@ -1925,8 +1788,6 @@ export interface AddressSubscription
   city: () => Promise<AsyncIterator<String>>;
   postcode: () => Promise<AsyncIterator<Int>>;
   country: () => Promise<AsyncIterator<String>>;
-  user: <T = UserSubscription>() => T;
-  isBilling: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface UserEdge {
@@ -1946,33 +1807,28 @@ export interface UserEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateAddress {
-  count: Int;
-}
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
 
-export interface AggregateAddressPromise
-  extends Promise<AggregateAddress>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
+export type Long = string;
 
-export interface AggregateAddressSubscription
-  extends Promise<AsyncIterator<AggregateAddress>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
+/*
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+*/
+export type ID_Input = string | number;
+export type ID_Output = string;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
 
-export type Long = string;
-
 /*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). 
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
-export type Float = number;
+export type Int = number;
 
 /*
 DateTime scalar input type, allowing Date
@@ -1985,20 +1841,9 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
-The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
-export type ID_Input = string | number;
-export type ID_Output = string;
-
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
+export type Float = number;
 
 /**
  * Model Metadata
@@ -2011,10 +1856,6 @@ export const models: Model[] = [
   },
   {
     name: "Image",
-    embedded: false
-  },
-  {
-    name: "ImageType",
     embedded: false
   },
   {
