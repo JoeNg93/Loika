@@ -10,7 +10,7 @@ import {
 import { Constants } from 'expo';
 import SideSwipe from 'react-native-sideswipe';
 
-import Carousel from '../../../../components/Carousel.js';
+import Carousel from '../../../../components/Carousel';
 const boxes = [
   {
     title: 'Mixed Box',
@@ -20,7 +20,7 @@ const boxes = [
     description:
       'Best of both worl. Can include beef, pork , chicken, milk, eggs, potatoes, brocoli, cabbage... Check to see more details.',
     tag: 'Best seller',
-    image: require('../assets/images/mixed.png'),
+    image: require('../../../../assets/images/mixed.png'),
   },
   {
     title: 'Vegan Box',
@@ -30,7 +30,7 @@ const boxes = [
     description:
       'Best of both worl. Can include beef, pork , chicken, milk, eggs, potatoes, brocoli, cabbage... Check to see more details.',
     tag: 'Vegan',
-    image: require('../assets/images/vegan.png'),
+    image: require('../../../../assets/images/vegan.png'),
   },
   {
     title: 'Meat Box',
@@ -40,7 +40,7 @@ const boxes = [
     description:
       'Best of both worl. Can include beef, pork , chicken, milk, eggs, potatoes, brocoli, cabbage... Check to see more details.',
     tag: 'Meat',
-    image: require('../assets/images/meat.png'),
+    image: require('../../../../assets/images/meat.png'),
   },
 ];
 
@@ -65,14 +65,14 @@ export default class SubscriptionSelectionScreen extends React.Component {
             <TouchableOpacity>
               <Image
                 style={{ width: 16, height: 16 }}
-                source={require('../assets/images/previous.png')}
+                source={require('../../../../assets/images/previous.png')}
               />
             </TouchableOpacity>
             <Text style={styles.topText}>Choose your subscription</Text>
             <TouchableOpacity>
               <Image
                 style={{ width: 18, height: 18 }}
-                source={require('../assets/images/cart.png')}
+                source={require('../../../../assets/images/cart.png')}
               />
             </TouchableOpacity>
           </View>
@@ -104,7 +104,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
             <View style={styles.plusCircle}>
               <Image
                 style={styles.plus}
-                source={require('../assets/images/plus.png')}
+                source={require('../../../../assets/images/plus.png')}
               />
             </View>
           </TouchableOpacity>
