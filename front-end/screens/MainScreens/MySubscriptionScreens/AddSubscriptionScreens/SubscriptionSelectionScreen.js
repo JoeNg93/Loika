@@ -11,6 +11,9 @@ import { Constants } from 'expo';
 import SideSwipe from 'react-native-sideswipe';
 
 import Carousel from '../../../../components/Carousel';
+
+import colors from '../../../../constants/Colors';
+
 const boxes = [
   {
     title: 'Mixed Box',
@@ -46,7 +49,26 @@ const boxes = [
 
 export default class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerTitle: 'Choose your subscription',
+    headerTransparent: true,
+    headerTintColor: colors.mediumCarmine,
+    headerBackImage: (
+      <Image
+        style={{ width: 16, height: 16, marginLeft: 20 }}
+        source={require('../../../../assets/images/previous.png')}
+      />
+    ),
+    headerRight: (
+      <TouchableOpacity>
+        <Image
+          style={{ width: 16, height: 16, marginRight: 20 }}
+          source={require('../../../../assets/images/cart.png')}
+        />
+      </TouchableOpacity>
+    ),
+    headerStyle: {
+      marginTop: 8,
+    },
   };
 
   state = {
@@ -61,21 +83,6 @@ export default class SubscriptionSelectionScreen extends React.Component {
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
           <View style={styles.circle} />
-          <View style={styles.topBar}>
-            <TouchableOpacity>
-              <Image
-                style={{ width: 16, height: 16 }}
-                source={require('../../../../assets/images/previous.png')}
-              />
-            </TouchableOpacity>
-            <Text style={styles.topText}>Choose your subscription</Text>
-            <TouchableOpacity>
-              <Image
-                style={{ width: 18, height: 18 }}
-                source={require('../../../../assets/images/cart.png')}
-              />
-            </TouchableOpacity>
-          </View>
         </View>
         <View style={{ flex: 9 }}>
           <SideSwipe
