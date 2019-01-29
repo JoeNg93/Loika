@@ -3,12 +3,9 @@ const createServer = require('./createServer');
 const { formatError } = require('apollo-errors');
 
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
 
 const server = createServer();
 
-// Use express middlware to handle cookies (JWT)
-server.express.use(cookieParser());
 // Use express middlware to populate current user
 // Decode JWT to get user id per each request
 server.express.use((req, res, next) => {
