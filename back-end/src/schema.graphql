@@ -5,6 +5,10 @@ type Mutation {
   signup(email: String!, password: String!, name: String!): String
   signin(email: String!, password: String!): String
 
+  # user reset password
+  requestReset(email: String!): Boolean
+  resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
+
   # address with CRUD
   createAddress(street1: String!, street2: String, city: String!, postcode: Int, country: String!): Address!
   updateAddress(id: ID!, street1: String, street2: String, city: String, postcode: Int, country: String): Address!
@@ -14,4 +18,10 @@ type Mutation {
 type Query {
   me: User
   readAddress(id: ID!): Address
+}
+
+type User{
+  id: ID!
+  name: String!
+  email: String!
 }

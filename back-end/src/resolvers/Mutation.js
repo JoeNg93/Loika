@@ -1,6 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { prisma } = require("../generated/prisma-client");
+const { randomBytes } = require('crypto');
+const { promisify } = require('util');
+const { transport, makeANiceEmail } = require('../mail');
 
 const Mutations = {
   /**
@@ -62,6 +65,36 @@ const Mutations = {
     });
     // 4. return token only
     return token;
+  },
+
+  /**
+   * Make a request to reset user's password
+   * @param {*} parent 
+   * @param {*} args 
+   * @param {*} ctx 
+   * @param {*} info 
+   */
+  async requestReset(parent, args, ctx, info) {
+    // 1. check if there is a user with that email
+    const user = await prisma.user({ email });
+    if (!user) {
+      throw new Error(`No such user found for email ${email}`);
+    }
+    // 2. Set a reset token and expiry on that user
+    const randomBytesPromiseified = promisify(randomBytes);
+    const resetToken = (await randomBytesPromiseified(20)).toString('hex');
+    const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+    const res = await ctx.db.mutation.updateUser({
+      where: { email: args.email },
+      data: { resetToken, resetTokenExpiry },
+    });
+    // 3. Email them that reset token
+    // or send notification
+    // need to dicuss with team
+    // TODO:
+
+    // 4. Return the message
+    return true;
   },
 
   /**
