@@ -5,7 +5,9 @@ import {
   Dimensions,
   Image,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform,
+  Animated
 } from "react-native";
 import { Constants } from 'expo';
 import SideSwipe from 'react-native-sideswipe';
@@ -26,14 +28,14 @@ export default class SubscriptionSelectionScreen extends React.Component {
     currentIndex: 0,
   };
 
-	render() {
+
+	render = () => {
 		const { width } = Dimensions.get('window');
     const contentOffset = (width - Carousel.WIDTH) / 2 ;
-
 		return (
-			<View style={{flex: 1}}>
-				<View style={{flex: 1}}>
-          <View style={styles.circle}></View>
+			<View style={{flex: 1, justifyContent: 'space-between'}}>
+				<View style={{height: 60}}>
+          <View style={styles.bigCircle}></View>
           <View style={styles.topBar}>
             <TouchableOpacity>
               <Image 
@@ -49,17 +51,22 @@ export default class SubscriptionSelectionScreen extends React.Component {
               />
             </TouchableOpacity>
           </View>
+
+          <View style={styles.priceTag}>
+            <Text style={styles.priceText}>{boxes[this.state.currentIndex].price}</Text>
+          </View>
         </View>
-				<View style={{flex: 9}}>
+				<View style={{height: 305}}>
           <SideSwipe
-            index={this.state.currentIndex}
+            shouldCapture={() => true}
+            extractKey={item => item.title}
             itemWidth={Carousel.WIDTH}
             threshold={5}
             style={{ width }}
-            contentContainerStyle={{  paddingTop: 20 }}
+            contentContainerStyle={{  paddingTop: 20, overflow: 'visible', marginBottom: 10 }}
             data={boxes}
             contentOffset={contentOffset}
-            onIndexChang1e={index =>
+            onIndexChange={index =>
               this.setState(() => ({ currentIndex: index }))
             }
             renderItem={({ itemIndex, currentIndex, item, animatedValue }) => (
@@ -72,7 +79,19 @@ export default class SubscriptionSelectionScreen extends React.Component {
             )}
           />
         </View>
-        <View style={{flex: 1, justifyContent: 'center'}}>
+        <Animated.View style={styles.textContainer}>
+          <View style={styles.textTag}>
+            <Text style={styles.textTagText}>{boxes[curr].tag}</Text>
+          </View>
+          <Text style={styles.title}>{boxes[this.state.currentIndex].title}</Text>
+          <View style={styles.valueContainer}>
+            <Text style={styles.valueText}>{boxes[this.state.currentIndex].size}</Text>
+            <View style={styles.circle}></View>
+            <Text style={styles.valueText}>{boxes[this.state.currentIndex].divprice}</Text>
+          </View>
+          <Text style={styles.description}>{boxes[this.state.currentIndex].description}</Text>
+        </Animated.View>
+        <View style={styles.totalContainer}>
           <TouchableOpacity style={{alignItems: 'center'}}>
             <View style={styles.plusCircle}>
               <Image
@@ -83,7 +102,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
           </TouchableOpacity>
           <Text style={styles.total}>TOTAL: 549€</Text>
         </View>
-        <View style={[{flex: 1}, styles.bottom]}>
+        <View style={ styles.bottom}>
           <TouchableOpacity style={styles.orderButton}>
             <Text style={styles.orderText}>Confirm order</Text>
           </TouchableOpacity>
@@ -93,7 +112,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
 	}
 }
 const styles = StyleSheet.create({
-	circle: {
+	bigCircle: {
 		position: 'absolute',
 		width: 622,
 		height: 622,
@@ -104,11 +123,12 @@ const styles = StyleSheet.create({
   },
   topBar: {
     flexDirection: 'row',
-    paddingTop: 40,
+    paddingTop: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
     marginLeft: 30,
-    marginRight: 30
+    marginRight: 30,
+    marginTop:30
   },
   topText: {
     //fontFamily: 'Raleway',
@@ -144,6 +164,11 @@ const styles = StyleSheet.create({
     color: '#AA3C3B',
     paddingTop: 16
   },
+  totalContainer: {
+    height: 90, 
+    justifyContent: 'center',
+    marginTop: 25
+  },
   orderButton: {
     width: this.width,
     height: 56,
@@ -159,6 +184,121 @@ const styles = StyleSheet.create({
     color: '#FFFFFF'
   },
   bottom: {
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    height: 56
+  },
+  priceTag: Platform.select({
+    ios: {
+      position: 'absolute',
+      width: 70,
+      height: 70,
+      left: 267,
+      top: 100,
+      borderRadius: 38,
+      backgroundColor: '#AA3C3B',
+      shadowRadius: 4,
+      shadowOffset: {height: 0, width: 4},
+      shadowColor: 'rgba(91, 91, 91, 0.25)'
+    },
+    android: {
+      position: 'absolute',
+      width: 75,
+      height: 75,
+      left: 287,
+      top: 100,
+      borderRadius: 38,
+      backgroundColor: '#AA3C3B',
+      elevation: 4
+    }
+  }),
+  priceText: Platform.select({
+    ios: {
+      paddingTop: 22,
+      paddingLeft: 10,
+  
+      //fontFamily: 'Raleway',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      fontSize: 20,
+  
+      color: '#FFFFFF',
+    },
+    android: {
+      paddingTop: 22,
+      paddingLeft: 10,
+  
+      //fontFamily: 'Raleway',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      fontSize: 22,
+  
+      color: '#FFFFFF',
+    }
+  }),
+  textTag: {
+    width: 127,
+    height: 27,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#AA3C3B',
+    shadowRadius: 4,
+    shadowOffset: {height: 0, width: 4},
+    shadowColor: 'rgba(91, 91, 91, 0.25)',
+    elevation: 4,
+    borderRadius: 13.5,
+    marginBottom: 17
+  },
+  textTagText: {
+    //fontFamily: 'Raleway',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+
+    color: '#FFFFFF',
+  },
+  textContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 180
+  },
+  title: {
+    //fontFamily: 'Raleway',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 30,
+    textAlign: 'center',
+    color: '#282828'
+  },
+  valueContainer: {
+    flexDirection: 'row',
+    paddingTop: 3,
+    paddingBottom: 17
+  },
+  circle: {
+    marginTop: 6,
+    marginLeft: 12,
+    marginRight: 12,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#AA3C3B'
+  },
+  valueText: {
+    //fontFamily: 'Raleway',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#979797'
+  },
+  description: {
+    //fontFamily: 'Raleway',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#282828',
+    width: 280
   }
 });
