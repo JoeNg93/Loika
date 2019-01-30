@@ -92,13 +92,12 @@ const Mutations = {
     return address;
   },
 
-
   /**
    * Update an address
-   * @param {*} parent 
-   * @param {*} args 
-   * @param {*} ctx 
-   * @param {*} info 
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
    */
   updateAddress(parent, args, ctx, info) {
     // first take a copy of the updates
@@ -110,8 +109,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id,
-        },
+          id: args.id
+        }
       },
       info
     );
@@ -119,10 +118,10 @@ const Mutations = {
 
   /**
    * Delete address
-   * @param {*} parent 
-   * @param {*} args 
-   * @param {*} ctx 
-   * @param {*} info 
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
    */
   async deleteAddress(parent, args, ctx, info) {
     const where = { id: args.id };
@@ -133,6 +132,125 @@ const Mutations = {
 
     if (!ownsAddress) {
       throw new Error("You don't have permission to do that!");
+    }
+
+    // 3. Delete it!
+    return prisma.deleteItem({ where }, info);
+  },
+
+  /**
+   * For subscriptions
+   */
+
+  /**
+   * Create a subscription
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
+   */
+  async createSubscription(parent, args, ctx, info) {
+    // 1. Check if user logged in
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    // 2. Check if user is ADMIN
+    const user = await prisma.user({
+      id: ctx.request.userId
+    });
+
+    const hasPermissions = user.permissions.some(permission =>
+      ["ADMIN"].includes(permission)
+    );
+    if (!hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    // 3. Create a new subscription
+    const subscription = await prisma.createSubscription(
+      {
+        ...args
+      },
+      info
+    );
+
+    return subscription;
+  },
+
+  /**
+   * Update one subscription
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
+   */
+  async updateSubscription(parent, args, ctx, info) {
+    // 1. Check if user logged in
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    // 2. Check if user is ADMIN
+    const user = await prisma.user({
+      id: ctx.request.userId
+    });
+    const hasPermissions = user.permissions.some(permission =>
+      ["ADMIN"].includes(permission)
+    );
+
+    if (!hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    // 3. Create a new subscription
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates
+    delete updates.id;
+    // run the update method
+    return prisma.updateSubscription(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+
+  /**
+   * Delete One Subscription
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
+   */
+  async deleteSubscription(parent, args, ctx, info) {
+    // 1. Check if user logged in
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+
+    // 2. Check if user is ADMIN
+    const user = await prisma.user({
+      id: ctx.request.userId
+    });
+    const hasPermissions = user.permissions.some(permission =>
+      ["ADMIN"].includes(permission)
+    );
+
+    if (!hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    const where = { id: args.id };
+    // 1. find the subscription
+    const subscription = await prisma.subscription({ where }, `{ id }`);
+    // 2. Check if it does exist
+    if (!subscription) {
+      throw new Error(`Could not found the subsciption with id ${ args.id }.`);
     }
 
     // 3. Delete it!
