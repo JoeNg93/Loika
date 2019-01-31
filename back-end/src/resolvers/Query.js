@@ -10,8 +10,7 @@ const Query = {
     return prisma.user(
       {
         id: ctx.request.userId
-      },
-      info
+      }
     );
   },
 
@@ -24,10 +23,40 @@ const Query = {
     return prisma.address(
       {
         id: args.id
-      },
-      info
+      }
     );
-  }
+  },
+
+  /**
+   * Subscriptions
+   */
+
+  /**
+   * Read a subscriptions
+   * Basically, everyone (guests or members) can see it.
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
+   */
+  readOneSubscription(parent, args, ctx, info) {
+    return prisma.subscription(
+      {
+        id: args.id
+      }
+    );
+  },
+
+  /**
+   * For now, return all the subscriptions we have
+   * @param {*} parent 
+   * @param {*} args 
+   * @param {*} ctx 
+   * @param {*} info 
+   */
+  readAllSubscriptions(parent, args, ctx, info) {
+    return prisma.subscriptions({});
+  },
 };
 
 module.exports = Query;

@@ -6,12 +6,53 @@ type Mutation {
   signin(email: String!, password: String!): String
 
   # address with CRUD
-  createAddress(street1: String!, street2: String, city: String!, postcode: Int, country: String!): Address!
-  updateAddress(id: ID!, street1: String, street2: String, city: String, postcode: Int, country: String): Address!
+  createAddress(
+    street1: String!
+    street2: String
+    city: String!
+    postcode: Int
+    country: String!
+  ): Address!
+
+  updateAddress(
+    id: ID!
+    street1: String
+    street2: String
+    city: String
+    postcode: Int
+    country: String
+  ): Address!
+
   deleteAddress(id: ID!): Address!
+
+  # subscriptions
+  createSubscription(
+    title: String!
+    shortDescription: String!
+    longDescription: String!
+    totalPrice: Int!
+    mealPrice: Int
+    thumbnailImage: String
+    largeImage: String
+  ): Subscription!
+
+  updateSubscription(
+    id: ID!
+    title: String
+    shortDescription: String
+    longDescription: String
+    totalPrice: Int
+    mealPrice: Int
+    thumbnailImage: String
+    largeImage: String
+  ): Subscription!
+
+  deleteSubscription(id: ID!): Subscription
 }
 
 type Query {
   me: User
   readAddress(id: ID!): Address
+  readOneSubscription(id: ID!): Subscription
+  readAllSubscriptions: [Subscription!]!
 }
