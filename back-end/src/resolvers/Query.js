@@ -10,8 +10,7 @@ const Query = {
     return prisma.user(
       {
         id: ctx.request.userId
-      },
-      info
+      }
     );
   },
 
@@ -24,8 +23,7 @@ const Query = {
     return prisma.address(
       {
         id: args.id
-      },
-      info
+      }
     );
   },
 
@@ -45,8 +43,7 @@ const Query = {
     return prisma.subscription(
       {
         id: args.id
-      },
-      info
+      }
     );
   },
 
@@ -58,7 +55,7 @@ const Query = {
    * @param {*} info 
    */
   readAllSubscriptions(parent, args, ctx, info) {
-    return prisma.subscriptions({}, info);
+    return prisma.subscriptions({});
   },
 };
 

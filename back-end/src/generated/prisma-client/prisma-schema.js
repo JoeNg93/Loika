@@ -312,10 +312,6 @@ type AggregateAddress {
   count: Int!
 }
 
-type AggregateImage {
-  count: Int!
-}
-
 type AggregateOrder {
   count: Int!
 }
@@ -334,113 +330,6 @@ type BatchPayload {
 
 scalar DateTime
 
-type Image {
-  id: ID!
-  url: String!
-}
-
-type ImageConnection {
-  pageInfo: PageInfo!
-  edges: [ImageEdge]!
-  aggregate: AggregateImage!
-}
-
-input ImageCreateInput {
-  url: String!
-}
-
-input ImageCreateOneInput {
-  create: ImageCreateInput
-  connect: ImageWhereUniqueInput
-}
-
-type ImageEdge {
-  node: Image!
-  cursor: String!
-}
-
-enum ImageOrderByInput {
-  id_ASC
-  id_DESC
-  url_ASC
-  url_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-input ImageUpdateDataInput {
-  url: String
-}
-
-input ImageUpdateInput {
-  url: String
-}
-
-input ImageUpdateManyMutationInput {
-  url: String
-}
-
-input ImageUpdateOneInput {
-  create: ImageCreateInput
-  update: ImageUpdateDataInput
-  upsert: ImageUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: ImageWhereUniqueInput
-}
-
-input ImageUpdateOneRequiredInput {
-  create: ImageCreateInput
-  update: ImageUpdateDataInput
-  upsert: ImageUpsertNestedInput
-  connect: ImageWhereUniqueInput
-}
-
-input ImageUpsertNestedInput {
-  update: ImageUpdateDataInput!
-  create: ImageCreateInput!
-}
-
-input ImageWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  url: String
-  url_not: String
-  url_in: [String!]
-  url_not_in: [String!]
-  url_lt: String
-  url_lte: String
-  url_gt: String
-  url_gte: String
-  url_contains: String
-  url_not_contains: String
-  url_starts_with: String
-  url_not_starts_with: String
-  url_ends_with: String
-  url_not_ends_with: String
-  AND: [ImageWhereInput!]
-  OR: [ImageWhereInput!]
-  NOT: [ImageWhereInput!]
-}
-
-input ImageWhereUniqueInput {
-  id: ID
-}
-
 scalar Long
 
 type Mutation {
@@ -450,12 +339,6 @@ type Mutation {
   upsertAddress(where: AddressWhereUniqueInput!, create: AddressCreateInput!, update: AddressUpdateInput!): Address!
   deleteAddress(where: AddressWhereUniqueInput!): Address
   deleteManyAddresses(where: AddressWhereInput): BatchPayload!
-  createImage(data: ImageCreateInput!): Image!
-  updateImage(data: ImageUpdateInput!, where: ImageWhereUniqueInput!): Image
-  updateManyImages(data: ImageUpdateManyMutationInput!, where: ImageWhereInput): BatchPayload!
-  upsertImage(where: ImageWhereUniqueInput!, create: ImageCreateInput!, update: ImageUpdateInput!): Image!
-  deleteImage(where: ImageWhereUniqueInput!): Image
-  deleteManyImages(where: ImageWhereInput): BatchPayload!
   createOrder(data: OrderCreateInput!): Order!
   updateOrder(data: OrderUpdateInput!, where: OrderWhereUniqueInput!): Order
   updateManyOrders(data: OrderUpdateManyMutationInput!, where: OrderWhereInput): BatchPayload!
@@ -643,9 +526,6 @@ type Query {
   address(where: AddressWhereUniqueInput!): Address
   addresses(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address]!
   addressesConnection(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AddressConnection!
-  image(where: ImageWhereUniqueInput!): Image
-  images(where: ImageWhereInput, orderBy: ImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Image]!
-  imagesConnection(where: ImageWhereInput, orderBy: ImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ImageConnection!
   order(where: OrderWhereUniqueInput!): Order
   orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order]!
   ordersConnection(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrderConnection!
@@ -665,8 +545,8 @@ type Subscription {
   longDescription: String!
   totalPrice: Int!
   mealPrice: Int!
-  thumbnailImage: Image!
-  largeImage: Image!
+  thumbnailImage: String
+  largeImage: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -683,8 +563,8 @@ input SubscriptionCreateInput {
   longDescription: String!
   totalPrice: Int!
   mealPrice: Int!
-  thumbnailImage: ImageCreateOneInput!
-  largeImage: ImageCreateOneInput!
+  thumbnailImage: String
+  largeImage: String
 }
 
 input SubscriptionCreateManyInput {
@@ -710,6 +590,10 @@ enum SubscriptionOrderByInput {
   totalPrice_DESC
   mealPrice_ASC
   mealPrice_DESC
+  thumbnailImage_ASC
+  thumbnailImage_DESC
+  largeImage_ASC
+  largeImage_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -789,6 +673,34 @@ input SubscriptionScalarWhereInput {
   mealPrice_lte: Int
   mealPrice_gt: Int
   mealPrice_gte: Int
+  thumbnailImage: String
+  thumbnailImage_not: String
+  thumbnailImage_in: [String!]
+  thumbnailImage_not_in: [String!]
+  thumbnailImage_lt: String
+  thumbnailImage_lte: String
+  thumbnailImage_gt: String
+  thumbnailImage_gte: String
+  thumbnailImage_contains: String
+  thumbnailImage_not_contains: String
+  thumbnailImage_starts_with: String
+  thumbnailImage_not_starts_with: String
+  thumbnailImage_ends_with: String
+  thumbnailImage_not_ends_with: String
+  largeImage: String
+  largeImage_not: String
+  largeImage_in: [String!]
+  largeImage_not_in: [String!]
+  largeImage_lt: String
+  largeImage_lte: String
+  largeImage_gt: String
+  largeImage_gte: String
+  largeImage_contains: String
+  largeImage_not_contains: String
+  largeImage_starts_with: String
+  largeImage_not_starts_with: String
+  largeImage_ends_with: String
+  largeImage_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -816,8 +728,8 @@ input SubscriptionUpdateDataInput {
   longDescription: String
   totalPrice: Int
   mealPrice: Int
-  thumbnailImage: ImageUpdateOneRequiredInput
-  largeImage: ImageUpdateOneRequiredInput
+  thumbnailImage: String
+  largeImage: String
 }
 
 input SubscriptionUpdateInput {
@@ -826,8 +738,8 @@ input SubscriptionUpdateInput {
   longDescription: String
   totalPrice: Int
   mealPrice: Int
-  thumbnailImage: ImageUpdateOneRequiredInput
-  largeImage: ImageUpdateOneRequiredInput
+  thumbnailImage: String
+  largeImage: String
 }
 
 input SubscriptionUpdateManyDataInput {
@@ -836,6 +748,8 @@ input SubscriptionUpdateManyDataInput {
   longDescription: String
   totalPrice: Int
   mealPrice: Int
+  thumbnailImage: String
+  largeImage: String
 }
 
 input SubscriptionUpdateManyInput {
@@ -855,6 +769,8 @@ input SubscriptionUpdateManyMutationInput {
   longDescription: String
   totalPrice: Int
   mealPrice: Int
+  thumbnailImage: String
+  largeImage: String
 }
 
 input SubscriptionUpdateManyWithWhereNestedInput {
@@ -946,8 +862,34 @@ input SubscriptionWhereInput {
   mealPrice_lte: Int
   mealPrice_gt: Int
   mealPrice_gte: Int
-  thumbnailImage: ImageWhereInput
-  largeImage: ImageWhereInput
+  thumbnailImage: String
+  thumbnailImage_not: String
+  thumbnailImage_in: [String!]
+  thumbnailImage_not_in: [String!]
+  thumbnailImage_lt: String
+  thumbnailImage_lte: String
+  thumbnailImage_gt: String
+  thumbnailImage_gte: String
+  thumbnailImage_contains: String
+  thumbnailImage_not_contains: String
+  thumbnailImage_starts_with: String
+  thumbnailImage_not_starts_with: String
+  thumbnailImage_ends_with: String
+  thumbnailImage_not_ends_with: String
+  largeImage: String
+  largeImage_not: String
+  largeImage_in: [String!]
+  largeImage_not_in: [String!]
+  largeImage_lt: String
+  largeImage_lte: String
+  largeImage_gt: String
+  largeImage_gte: String
+  largeImage_contains: String
+  largeImage_not_contains: String
+  largeImage_starts_with: String
+  largeImage_not_starts_with: String
+  largeImage_ends_with: String
+  largeImage_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -985,7 +927,7 @@ type User {
   billingAddress: Address
   shippingAddress(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address!]
   paymentId: String
-  avatar: Image
+  avatar: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1007,7 +949,7 @@ input UserCreateInput {
   billingAddress: AddressCreateOneInput
   shippingAddress: AddressCreateManyInput
   paymentId: String
-  avatar: ImageCreateOneInput
+  avatar: String
 }
 
 input UserCreateOneInput {
@@ -1041,6 +983,8 @@ enum UserOrderByInput {
   phone_DESC
   paymentId_ASC
   paymentId_DESC
+  avatar_ASC
+  avatar_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1058,7 +1002,7 @@ input UserUpdateDataInput {
   billingAddress: AddressUpdateOneInput
   shippingAddress: AddressUpdateManyInput
   paymentId: String
-  avatar: ImageUpdateOneInput
+  avatar: String
 }
 
 input UserUpdateInput {
@@ -1072,7 +1016,7 @@ input UserUpdateInput {
   billingAddress: AddressUpdateOneInput
   shippingAddress: AddressUpdateManyInput
   paymentId: String
-  avatar: ImageUpdateOneInput
+  avatar: String
 }
 
 input UserUpdateManyMutationInput {
@@ -1084,6 +1028,7 @@ input UserUpdateManyMutationInput {
   permissions: UserUpdatepermissionsInput
   phone: String
   paymentId: String
+  avatar: String
 }
 
 input UserUpdateOneRequiredInput {
@@ -1213,7 +1158,20 @@ input UserWhereInput {
   paymentId_not_starts_with: String
   paymentId_ends_with: String
   paymentId_not_ends_with: String
-  avatar: ImageWhereInput
+  avatar: String
+  avatar_not: String
+  avatar_in: [String!]
+  avatar_not_in: [String!]
+  avatar_lt: String
+  avatar_lte: String
+  avatar_gt: String
+  avatar_gte: String
+  avatar_contains: String
+  avatar_not_contains: String
+  avatar_starts_with: String
+  avatar_not_starts_with: String
+  avatar_ends_with: String
+  avatar_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

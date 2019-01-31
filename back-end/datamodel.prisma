@@ -3,11 +3,6 @@ enum Permission {
   USER
 }
 
-type Image {
-  id: ID! @unique
-  url: String!
-}
-
 type Address {
   id: ID! @unique
   street1: String!
@@ -29,7 +24,7 @@ type User {
   billingAddress: Address @relation(name: "UserBillingAddress")
   shippingAddress: [Address!] @relation(name: "UserShippingAddresses")
   paymentId: String
-  avatar: Image
+  avatar: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -41,8 +36,8 @@ type Subscription {
   longDescription: String!
   totalPrice: Int!
   mealPrice: Int!
-  thumbnailImage: Image! @relation(name: "SubscriptionThumbnailImage")
-  largeImage: Image! @relation(name: "SubscriptionLargeImage")
+  thumbnailImage: String
+  largeImage: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }

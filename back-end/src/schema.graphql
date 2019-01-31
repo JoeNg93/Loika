@@ -32,8 +32,8 @@ type Mutation {
     longDescription: String!
     totalPrice: Int!
     mealPrice: Int
-    thumbnailImage: Image!
-    largeImage: Image!
+    thumbnailImage: String
+    largeImage: String
   ): Subscription!
 
   updateSubscription(
@@ -43,8 +43,8 @@ type Mutation {
     longDescription: String
     totalPrice: Int
     mealPrice: Int
-    thumbnailImage: Image
-    largeImage: Image
+    thumbnailImage: String
+    largeImage: String
   ): Subscription!
 
   deleteSubscription(id: ID!): Subscription

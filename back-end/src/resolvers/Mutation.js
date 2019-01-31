@@ -26,8 +26,7 @@ const Mutations = {
         password,
         name: args.name,
         permissions: { set: ["USER"] }
-      },
-      info
+      }
     );
     // create JWT
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
@@ -85,8 +84,7 @@ const Mutations = {
     const address = await prisma.createAddress(
       {
         ...args
-      },
-      info
+      }
     );
 
     return address;
@@ -111,8 +109,7 @@ const Mutations = {
         where: {
           id: args.id
         }
-      },
-      info
+      }
     );
   },
 
@@ -135,7 +132,7 @@ const Mutations = {
     }
 
     // 3. Delete it!
-    return prisma.deleteItem({ where }, info);
+    return prisma.deleteItem({ where });
   },
 
   /**
@@ -166,13 +163,11 @@ const Mutations = {
     if (!hasPermissions) {
       throw new Error("You don't have permission to do that!");
     }
-
     // 3. Create a new subscription
     const subscription = await prisma.createSubscription(
       {
         ...args
-      },
-      info
+      }
     );
 
     return subscription;
@@ -202,7 +197,7 @@ const Mutations = {
     if (!hasPermissions) {
       throw new Error("You don't have permission to do that!");
     }
-
+    
     // 3. Create a new subscription
     // first take a copy of the updates
     const updates = { ...args };
@@ -215,8 +210,7 @@ const Mutations = {
         where: {
           id: args.id
         }
-      },
-      info
+      }
     );
   },
 
@@ -245,16 +239,15 @@ const Mutations = {
       throw new Error("You don't have permission to do that!");
     }
 
-    const where = { id: args.id };
     // 1. find the subscription
-    const subscription = await prisma.subscription({ where }, `{ id }`);
+    const subscription = await prisma.subscription({id: args.id});
     // 2. Check if it does exist
     if (!subscription) {
       throw new Error(`Could not found the subsciption with id ${ args.id }.`);
     }
 
     // 3. Delete it!
-    return prisma.deleteItem({ where }, info);
+    return prisma.deleteSubscription({ id: args.id });
   }
 };
 
