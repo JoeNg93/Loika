@@ -9,6 +9,10 @@ var models = [
     embedded: false
   },
   {
+    name: "CartItem",
+    embedded: false
+  },
+  {
     name: "Order",
     embedded: false
   },

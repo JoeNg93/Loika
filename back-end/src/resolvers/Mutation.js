@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { prisma } = require("../generated/prisma-client");
 
 const Mutations = {
+  /////////////////////////////////////////////////////////////////
   /**
    * This is for user and authorization
    */
@@ -14,20 +15,18 @@ const Mutations = {
    * @param {*} ctx
    * @param {*} info
    */
-  async signup(parent, args, ctx, info) {
+  async signup(parent, args, ctx) {
     // lower case
     const email = args.email.toLowerCase();
     // hash password
     const password = await bcrypt.hash(args.password, 10);
     // create user in db
-    const user = await prisma.createUser(
-      {
-        email,
-        password,
-        name: args.name,
-        permissions: { set: ["USER"] }
-      }
-    );
+    const user = await prisma.createUser({
+      email,
+      password,
+      name: args.name,
+      permissions: { set: ["USER"] }
+    });
     // create JWT
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
       expiresIn: 1000 * 60 * 60 * 24 * 30
@@ -44,7 +43,7 @@ const Mutations = {
    * @param {*} ctx
    * @param {*} info
    */
-  async signin(parent, { email, password }, ctx, info) {
+  async signin(parent, { email, password }, ctx) {
     // 1. check if there is a user with that email
     const user = await prisma.user({ email });
     if (!user) {
@@ -63,6 +62,7 @@ const Mutations = {
     return token;
   },
 
+  /////////////////////////////////////////////////////////////////
   /**
    * This is for address
    */
@@ -74,18 +74,16 @@ const Mutations = {
    * @param {*} ctx
    * @param {*} info
    */
-  async createAddress(parent, args, ctx, info) {
+  async createAddress(parent, args, ctx) {
     // 1. Check if user logged in
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
     }
 
     // 2. Create a new address
-    const address = await prisma.createAddress(
-      {
-        ...args
-      }
-    );
+    const address = await prisma.createAddress({
+      ...args
+    });
 
     return address;
   },
@@ -97,20 +95,18 @@ const Mutations = {
    * @param {*} ctx
    * @param {*} info
    */
-  updateAddress(parent, args, ctx, info) {
+  updateAddress(parent, args, ctx) {
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
     delete updates.id;
     // run the update method
-    return prisma.updateAddress(
-      {
-        data: updates,
-        where: {
-          id: args.id
-        }
+    return prisma.updateAddress({
+      data: updates,
+      where: {
+        id: args.id
       }
-    );
+    });
   },
 
   /**
@@ -120,7 +116,7 @@ const Mutations = {
    * @param {*} ctx
    * @param {*} info
    */
-  async deleteAddress(parent, args, ctx, info) {
+  async deleteAddress(parent, args, ctx) {
     const where = { id: args.id };
     // 1. find the address
     const address = await prisma.address({ where }, `{ id user { id }}`);
@@ -135,6 +131,7 @@ const Mutations = {
     return prisma.deleteItem({ where });
   },
 
+  /////////////////////////////////////////////////////////////////
   /**
    * For subscriptions
    */
@@ -146,7 +143,7 @@ const Mutations = {
    * @param {*} ctx
    * @param {*} info
    */
-  async createSubscription(parent, args, ctx, info) {
+  async createSubscription(parent, args, ctx) {
     // 1. Check if user logged in
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
@@ -164,11 +161,9 @@ const Mutations = {
       throw new Error("You don't have permission to do that!");
     }
     // 3. Create a new subscription
-    const subscription = await prisma.createSubscription(
-      {
-        ...args
-      }
-    );
+    const subscription = await prisma.createSubscription({
+      ...args
+    });
 
     return subscription;
   },
@@ -180,7 +175,7 @@ const Mutations = {
    * @param {*} ctx
    * @param {*} info
    */
-  async updateSubscription(parent, args, ctx, info) {
+  async updateSubscription(parent, args, ctx) {
     // 1. Check if user logged in
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
@@ -197,21 +192,19 @@ const Mutations = {
     if (!hasPermissions) {
       throw new Error("You don't have permission to do that!");
     }
-    
+
     // 3. Create a new subscription
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
     delete updates.id;
     // run the update method
-    return prisma.updateSubscription(
-      {
-        data: updates,
-        where: {
-          id: args.id
-        }
+    return prisma.updateSubscription({
+      data: updates,
+      where: {
+        id: args.id
       }
-    );
+    });
   },
 
   /**
@@ -221,7 +214,7 @@ const Mutations = {
    * @param {*} ctx
    * @param {*} info
    */
-  async deleteSubscription(parent, args, ctx, info) {
+  async deleteSubscription(parent, args, ctx) {
     // 1. Check if user logged in
     if (!ctx.request.userId) {
       throw new Error("You must be logged in to do that!");
@@ -240,14 +233,87 @@ const Mutations = {
     }
 
     // 1. find the subscription
-    const subscription = await prisma.subscription({id: args.id});
+    const subscription = await prisma.subscription({ id: args.id });
     // 2. Check if it does exist
     if (!subscription) {
-      throw new Error(`Could not found the subsciption with id ${ args.id }.`);
+      throw new Error(`Could not found the subsciption with id ${args.id}.`);
     }
 
     // 3. Delete it!
     return prisma.deleteSubscription({ id: args.id });
+  },
+
+  /////////////////////////////////////////////////////////////////
+  /**
+   * Cart
+   */
+
+  /**
+   * Add to cart
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
+   */
+  async addToCart(parent, args, ctx) {
+    // 1. Check if user logged in
+    const userId = ctx.request.userId;
+    if (!userId) {
+      throw new Error("You must be logged in to do that!");
+    }
+    // 2. Query the users current cart
+
+    const [existingCartItem] = await prisma.cartItems({
+      where: {
+        user: { id: userId },
+        item: { id: args.id }
+      }
+    });
+
+    // 3. Check if that item is already in their cart and increment by 1 if it is
+    if (existingCartItem) {
+      // It means the item is already in cart
+      return prisma.updateCartItem({
+        where: { id: existingCartItem.id },
+        data: { quantity: existingCartItem.quantity + 1 }
+      });
+    }
+
+    // 4. If its not, create a new CartItem for that user!
+    return prisma.createCartItem({
+      user: {
+        connect: { id: userId }
+      },
+      item: {
+        connect: { id: args.id }
+      }
+    });
+  },
+
+  /**
+   * Remove item from cart
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
+   */
+  async removeFromCart(parent, args, ctx) {
+    // 1. Find the cart item
+    const cartItem = await prisma.cartItem({
+      id: args.id
+    });
+
+    const user = await prisma.cartItem({ id: cartItem.id }).user();
+    // 2. Make sure we found an item
+    if (!cartItem) throw new Error("No cart item found!");
+    // 3. Make sure they own that cart item
+    if (user.id !== ctx.request.userId) {
+      throw new Error("That cart item is not yours.");
+    }
+    // 4. Delete that cart item
+    return prisma.deleteCartItem({
+      id: args.id
+    });
   }
 };
 
