@@ -17,6 +17,10 @@ var models = [
     embedded: false
   },
   {
+    name: "OrderItem",
+    embedded: false
+  },
+  {
     name: "Permission",
     embedded: false
   },

@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { prisma } = require("../generated/prisma-client");
+const stripe = require("../stripe");
 
 const Mutations = {
   /////////////////////////////////////////////////////////////////
@@ -314,6 +315,74 @@ const Mutations = {
     return prisma.deleteCartItem({
       id: args.id
     });
+  },
+
+  /**
+   * Order thingy
+   */
+
+  /**
+   * Create a new order
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   */
+  async createOrder(parent, args, ctx) {
+    // 1. Query the current user and make sure they are signed in
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error("You must be signed in to complete this order.");
+    }
+
+    const user = await prisma.user({ id: userId });
+    const userCart = await prisma.user({ id: userId }).cart();
+
+    // 2. recalculate the total for the price
+    const amount = userCart.reduce(
+      (tally, cartItem) => tally + cartItem.item.price * cartItem.quantity,
+      0
+    );
+    console.log(`Going to charge for a total of ${amount}`);
+
+    // 3. Create the stripe charge (turn token into $$$)
+    const charge = await stripe.charges.create({
+      amount,
+      currency: "EUR",
+      source: args.token
+    });
+
+    // 4. Convert the CartItems to OrderItems
+    const orderItems = userCart.map(cartItem => {
+      const orderItem = {
+        ...cartItem.item,
+        quantity: cartItem.quantity,
+        user: { connect: { id: userId } }
+      };
+      delete orderItem.id;
+      return orderItem;
+    });
+
+    // 5. create the Order
+    const order = await prisma.createOrder({
+      total: charge.amount,
+      charge: charge.id,
+      paymentDate: Date.now(),
+      deliveryTime: args.deliveryTime,
+      deliveryDayOfWeek: args.deliveryDayOfWeek,
+      billingAddress: user.billingAddress,
+      shippingAddress: user.shippingAddress,
+      items: { create: orderItems },
+      user: { connect: { id: userId } }
+    });
+
+    // 6. Clean up - clear the users cart, delete cartItems
+    const cartItemIds = userCart.map(cartItem => cartItem.id);
+    await prisma.deleteManyCartItems({
+      id_in: cartItemIds
+    });
+
+    // 7. Return the Order to the client
+    return order;
   }
 };
 

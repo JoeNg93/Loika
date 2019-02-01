@@ -53,12 +53,27 @@ type Subscription {
 type Order {
   id: ID! @unique
   user: User!
-  subscriptions: [Subscription!]!
+  items: [OrderItem!]!
   billingAddress: Address! @relation(name: "OrderBillingAddress")
   shippingAddress: Address! @relation(name: "OrderShippingAddress")
   deliveryTime: String!
   deliveryDayOfWeek: String!
   paymentDate: DateTime!
+  total: Int!
+  charge: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type OrderItem {
+  id: ID! @unique
+  title: String!
+  shortDescription: String!
+  longDescription: String!
+  totalPrice: Int!
+  mealPrice: Int!
+  thumbnailImage: String
+  largeImage: String
+  quantity: Int! @default(value: 1)
+  user: User
 }

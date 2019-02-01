@@ -52,6 +52,9 @@ type Mutation {
   # cart
   addToCart(id: ID!): CartItem
   removeFromCart(id: ID!): CartItem
+
+  # order
+  createOrder(token: String!, deliveryTime: String!, deliveryDayOfWeek: String!): Order!
 }
 
 type Query {
