@@ -48,6 +48,10 @@ type Mutation {
   ): Subscription!
 
   deleteSubscription(id: ID!): Subscription
+
+  # cart
+  addToCart(id: ID!): CartItem
+  removeFromCart(id: ID!): CartItem
 }
 
 type Query {

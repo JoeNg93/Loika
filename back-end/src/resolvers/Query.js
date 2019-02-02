@@ -7,11 +7,9 @@ const Query = {
     if (!ctx.request.userId) {
       return null;
     }
-    return prisma.user(
-      {
-        id: ctx.request.userId
-      }
-    );
+    return prisma.user({
+      id: ctx.request.userId
+    });
   },
 
   // Get one address
@@ -20,11 +18,9 @@ const Query = {
     if (!ctx.request.userId) {
       return null;
     }
-    return prisma.address(
-      {
-        id: args.id
-      }
-    );
+    return prisma.address({
+      id: args.id
+    });
   },
 
   /**
@@ -40,23 +36,21 @@ const Query = {
    * @param {*} info
    */
   readOneSubscription(parent, args, ctx, info) {
-    return prisma.subscription(
-      {
-        id: args.id
-      }
-    );
+    return prisma.subscription({
+      id: args.id
+    });
   },
 
   /**
    * For now, return all the subscriptions we have
-   * @param {*} parent 
-   * @param {*} args 
-   * @param {*} ctx 
-   * @param {*} info 
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
+   * @param {*} info
    */
   readAllSubscriptions(parent, args, ctx, info) {
     return prisma.subscriptions({});
-  },
+  }
 };
 
 module.exports = Query;
