@@ -12,6 +12,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@babel/runtime": "^7.3.1",
     "@expo/samples": "2.1.1",
     "expo": "^32.0.0",
     "react": "16.5.0",
