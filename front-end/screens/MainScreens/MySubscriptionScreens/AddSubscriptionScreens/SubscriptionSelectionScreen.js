@@ -72,7 +72,40 @@ export default class SubscriptionSelectionScreen extends React.Component {
 
   state = {
     currentIndex: 0,
+    shoppingCart: [],
+    indexInCart: [],
   };
+
+  onPressPlus = () => {
+    var indexInCart = this.state.indexInCart;
+
+    if(indexInCart.indexOf(this.state.currentIndex) == -1) {
+      indexInCart.push(this.state.currentIndex);
+      this.setState(() => ({ indexInCart: indexInCart }));
+    } else {
+      console.log('item is in cart already');
+    }
+    console.log(this.state.indexInCart);
+
+  }
+
+  displayAddToCartButton = () => {
+    if (this.state.indexInCart.indexOf(this.state.currentIndex) == -1) {
+      return (<View style={styles.plusCircle}>
+                <Image
+                  style={styles.plus}
+                  source={require('../../../../assets/images/plus.png')}
+                />
+              </View>);
+    } else {
+      return (<View style={styles.checkCircle}>
+                <Image
+                  style={styles.check}
+                  source={require('../../../../assets/images/check.png')}
+                />
+              </View>);
+    }
+  }
 
   render() {
     const { width } = Dimensions.get('window');
@@ -123,13 +156,11 @@ export default class SubscriptionSelectionScreen extends React.Component {
           <Text style={styles.description}>{boxes[this.state.currentIndex].description}</Text>
         </Animated.View>
         <View style={styles.totalContainer}>
-          <TouchableOpacity style={{alignItems: 'center'}}>
-            <View style={styles.plusCircle}>
-              <Image
-                style={styles.plus}
-                source={require('../../../../assets/images/plus.png')}
-              />
-            </View>
+          <TouchableOpacity
+            onPress={this.onPressPlus}
+            style={{alignItems: 'center'}}
+            >
+            {this.displayAddToCartButton()}
           </TouchableOpacity>
           <Text style={styles.total}>TOTAL: 549€</Text>
         </View>
@@ -180,6 +211,20 @@ const styles = StyleSheet.create({
     marginTop: -25
   },
   plus: {
+    width: 23.17, 
+    height: 23.17,
+  },
+  checkCircle: {
+    width: 48,
+    height: 48,
+    borderWidth: 2,
+    backgroundColor: '#AA3C3B',
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -25
+  },
+  check: {
     width: 23.17, 
     height: 23.17,
   },
