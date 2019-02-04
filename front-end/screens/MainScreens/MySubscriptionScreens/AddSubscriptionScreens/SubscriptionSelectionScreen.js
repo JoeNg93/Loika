@@ -18,7 +18,7 @@ import commonStyles from "../../../../constants/commonStyles";
 const boxes = [
   {
     title: 'Mixed Box',
-    price: '199 €',
+    price: 199,
     size: '5 kg/box',
     divprice: '3-4€/meal',
     description:
@@ -28,7 +28,7 @@ const boxes = [
   },
   {
     title: 'Vegan Box',
-    price: '299 €',
+    price: 299,
     size: '5 kg/box',
     divprice: '3-4€/meal',
     description:
@@ -38,7 +38,7 @@ const boxes = [
   },
   {
     title: 'Meat Box',
-    price: '499 €',
+    price: 499,
     size: '5 kg/box',
     divprice: '3-4€/meal',
     description:
@@ -74,19 +74,21 @@ export default class SubscriptionSelectionScreen extends React.Component {
     currentIndex: 0,
     shoppingCart: [],
     indexInCart: [],
+    totalPrice: 0,
   };
 
   onPressPlus = () => {
     var indexInCart = this.state.indexInCart;
 
     if(indexInCart.indexOf(this.state.currentIndex) == -1) {
+      let total = this.state.totalPrice;
+      total += boxes[this.state.currentIndex].price;
+      this.setState(() => ({totalPrice: total}));
       indexInCart.push(this.state.currentIndex);
       this.setState(() => ({ indexInCart: indexInCart }));
     } else {
       console.log('item is in cart already');
     }
-    console.log(this.state.indexInCart);
-
   }
 
   displayAddToCartButton = () => {
@@ -117,7 +119,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
           <View style={styles.bigCircle}></View>
 
           <View style={styles.priceTag}>
-            <Text style={styles.priceText}>{boxes[this.state.currentIndex].price}</Text>
+            <Text style={styles.priceText}>{boxes[this.state.currentIndex].price} €</Text>
           </View>
         </View>
 				<View style={{height: 305}}>
@@ -162,7 +164,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
             >
             {this.displayAddToCartButton()}
           </TouchableOpacity>
-          <Text style={styles.total}>TOTAL: 549€</Text>
+          <Text style={styles.total}>TOTAL: {this.state.totalPrice}€</Text>
         </View>
         <View style={ styles.bottom}>
           <TouchableOpacity style={styles.orderButton}>
@@ -201,11 +203,11 @@ const styles = StyleSheet.create({
     color: '#AA3C3B'
   },
   plusCircle: {
-    width: 48,
-    height: 48,
+    width: 60, //48,
+    height: 60,  //48,
     borderWidth: 2,
     borderColor: '#AA3C3B',
-    borderRadius: 24,
+    borderRadius: 30, //24,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -25
@@ -215,11 +217,11 @@ const styles = StyleSheet.create({
     height: 23.17,
   },
   checkCircle: {
-    width: 48,
-    height: 48,
+    width: 60, //48,
+    height: 60, //48,
     borderWidth: 2,
     backgroundColor: '#AA3C3B',
-    borderRadius: 24,
+    borderRadius: 30, //24,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -25
