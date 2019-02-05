@@ -20,7 +20,7 @@
     "react-native-app-intro-slider": "^1.0.1",
     "react-native-elements": "^1.0.0",
     "react-native-sideswipe": "^1.4.2",
-    "react-navigation": "^3.0.9"
+    "react-navigation": "3.0.9"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",
