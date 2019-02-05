@@ -49,7 +49,11 @@ export default class App extends React.Component {
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-        Raleway: require('./assets/fonts/Raleway-Medium.ttf'),
+        'raleway-regular': require('./assets/fonts/Raleway-Regular.ttf'),
+        'raleway-medium': require('./assets/fonts/Raleway-Medium.ttf'),
+        'raleway-semibold': require('./assets/fonts/Raleway-SemiBold.ttf'),
+        'raleway-bold': require('./assets/fonts/Raleway-Bold.ttf'),
+        'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf'),
       }),
     ]);
   };
