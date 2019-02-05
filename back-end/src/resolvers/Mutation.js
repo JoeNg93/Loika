@@ -77,7 +77,9 @@ const Mutations = {
    */
   async createAddress(parent, args, ctx) {
     // 1. Check if user logged in
-    
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
 
     // 2. Create a new address
     const address = await prisma.createAddress({
@@ -88,7 +90,7 @@ const Mutations = {
     if (args.isBillingAddress) {
       await prisma.updateUser({
         where: {
-          id: "cjrqjrdinwfvr0a85rd8opgqh"
+          id: ctx.request.userId
         },
         data: {
           billingAddress: {
@@ -101,7 +103,7 @@ const Mutations = {
     } else {
       await prisma.updateUser({
         where: {
-          id: "cjrqjrdinwfvr0a85rd8opgqh"
+          id: ctx.request.userId
         },
         data: {
           shippingAddress: {
