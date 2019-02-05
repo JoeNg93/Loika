@@ -2,14 +2,19 @@ const { prisma } = require("../generated/prisma-client");
 
 const Query = {
   // This is for getting the current user logged in
-  me(parent, args, ctx, info) {
+  async me(parent, args, ctx, info) {
     // check if there is a current user ID
     if (!ctx.request.userId) {
       return null;
     }
-    return prisma.user({
+    let user = await prisma.user({
       id: ctx.request.userId
     });
+
+    user.cart = await prisma.user({id: ctx.request.userId}).cart();
+    user.orders = await prisma.user({id: ctx.request.userId}).orders();
+
+    return user;
   },
 
   // Get one address

@@ -77,14 +77,41 @@ const Mutations = {
    */
   async createAddress(parent, args, ctx) {
     // 1. Check if user logged in
-    if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
-    }
+    
 
     // 2. Create a new address
     const address = await prisma.createAddress({
       ...args
     });
+
+    // 3. Updated user data address
+    if (args.isBillingAddress) {
+      await prisma.updateUser({
+        where: {
+          id: "cjrqjrdinwfvr0a85rd8opgqh"
+        },
+        data: {
+          billingAddress: {
+            connect: {
+              id: address.id
+            }
+          }
+        }
+      });
+    } else {
+      await prisma.updateUser({
+        where: {
+          id: "cjrqjrdinwfvr0a85rd8opgqh"
+        },
+        data: {
+          shippingAddress: {
+            connect: {
+              id: address.id
+            }
+          }
+        }
+      })
+    }
 
     return address;
   },
@@ -334,15 +361,56 @@ const Mutations = {
       throw new Error("You must be signed in to complete this order.");
     }
 
-    const user = await prisma.user({ id: userId });
-    const userCart = await prisma.user({ id: userId }).cart();
+    const userFragment = `
+      fragment user on User {
+        id
+        name
+        email
+        billingAddress {
+          street1
+          street2
+          city
+          postcode
+          country
+        }
+        shippingAddress {
+          street1
+          street2
+          city
+          postcode
+          country
+        }
+        cart {
+          id
+        }
+      }
+    `;
+
+    const user = await prisma.user({ id: userId }).$fragment(userFragment);
 
     // 2. recalculate the total for the price
-    const amount = userCart.reduce(
-      (tally, cartItem) => tally + cartItem.item.price * cartItem.quantity,
+    const userWithCartItems = `
+      fragment userWithCartItems on CartItem {
+        id
+        quantity
+        item {
+          id
+          title
+          shortDescription
+          longDescription
+          totalPrice
+          mealPrice
+          thumbnailImage
+          largeImage
+        }
+      }
+    `;
+
+    let cartItems = await prisma.user({ id: userId }).cart().$fragment(userWithCartItems);
+    const amount = cartItems.reduce(
+      (tally, cartItem) => tally + cartItem.item.totalPrice * cartItem.quantity,
       0
     );
-    console.log(`Going to charge for a total of ${amount}`);
 
     // 3. Create the stripe charge (turn token into $$$)
     const charge = await stripe.charges.create({
@@ -352,7 +420,7 @@ const Mutations = {
     });
 
     // 4. Convert the CartItems to OrderItems
-    const orderItems = userCart.map(cartItem => {
+    const orderItems = cartItems.map(cartItem => {
       const orderItem = {
         ...cartItem.item,
         quantity: cartItem.quantity,
@@ -362,21 +430,40 @@ const Mutations = {
       return orderItem;
     });
 
+
     // 5. create the Order
     const order = await prisma.createOrder({
-      total: charge.amount,
-      charge: charge.id,
-      paymentDate: Date.now(),
+      user: { connect: { id: userId } },
+      items: { create: orderItems },
+      billingAddress: {
+        create: {
+          isBillingAddress: true,
+          street1: user.billingAddress.street1,
+          street2: user.billingAddress.street2,
+          city: user.billingAddress.city,
+          postcode: user.billingAddress.postcode,
+          country: user.billingAddress.country
+        }
+      },
+      shippingAddress: {
+        create: {
+          isBillingAddress: false,
+          street1: user.shippingAddress.street1,
+          street2: user.shippingAddress.street2,
+          city: user.shippingAddress.city,
+          postcode: user.shippingAddress.postcode,
+          country: user.shippingAddress.country
+        }
+      },
       deliveryTime: args.deliveryTime,
       deliveryDayOfWeek: args.deliveryDayOfWeek,
-      billingAddress: user.billingAddress,
-      shippingAddress: user.shippingAddress,
-      items: { create: orderItems },
-      user: { connect: { id: userId } }
+      paymentDate: new Date().toISOString(),
+      total: amount,
+      charge,
     });
 
     // 6. Clean up - clear the users cart, delete cartItems
-    const cartItemIds = userCart.map(cartItem => cartItem.id);
+    const cartItemIds = user.cart.map(cartItem => cartItem.id);
     await prisma.deleteManyCartItems({
       id_in: cartItemIds
     });

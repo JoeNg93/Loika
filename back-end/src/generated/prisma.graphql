@@ -5,6 +5,7 @@ type Address {
   city: String!
   postcode: Int!
   country: String!
+  isBillingAddress: Boolean!
 }
 
 type AddressConnection {
@@ -19,11 +20,7 @@ input AddressCreateInput {
   city: String!
   postcode: Int!
   country: String!
-}
-
-input AddressCreateManyInput {
-  create: [AddressCreateInput!]
-  connect: [AddressWhereUniqueInput!]
+  isBillingAddress: Boolean!
 }
 
 input AddressCreateOneInput {
@@ -49,94 +46,12 @@ enum AddressOrderByInput {
   postcode_DESC
   country_ASC
   country_DESC
+  isBillingAddress_ASC
+  isBillingAddress_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
-}
-
-input AddressScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  street1: String
-  street1_not: String
-  street1_in: [String!]
-  street1_not_in: [String!]
-  street1_lt: String
-  street1_lte: String
-  street1_gt: String
-  street1_gte: String
-  street1_contains: String
-  street1_not_contains: String
-  street1_starts_with: String
-  street1_not_starts_with: String
-  street1_ends_with: String
-  street1_not_ends_with: String
-  street2: String
-  street2_not: String
-  street2_in: [String!]
-  street2_not_in: [String!]
-  street2_lt: String
-  street2_lte: String
-  street2_gt: String
-  street2_gte: String
-  street2_contains: String
-  street2_not_contains: String
-  street2_starts_with: String
-  street2_not_starts_with: String
-  street2_ends_with: String
-  street2_not_ends_with: String
-  city: String
-  city_not: String
-  city_in: [String!]
-  city_not_in: [String!]
-  city_lt: String
-  city_lte: String
-  city_gt: String
-  city_gte: String
-  city_contains: String
-  city_not_contains: String
-  city_starts_with: String
-  city_not_starts_with: String
-  city_ends_with: String
-  city_not_ends_with: String
-  postcode: Int
-  postcode_not: Int
-  postcode_in: [Int!]
-  postcode_not_in: [Int!]
-  postcode_lt: Int
-  postcode_lte: Int
-  postcode_gt: Int
-  postcode_gte: Int
-  country: String
-  country_not: String
-  country_in: [String!]
-  country_not_in: [String!]
-  country_lt: String
-  country_lte: String
-  country_gt: String
-  country_gte: String
-  country_contains: String
-  country_not_contains: String
-  country_starts_with: String
-  country_not_starts_with: String
-  country_ends_with: String
-  country_not_ends_with: String
-  AND: [AddressScalarWhereInput!]
-  OR: [AddressScalarWhereInput!]
-  NOT: [AddressScalarWhereInput!]
 }
 
 input AddressUpdateDataInput {
@@ -145,6 +60,7 @@ input AddressUpdateDataInput {
   city: String
   postcode: Int
   country: String
+  isBillingAddress: Boolean
 }
 
 input AddressUpdateInput {
@@ -153,25 +69,7 @@ input AddressUpdateInput {
   city: String
   postcode: Int
   country: String
-}
-
-input AddressUpdateManyDataInput {
-  street1: String
-  street2: String
-  city: String
-  postcode: Int
-  country: String
-}
-
-input AddressUpdateManyInput {
-  create: [AddressCreateInput!]
-  update: [AddressUpdateWithWhereUniqueNestedInput!]
-  upsert: [AddressUpsertWithWhereUniqueNestedInput!]
-  delete: [AddressWhereUniqueInput!]
-  connect: [AddressWhereUniqueInput!]
-  disconnect: [AddressWhereUniqueInput!]
-  deleteMany: [AddressScalarWhereInput!]
-  updateMany: [AddressUpdateManyWithWhereNestedInput!]
+  isBillingAddress: Boolean
 }
 
 input AddressUpdateManyMutationInput {
@@ -180,11 +78,7 @@ input AddressUpdateManyMutationInput {
   city: String
   postcode: Int
   country: String
-}
-
-input AddressUpdateManyWithWhereNestedInput {
-  where: AddressScalarWhereInput!
-  data: AddressUpdateManyDataInput!
+  isBillingAddress: Boolean
 }
 
 input AddressUpdateOneInput {
@@ -203,18 +97,7 @@ input AddressUpdateOneRequiredInput {
   connect: AddressWhereUniqueInput
 }
 
-input AddressUpdateWithWhereUniqueNestedInput {
-  where: AddressWhereUniqueInput!
-  data: AddressUpdateDataInput!
-}
-
 input AddressUpsertNestedInput {
-  update: AddressUpdateDataInput!
-  create: AddressCreateInput!
-}
-
-input AddressUpsertWithWhereUniqueNestedInput {
-  where: AddressWhereUniqueInput!
   update: AddressUpdateDataInput!
   create: AddressCreateInput!
 }
@@ -298,6 +181,8 @@ input AddressWhereInput {
   country_not_starts_with: String
   country_ends_with: String
   country_not_ends_with: String
+  isBillingAddress: Boolean
+  isBillingAddress_not: Boolean
   AND: [AddressWhereInput!]
   OR: [AddressWhereInput!]
   NOT: [AddressWhereInput!]
@@ -557,7 +442,23 @@ type OrderConnection {
 }
 
 input OrderCreateInput {
-  user: UserCreateOneInput!
+  user: UserCreateOneWithoutOrdersInput!
+  items: OrderItemCreateManyInput
+  billingAddress: AddressCreateOneInput!
+  shippingAddress: AddressCreateOneInput!
+  deliveryTime: String!
+  deliveryDayOfWeek: String!
+  paymentDate: DateTime!
+  total: Int!
+  charge: String!
+}
+
+input OrderCreateManyWithoutUserInput {
+  create: [OrderCreateWithoutUserInput!]
+  connect: [OrderWhereUniqueInput!]
+}
+
+input OrderCreateWithoutUserInput {
   items: OrderItemCreateManyInput
   billingAddress: AddressCreateOneInput!
   shippingAddress: AddressCreateOneInput!
@@ -964,11 +865,113 @@ enum OrderOrderByInput {
   updatedAt_DESC
 }
 
+input OrderScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  deliveryTime: String
+  deliveryTime_not: String
+  deliveryTime_in: [String!]
+  deliveryTime_not_in: [String!]
+  deliveryTime_lt: String
+  deliveryTime_lte: String
+  deliveryTime_gt: String
+  deliveryTime_gte: String
+  deliveryTime_contains: String
+  deliveryTime_not_contains: String
+  deliveryTime_starts_with: String
+  deliveryTime_not_starts_with: String
+  deliveryTime_ends_with: String
+  deliveryTime_not_ends_with: String
+  deliveryDayOfWeek: String
+  deliveryDayOfWeek_not: String
+  deliveryDayOfWeek_in: [String!]
+  deliveryDayOfWeek_not_in: [String!]
+  deliveryDayOfWeek_lt: String
+  deliveryDayOfWeek_lte: String
+  deliveryDayOfWeek_gt: String
+  deliveryDayOfWeek_gte: String
+  deliveryDayOfWeek_contains: String
+  deliveryDayOfWeek_not_contains: String
+  deliveryDayOfWeek_starts_with: String
+  deliveryDayOfWeek_not_starts_with: String
+  deliveryDayOfWeek_ends_with: String
+  deliveryDayOfWeek_not_ends_with: String
+  paymentDate: DateTime
+  paymentDate_not: DateTime
+  paymentDate_in: [DateTime!]
+  paymentDate_not_in: [DateTime!]
+  paymentDate_lt: DateTime
+  paymentDate_lte: DateTime
+  paymentDate_gt: DateTime
+  paymentDate_gte: DateTime
+  total: Int
+  total_not: Int
+  total_in: [Int!]
+  total_not_in: [Int!]
+  total_lt: Int
+  total_lte: Int
+  total_gt: Int
+  total_gte: Int
+  charge: String
+  charge_not: String
+  charge_in: [String!]
+  charge_not_in: [String!]
+  charge_lt: String
+  charge_lte: String
+  charge_gt: String
+  charge_gte: String
+  charge_contains: String
+  charge_not_contains: String
+  charge_starts_with: String
+  charge_not_starts_with: String
+  charge_ends_with: String
+  charge_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [OrderScalarWhereInput!]
+  OR: [OrderScalarWhereInput!]
+  NOT: [OrderScalarWhereInput!]
+}
+
 input OrderUpdateInput {
-  user: UserUpdateOneRequiredInput
+  user: UserUpdateOneRequiredWithoutOrdersInput
   items: OrderItemUpdateManyInput
   billingAddress: AddressUpdateOneRequiredInput
   shippingAddress: AddressUpdateOneRequiredInput
+  deliveryTime: String
+  deliveryDayOfWeek: String
+  paymentDate: DateTime
+  total: Int
+  charge: String
+}
+
+input OrderUpdateManyDataInput {
   deliveryTime: String
   deliveryDayOfWeek: String
   paymentDate: DateTime
@@ -982,6 +985,44 @@ input OrderUpdateManyMutationInput {
   paymentDate: DateTime
   total: Int
   charge: String
+}
+
+input OrderUpdateManyWithoutUserInput {
+  create: [OrderCreateWithoutUserInput!]
+  delete: [OrderWhereUniqueInput!]
+  connect: [OrderWhereUniqueInput!]
+  disconnect: [OrderWhereUniqueInput!]
+  update: [OrderUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [OrderUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [OrderScalarWhereInput!]
+  updateMany: [OrderUpdateManyWithWhereNestedInput!]
+}
+
+input OrderUpdateManyWithWhereNestedInput {
+  where: OrderScalarWhereInput!
+  data: OrderUpdateManyDataInput!
+}
+
+input OrderUpdateWithoutUserDataInput {
+  items: OrderItemUpdateManyInput
+  billingAddress: AddressUpdateOneRequiredInput
+  shippingAddress: AddressUpdateOneRequiredInput
+  deliveryTime: String
+  deliveryDayOfWeek: String
+  paymentDate: DateTime
+  total: Int
+  charge: String
+}
+
+input OrderUpdateWithWhereUniqueWithoutUserInput {
+  where: OrderWhereUniqueInput!
+  data: OrderUpdateWithoutUserDataInput!
+}
+
+input OrderUpsertWithWhereUniqueWithoutUserInput {
+  where: OrderWhereUniqueInput!
+  update: OrderUpdateWithoutUserDataInput!
+  create: OrderCreateWithoutUserInput!
 }
 
 input OrderWhereInput {
@@ -1364,10 +1405,11 @@ type User {
   permissions: [Permission!]!
   phone: String
   billingAddress: Address
-  shippingAddress(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address!]
+  shippingAddress: Address
   paymentId: String
   avatar: String
   cart(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartItem!]
+  orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1387,10 +1429,11 @@ input UserCreateInput {
   permissions: UserCreatepermissionsInput
   phone: String
   billingAddress: AddressCreateOneInput
-  shippingAddress: AddressCreateManyInput
+  shippingAddress: AddressCreateOneInput
   paymentId: String
   avatar: String
   cart: CartItemCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
 }
 
 input UserCreateOneInput {
@@ -1400,6 +1443,11 @@ input UserCreateOneInput {
 
 input UserCreateOneWithoutCartInput {
   create: UserCreateWithoutCartInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutOrdersInput {
+  create: UserCreateWithoutOrdersInput
   connect: UserWhereUniqueInput
 }
 
@@ -1416,9 +1464,25 @@ input UserCreateWithoutCartInput {
   permissions: UserCreatepermissionsInput
   phone: String
   billingAddress: AddressCreateOneInput
-  shippingAddress: AddressCreateManyInput
+  shippingAddress: AddressCreateOneInput
   paymentId: String
   avatar: String
+  orders: OrderCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutOrdersInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  phone: String
+  billingAddress: AddressCreateOneInput
+  shippingAddress: AddressCreateOneInput
+  paymentId: String
+  avatar: String
+  cart: CartItemCreateManyWithoutUserInput
 }
 
 type UserEdge {
@@ -1460,10 +1524,11 @@ input UserUpdateDataInput {
   permissions: UserUpdatepermissionsInput
   phone: String
   billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateManyInput
+  shippingAddress: AddressUpdateOneInput
   paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -1475,10 +1540,11 @@ input UserUpdateInput {
   permissions: UserUpdatepermissionsInput
   phone: String
   billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateManyInput
+  shippingAddress: AddressUpdateOneInput
   paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -1502,17 +1568,17 @@ input UserUpdateOneInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredInput {
-  create: UserCreateInput
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdateOneRequiredWithoutCartInput {
   create: UserCreateWithoutCartInput
   update: UserUpdateWithoutCartDataInput
   upsert: UserUpsertWithoutCartInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutOrdersInput {
+  create: UserCreateWithoutOrdersInput
+  update: UserUpdateWithoutOrdersDataInput
+  upsert: UserUpsertWithoutOrdersInput
   connect: UserWhereUniqueInput
 }
 
@@ -1529,9 +1595,25 @@ input UserUpdateWithoutCartDataInput {
   permissions: UserUpdatepermissionsInput
   phone: String
   billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateManyInput
+  shippingAddress: AddressUpdateOneInput
   paymentId: String
   avatar: String
+  orders: OrderUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutOrdersDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  phone: String
+  billingAddress: AddressUpdateOneInput
+  shippingAddress: AddressUpdateOneInput
+  paymentId: String
+  avatar: String
+  cart: CartItemUpdateManyWithoutUserInput
 }
 
 input UserUpsertNestedInput {
@@ -1542,6 +1624,11 @@ input UserUpsertNestedInput {
 input UserUpsertWithoutCartInput {
   update: UserUpdateWithoutCartDataInput!
   create: UserCreateWithoutCartInput!
+}
+
+input UserUpsertWithoutOrdersInput {
+  update: UserUpdateWithoutOrdersDataInput!
+  create: UserCreateWithoutOrdersInput!
 }
 
 input UserWhereInput {
@@ -1638,9 +1725,7 @@ input UserWhereInput {
   phone_ends_with: String
   phone_not_ends_with: String
   billingAddress: AddressWhereInput
-  shippingAddress_every: AddressWhereInput
-  shippingAddress_some: AddressWhereInput
-  shippingAddress_none: AddressWhereInput
+  shippingAddress: AddressWhereInput
   paymentId: String
   paymentId_not: String
   paymentId_in: [String!]
@@ -1672,6 +1757,9 @@ input UserWhereInput {
   cart_every: CartItemWhereInput
   cart_some: CartItemWhereInput
   cart_none: CartItemWhereInput
+  orders_every: OrderWhereInput
+  orders_some: OrderWhereInput
+  orders_none: OrderWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

@@ -10,6 +10,7 @@ type Address {
   city: String!
   postcode: Int!
   country: String!
+  isBillingAddress: Boolean!
 }
 
 type User {
@@ -22,10 +23,11 @@ type User {
   permissions: [Permission]
   phone: String
   billingAddress: Address @relation(name: "UserBillingAddress")
-  shippingAddress: [Address!] @relation(name: "UserShippingAddresses")
+  shippingAddress: Address @relation(name: "UserShippingAddresses")
   paymentId: String
   avatar: String
   cart: [CartItem!]!
+  orders: [Order!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
