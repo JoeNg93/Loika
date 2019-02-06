@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { StyleSheet, View } from 'react-native';
+import { TextField } from 'react-native-material-textfield';
 import Colors from '../constants/Colors';
 import commonStyles from '../constants/commonStyles';
 import PropTypes from 'prop-types';
 
-const addressFormLabel = {
+const addressFormType = {
   name: 'name',
   address: 'address',
   postCode: 'postCode',
@@ -19,98 +19,146 @@ export default function AddressForm({
   postCode,
   city,
   phoneNumber,
-  onAddressInputChange,
+  onAddressInputEndEditing,
 }) {
   return (
     <View style={styles.formContainer}>
-      <Input
+      <TextField
         label={'Full name'}
+        textColor={Colors.black}
+        fontSize={12}
+        labelFontSize={10}
+        lineWidth={0.5}
+        activeLineWidth={1}
+        tintColor={Colors.mediumCarmine}
+        baseColor={Colors.mediumBlack}
+        errorColor={Colors.mediumCarmine}
         inputContainerStyle={styles.inputContainer}
-        labelStyle={styles.inputLabel}
-        inputStyle={styles.inputValue}
+        labelTextStyle={styles.inputLabel}
         defaultValue={name}
-        onChangeText={text =>
-          onAddressInputChange({ label: addressFormLabel.name, value: text })
+        onEndEditing={event =>
+          onAddressInputEndEditing({
+            type: addressFormType.name,
+            value: event.nativeEvent.text,
+          })
         }
       />
-      <Input
+      <TextField
         label={'Street and house number'}
-        containerStyle={styles.inputFieldContainer}
+        textColor={Colors.black}
+        fontSize={12}
+        labelFontSize={10}
+        lineWidth={0.5}
+        activeLineWidth={1}
+        tintColor={Colors.mediumCarmine}
+        baseColor={Colors.mediumBlack}
+        errorColor={Colors.mediumCarmine}
         inputContainerStyle={styles.inputContainer}
-        labelStyle={styles.inputLabel}
-        inputStyle={styles.inputValue}
-        backgroundColor={'transparent'}
+        labelTextStyle={styles.inputLabel}
         defaultValue={address}
-        onChangeText={text =>
-          onAddressInputChange({ label: addressFormLabel.address, value: text })
+        onEndEditing={event =>
+          onAddressInputEndEditing({
+            type: addressFormType.address,
+            value: event.nativeEvent.text,
+          })
         }
       />
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Input
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <TextField
           label={'Postcode'}
-          containerStyle={[styles.inputFieldContainer, styles.smallInputContainer]}
+          textColor={Colors.black}
+          fontSize={12}
+          labelFontSize={10}
+          lineWidth={0.5}
+          activeLineWidth={1}
+          tintColor={Colors.mediumCarmine}
+          baseColor={Colors.mediumBlack}
+          errorColor={Colors.mediumCarmine}
           inputContainerStyle={styles.inputContainer}
-          labelStyle={styles.inputLabel}
-          inputStyle={styles.inputValue}
-          backgroundColor={'transparent'}
-          defaultValue={postCode}
-          onChangeText={text =>
-            onAddressInputChange({ label: addressFormLabel.postCode, value: text })
+          labelTextStyle={styles.inputLabel}
+          containerStyle={styles.smallInputContainer}
+          defaultValue={postCode && postCode.toString()}
+          onEndEditing={event =>
+            onAddressInputEndEditing({
+              type: addressFormType.postCode,
+              value: event.nativeEvent.text,
+            })
           }
         />
-        <Input
+        <TextField
           label={'City (Finland only)'}
-          containerStyle={[styles.inputFieldContainer, styles.smallInputContainer]}
+          textColor={Colors.black}
+          fontSize={12}
+          labelFontSize={10}
+          lineWidth={0.5}
+          activeLineWidth={1}
+          tintColor={Colors.mediumCarmine}
+          baseColor={Colors.mediumBlack}
+          errorColor={Colors.mediumCarmine}
           inputContainerStyle={styles.inputContainer}
-          labelStyle={styles.inputLabel}
-          inputStyle={styles.inputValue}
-          backgroundColor={'transparent'}
+          labelTextStyle={styles.inputLabel}
+          containerStyle={styles.smallInputContainer}
           defaultValue={city}
-          onChangeText={text =>
-            onAddressInputChange({ label: addressFormLabel.city, value: text })
+          onEndEditing={event =>
+            onAddressInputEndEditing({
+              type: addressFormType.city,
+              value: event.nativeEvent.text,
+            })
           }
         />
       </View>
-      <Input
+      <TextField
         label={'Phone number'}
-        containerStyle={styles.inputFieldContainer}
+        textColor={Colors.black}
+        fontSize={12}
+        labelFontSize={10}
+        lineWidth={0.5}
+        activeLineWidth={1}
+        tintColor={Colors.mediumCarmine}
+        baseColor={Colors.mediumBlack}
+        errorColor={Colors.mediumCarmine}
         inputContainerStyle={styles.inputContainer}
-        labelStyle={styles.inputLabel}
-        inputStyle={styles.inputValue}
-        backgroundColor={'transparent'}
+        labelTextStyle={styles.inputLabel}
         defaultValue={phoneNumber}
-        onChangeText={text =>
-          onAddressInputChange({ label: addressFormLabel.phoneNumber, value: text })
+        onEndEditing={event =>
+          onAddressInputEndEditing({
+            type: addressFormType.phoneNumber,
+            value: event.nativeEvent.text,
+          })
         }
       />
     </View>
   );
 }
 
+AddressForm.propTypes = {
+  name: PropTypes.string,
+  address: PropTypes.string,
+  postCode: PropTypes.number,
+  city: PropTypes.string,
+  phoneNumber: PropTypes.string,
+  onAddressInputEndEditing: PropTypes.func,
+};
+
+AddressForm.defaultProps = {
+  name: '',
+  address: '',
+  city: '',
+  phoneNumber: '',
+  onAddressInputEndEditing: ({ type, value }) => {},
+};
+
 const styles = StyleSheet.create({
-  inputFieldContainer: {
-    marginTop: 18
-  },
   inputContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.lightGrey,
-    paddingLeft: 2,
-    height: 24
+    marginTop: -8,
+    paddingTop: 36,
+    height: 58,
   },
   smallInputContainer: {
-    width: 150
+    width: 130,
   },
   inputLabel: {
     ...commonStyles.fontRalewayMedium,
-    ...commonStyles.textGrey,
-    fontSize: 10,
-    paddingLeft: 2,
-    marginBottom: 4
-  },
-  inputValue: {
-    ...commonStyles.fontRalewayMedium,
-    ...commonStyles.textBlack,
-    fontSize: 12,
-    borderWidth: 0
+    ...commonStyles.black,
   },
 });

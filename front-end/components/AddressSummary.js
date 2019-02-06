@@ -6,15 +6,28 @@ import commonStyles from '../constants/commonStyles';
 import PropTypes from 'prop-types';
 import AddressForm from './AddressForm';
 
-const hitSlop = { top: 20, bottom: 20, left: 20, right: 20 };
-
 export default class AddressSummary extends React.Component {
   state = {
     isEditing: false,
+    saveButtonEnabled: false,
   };
 
-  switchToEditMode = () => {
-    this.setState({ isEditing: true });
+  toggleEditMode = () => {
+    this.setState({ isEditing: !this.state.isEditing });
+  };
+
+  onAddressInputEndEditing = ({ type, value }) => {
+    //Validate input here, then return error message to AddressForm
+    console.log(`${type}: ${value}`);
+    //Validate form to see if save button should be enabled
+    if (this.validateForm()) {
+      this.setState({ saveButtonEnabled: true });
+    }
+  };
+
+  validateForm = () => {
+    // Check if all form input is filled (not empty)
+    return false;
   };
 
   render() {
@@ -22,18 +35,15 @@ export default class AddressSummary extends React.Component {
       <View>
         {this.props.canEditAddress && (
           <TouchableOpacity
-            onPress={this.switchToEditMode}
-            hitSlop={hitSlop}
+            onPress={this.toggleEditMode}
             style={{ zIndex: 100 }}
           >
-            <View>
-              <Icon
-                name={this.state.isEditing ? 'close' : 'edit'}
-                size={10}
-                color={Colors.white}
-                containerStyle={styles.editIconContainer}
-              />
-            </View>
+            <Icon
+              name={this.state.isEditing ? 'close' : 'edit'}
+              size={12}
+              color={Colors.white}
+              containerStyle={styles.editIconContainer}
+            />
           </TouchableOpacity>
         )}
         <View
@@ -48,25 +58,41 @@ export default class AddressSummary extends React.Component {
         >
           {this.state.isEditing ? (
             <View style={styles.formContainer}>
-              <AddressForm name={'Thanh Dang'} address={'Kotkantie 1'} onAddressInputChange={({label, value}) => {}}/>
+              <AddressForm
+                name={this.props.name}
+                {...this.props.shippingAddress}
+                phoneNumber={this.props.phoneNumber}
+                onAddressInputEndEditing={this.onAddressInputEndEditing}
+              />
+              <Button
+                title={'Save'}
+                titleStyle={styles.buttonTitleDefaultStyle}
+                buttonStyle={[
+                  styles.buttonDefaultStyle,
+                  this.state.saveButtonEnabled
+                    ? styles.activeButton
+                    : styles.disabledButton,
+                ]}
+                containerStyle={styles.formSaveButtonContainer}
+                onPress={this.props.onPressSaveAddressForm}
+              />
             </View>
           ) : (
             <View style={styles.addressSummaryContainer}>
               <View style={styles.addressDetailsContainer}>
                 <Text style={styles.importantText}>{this.props.name}</Text>
                 <Text style={styles.defaultText}>
-                  {this.props.shippingAddress}
+                  {Object.values(this.props.shippingAddress).join(', ')}
                 </Text>
                 <Text style={styles.defaultText}>{this.props.phoneNumber}</Text>
               </View>
               {this.props.hasSelectedButton && (
-                <View style={styles.buttonContainer}>
+                <View style={styles.selectButtonContainer}>
                   <Button
                     type={this.props.isButtonSelected ? 'solid' : 'outline'}
                     title={this.props.isButtonSelected ? 'Selected' : 'Select'}
                     titleStyle={[
-                      commonStyles.fontRalewaySemiBold,
-                      { fontSize: 14 },
+                      styles.buttonTitleDefaultStyle,
                       this.props.isButtonSelected
                         ? commonStyles.textWhite
                         : commonStyles.textMacaroniCheese,
@@ -77,7 +103,7 @@ export default class AddressSummary extends React.Component {
                         ? styles.activeButton
                         : styles.nonActiveButton,
                     ]}
-                    onPress={this.props.onPressButtonSelected}
+                    onPress={this.props.onPressSelectedButton}
                   />
                 </View>
               )}
@@ -88,6 +114,32 @@ export default class AddressSummary extends React.Component {
     );
   }
 }
+
+AddressSummary.propTypes = {
+  name: PropTypes.string,
+  shippingAddress: PropTypes.shape({
+    address: PropTypes.string,
+    postCode: PropTypes.number,
+    city: PropTypes.string,
+  }),
+  phoneNumber: PropTypes.string,
+  hasSelectedButton: PropTypes.bool,
+  isButtonSelected: PropTypes.bool,
+  onPressSelectedButton: PropTypes.func,
+  canEditAddress: PropTypes.bool,
+  onPressSaveAddressForm: PropTypes.func,
+};
+
+AddressSummary.defaultProps = {
+  name: '',
+  shippingAddress: {},
+  phoneNumber: '',
+  hasSelectedButton: false,
+  isButtonSelected: false,
+  onPressSelectedButton: () => {},
+  canEditAddress: false,
+  onPressSaveAddressForm: () => {},
+};
 
 const styles = StyleSheet.create({
   boxContainer: {
@@ -111,10 +163,15 @@ const styles = StyleSheet.create({
     flex: 3,
   },
   formContainer: {
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 14,
-    paddingRight:14
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  formSaveButtonContainer: {
+    marginTop: 18,
+    marginBottom: 10,
+    alignItems: 'flex-end',
   },
   importantText: {
     ...commonStyles.fontRalewayBold,
@@ -127,16 +184,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 10,
   },
-  buttonContainer: {
+  selectButtonContainer: {
     flex: 2,
     paddingLeft: 4,
+  },
+  buttonTitleDefaultStyle: {
+    ...commonStyles.fontRalewaySemiBold,
+    fontSize: 14,
   },
   buttonDefaultStyle: {
     paddingTop: 4,
     paddingBottom: 4,
     width: 102,
     borderRadius: 16,
-    borderWidth: 1,
   },
   editIconContainer: {
     backgroundColor: Colors.mediumCarmine,
@@ -147,19 +207,12 @@ const styles = StyleSheet.create({
   },
   activeButton: {
     backgroundColor: Colors.mediumCarmine,
-    borderWidth: 0,
+  },
+  disabledButton: {
+    backgroundColor: Colors.darkGrey,
   },
   nonActiveButton: {
     borderColor: Colors.macaroniCheese,
+    borderWidth: 1,
   },
 });
-
-AddressSummary.propTypes = {
-  name: PropTypes.string,
-  shippingAddress: PropTypes.string,
-  phoneNumber: PropTypes.string,
-  hasSelectedButton: PropTypes.bool,
-  isButtonSelected: PropTypes.bool,
-  onPressButtonSelected: PropTypes.func,
-  canEditAddress: PropTypes.bool,
-};
