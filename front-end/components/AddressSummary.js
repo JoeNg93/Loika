@@ -32,7 +32,7 @@ export default class AddressSummary extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.mainContainer}>
         {this.props.canEditAddress && (
           <TouchableOpacity
             onPress={this.toggleEditMode}
@@ -142,6 +142,9 @@ AddressSummary.defaultProps = {
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    width: 336,
+  },
   boxContainer: {
     width: 330,
     minHeight: 90,
@@ -154,19 +157,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 14,
-    paddingRight: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 14,
   },
   addressDetailsContainer: {
     flex: 3,
   },
   formContainer: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
   },
   formSaveButtonContainer: {
     marginTop: 18,
@@ -193,8 +192,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   buttonDefaultStyle: {
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingVertical: 4,
     width: 102,
     borderRadius: 16,
   },
