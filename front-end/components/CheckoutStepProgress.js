@@ -1,19 +1,94 @@
 import React from 'react';
-import colors from '../../constants/Colors';
-import {StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
+import PropTypes from 'prop-types';
+
+import colors from '../constants/Colors';
+
+export default function CheckoutStepProgress({ currentStep }) {
+  _checkCurrentStep = (elementStep, elem) => {
+    if (elementStep > currentStep) {
+      switch (elem) {
+        case 'divider':
+          return styles.greyDivider;
+        case 'circle':
+          return styles.greyCircle;
+        case 'text':
+          return styles.greyProgressText;
+      }
+    }
+  };
+
+  return (
+    <View style={styles.topProgressBar}>
+      <View style={styles.progressStepContainer}>
+        <View style={[styles.circle, this._checkCurrentStep('1', 'circle')]}>
+          <Image
+            style={styles.icon}
+            source={require('../assets/images/address.png')}
+          />
+        </View>
+        <Text
+          style={[styles.progressText, this._checkCurrentStep('1', 'text')]}
+        >
+          Address
+        </Text>
+      </View>
+
+      <View style={[styles.divider, this._checkCurrentStep('2', 'divider')]} />
+
+      <View style={styles.progressStepContainer}>
+        <View style={[styles.circle, this._checkCurrentStep('2', 'circle')]}>
+          <Image
+            style={styles.icon}
+            source={require('../assets/images/delivery.png')}
+          />
+        </View>
+        <Text
+          style={[styles.progressText, this._checkCurrentStep('2', 'text')]}
+        >
+          Delivery time
+        </Text>
+      </View>
+
+      <View style={[styles.divider, this._checkCurrentStep('3', 'divider')]} />
+
+      <View style={styles.progressStepContainer}>
+        <View style={[styles.circle, this._checkCurrentStep('3', 'circle')]}>
+          <Image
+            style={styles.icon}
+            source={require('../assets/images/confirm.png')}
+          />
+        </View>
+        <Text
+          style={[styles.progressText, this._checkCurrentStep('3', 'text')]}
+        >
+          Confirm
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+CheckoutStepProgress.propTypes = {
+  currentStep: PropTypes.oneOf(['1', '2', '3']),
+};
+
+CheckoutStepProgress.defaultProps = {
+  currentStep: '1',
+};
 
 const styles = StyleSheet.create({
   topProgressBar: {
     marginTop: 20,
     width: '80%',
-    flexDirection:'row',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center', 
+    justifyContent: 'center',
   },
   progressStepContainer: {
-    flexDirection:'row',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center', 
+    justifyContent: 'center',
   },
   circle: {
     height: 23,
@@ -21,7 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: 311,
     backgroundColor: colors.mediumCarmine,
     alignItems: 'center',
-    justifyContent: 'center', 
+    justifyContent: 'center',
   },
   greyCircle: {
     backgroundColor: '#979797',
@@ -54,60 +129,3 @@ const styles = StyleSheet.create({
     borderColor: '#979797',
   },
 });
-
-export default function CheckoutStepProgress ({ currentStep }) {
-	
-	_checkCurrentStep = (elementStep, elem) => {
-    if (elementStep > currentStep) {
-			switch (elem) {
-				case 'divider':
-          return styles.greyDivider 
-        case 'circle':
-          return styles.greyCircle 
-        case 'text':
-          return styles.greyProgressText
-      }
-    }
-  };
-
-  return (
-		<View style={styles.topProgressBar}>
-		
-			<View style={styles.progressStepContainer}>
-				<View style={[styles.circle, this._checkCurrentStep('1', 'circle')]}>
-					<Image
-						style={styles.icon}
-						source={require('../../assets/images/address.png')}
-					/>
-				</View>
-				<Text style={[styles.progressText, this._checkCurrentStep('1', 'text')]}>Address</Text>
-			</View>
-
-			<View style={[styles.divider, this._checkCurrentStep('2', 'divider')]}/>
-
-			<View style={styles.progressStepContainer}>
-				<View style={[styles.circle, this._checkCurrentStep('2', 'circle')]}>
-					<Image
-						style={styles.icon}
-						source={require('../../assets/images/delivery.png')}
-					/>
-				</View>
-				<Text style={[styles.progressText, this._checkCurrentStep('2', 'text')]}>Delivery time</Text>
-			</View>
-			
-			<View style={[styles.divider, this._checkCurrentStep('3', 'divider')]}/>
-			
-			<View style={styles.progressStepContainer}>
-			<View style={[styles.circle, this._checkCurrentStep('3', 'circle')]}>
-					<Image
-						style={styles.icon}
-						source={require('../../assets/images/confirm.png')}
-					/>
-				</View>
-				<Text style={[styles.progressText, this._checkCurrentStep('3', 'text')]}>Confirm</Text>
-			</View>
-
-		</View>
-		
-  );
-}
