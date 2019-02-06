@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Colors from './Colors';
 
 export default StyleSheet.create({
   fontRalewayRegular: {
@@ -15,5 +16,23 @@ export default StyleSheet.create({
   },
   fontMontserratBold: {
     fontFamily: 'montserrat-bold',
+  },
+  textBlack: {
+    color: Colors.black,
+  },
+  textWhite: {
+    color: Colors.white,
+  },
+  textGrey: {
+    color: Colors.darkGrey,
+  },
+  textMediumCarmine: {
+    color: Colors.mediumCarmine,
+  },
+  textLightCardboard: {
+    color: Colors.lightCardboard,
+  },
+  textMacaroniCheese: {
+    color: Colors.macaroniCheese,
   },
 });

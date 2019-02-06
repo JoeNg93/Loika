@@ -12,6 +12,10 @@ export default {
   noticeBackground: tintColor,
   noticeText: '#fff',
 
+  white: '#fff',
+  black: '#282828',
+  lightGrey: '#C4C4C4',
+  darkGrey: '#979797',
   mediumCarmine: '#AA3C3B',
   lightCardboard: '#E8DFCA',
   macaroniCheese: '#FCB79A',
