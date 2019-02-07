@@ -1,12 +1,20 @@
 import React from 'react';
 import colors from '../../constants/Colors';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { Icon, Button } from 'react-native-elements';
+import Colors from '../../constants/Colors';
 import CheckoutStepProgress from '../../components/CheckoutStepProgress';
 import DeliverySchedule from '../../components/DeliverySchedule';
+import commonStyles from "../../constants/commonStyles";
+import Layout from "../../constants/Layout";
+
+const width = Layout.window.width;
 
 const styles = StyleSheet.create({
   container: {
+    width: width,
     flex: 1,
+    marginTop: 70,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -14,23 +22,15 @@ const styles = StyleSheet.create({
     flexBasis: '70%',
     flex: 1,
   },
-  bottomView: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    width: '100%',
-  },
-  bottomButton: {
+  mainButtonStyle: {
+    backgroundColor: Colors.mediumCarmine,
+    width: width,
     height: 56,
-    backgroundColor: colors.mediumCarmine,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  buttonText: {
-    // fontFamily: 'Raleway',
-    color: '#FFFFFF',
+  mainButtonTitle: {
+    ...commonStyles.fontRalewayBold,
+    ...commonStyles.textWhite,
     fontSize: 20,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
   },
   deliverySchedule: {
     flex: 2,
@@ -49,24 +49,22 @@ const styles = StyleSheet.create({
 
 export default class DeliveryScheduleCheckoutScreen extends React.Component {
   static navigationOptions = {
-    headerTitle: 'Choose delivery time',
+    headerTitle: 'Choose delivery schedule',
     headerTransparent: true,
-    headerTintColor: '#FCFAF6',
+    headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
-      <Image
-        style={{ width: 16, height: 16, marginLeft: 20 }}
-        source={require('../../assets/images/previous.png')}
-      />
+      <TouchableOpacity style={{ marginLeft: 20 }}>
+        <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
+      </TouchableOpacity>
     ),
     headerRight: (
-      <TouchableOpacity>
-        <Image
-          style={{ width: 16, height: 16, marginRight: 20 }}
-          source={require('../../assets/images/cart.png')}
-        />
+      <TouchableOpacity style={{ marginRight: 20 }}>
+        <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
       </TouchableOpacity>
     ),
     headerStyle: {
+      ...commonStyles.fontRalewayBold,
+      fontSize: 18,
       marginTop: 8,
     },
   };
@@ -89,10 +87,13 @@ export default class DeliveryScheduleCheckoutScreen extends React.Component {
           </View>
         </View>
 
-        <View style={styles.bottomView}>
-          <TouchableOpacity style={styles.bottomButton}>
-            <Text style={styles.buttonText}>Schedule delivery</Text>
-          </TouchableOpacity>
+        <View>
+          <Button
+            title={'Confirm address'}
+            titleStyle={styles.mainButtonTitle}
+            buttonStyle={styles.mainButtonStyle}
+            onPress={() => {}}
+          />
         </View>
       </View>
     );

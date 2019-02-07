@@ -1,14 +1,45 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Text } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { Icon, Button, CheckBox } from 'react-native-elements';
 import AddressForm from '../../components/AddressForm';
 import AddressSummary from '../../components/AddressSummary';
 import AddNewAddressModal from '../../components/AddNewAddressModal';
+import CheckoutStepProgress from '../../components/CheckoutStepProgress';
 import Colors from '../../constants/Colors';
 import commonStyles from '../../constants/commonStyles';
+import Layout from '../../constants/Layout';
 import _ from 'lodash';
 
-export default class ShippingAddressCheckout extends React.Component {
+const width = Layout.window.width;
+
+export default class ShippingAddressCheckoutScreen extends React.Component {
+  static navigationOptions = {
+    headerTitle: 'Your address and contact',
+    headerTransparent: true,
+    headerTintColor: Colors.mediumCarmine,
+    headerBackImage: (
+      <TouchableOpacity style={{ marginLeft: 20 }}>
+        <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
+      </TouchableOpacity>
+    ),
+    headerRight: (
+      <TouchableOpacity style={{ marginRight: 20 }}>
+        <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
+      </TouchableOpacity>
+    ),
+    headerStyle: {
+      ...commonStyles.fontRalewayBold,
+      fontSize: 18,
+      marginTop: 8,
+    },
+  };
+
   state = {
     fetchShippingAddresses: [
       {
@@ -124,60 +155,76 @@ export default class ShippingAddressCheckout extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.mainContainer}>
-        {/* Checkout Steps Here */}
+      <View style={styles.mainContainer}>
+        <ScrollView>
+          <CheckoutStepProgress currentStep="1" />
 
+          <View style={{ marginTop: 34 }}>
+            <Text style={styles.titleText}>Shipping address</Text>
+            {!_.isEmpty(this.state.fetchShippingAddresses) ? (
+              <View>
+                {this.renderAddressSummaryList(
+                  this.state.fetchShippingAddresses
+                )}
+                <Button
+                  type={'clear'}
+                  title={'Add new address'}
+                  icon={<Icon name={'add'} size={18} color={Colors.darkGrey} />}
+                  titleStyle={[styles.titleText, { marginLeft: 4 }]}
+                  buttonStyle={{ alignItems: 'center' }}
+                  containerStyle={styles.addNewAddressContainer}
+                  onPress={this.openAddressModal}
+                />
+                <AddNewAddressModal
+                  visible={this.state.addressModalVisible}
+                  onPressCloseModal={this.closeAddressModal}
+                  onPressSaveAddressForm={() => {}}
+                />
+              </View>
+            ) : (
+              <View style={{ marginBottom: 34 }}>
+                <AddressForm
+                  onAddressInputEndEditing={this.onAddressInputEndEditing}
+                />
+              </View>
+            )}
+          </View>
+          <View>
+            <Text style={styles.titleText}>Billing address</Text>
+            <CheckBox
+              title="Same as shipping address"
+              checked={this.state.sameAsShippingChecked}
+              onPress={this.toggleSameAsShippingChecked}
+              size={16}
+              textStyle={styles.checkBoxText}
+              containerStyle={styles.checkBoxContainer}
+              checkedColor={Colors.mediumCarmine}
+              uncheckedColor={Colors.mediumCarmine}
+            />
+            {this.renderBillingAddress()}
+          </View>
+        </ScrollView>
         <View>
-          <Text style={styles.titleText}>Shipping address</Text>
-          {!_.isEmpty(this.state.fetchShippingAddresses) ? (
-            <View>
-              {this.renderAddressSummaryList(this.state.fetchShippingAddresses)}
-              <Button
-                type={'clear'}
-                title={'Add new address'}
-                icon={<Icon name={'add'} size={18} color={Colors.darkGrey} />}
-                titleStyle={[styles.titleText, { marginLeft: 4 }]}
-                buttonStyle={{ alignItems: 'center' }}
-                containerStyle={styles.addNewAddressContainer}
-                onPress={this.openAddressModal}
-              />
-              <AddNewAddressModal
-                visible={this.state.addressModalVisible}
-                onPressCloseModal={this.closeAddressModal}
-                onPressSaveAddressForm={() => {}}
-              />
-            </View>
-          ) : (
-            <View style={{ marginBottom: 34 }}>
-              <AddressForm
-                onAddressInputEndEditing={this.onAddressInputEndEditing}
-              />
-            </View>
-          )}
-        </View>
-        <View>
-          <Text style={styles.titleText}>Billing address</Text>
-          <CheckBox
-            title="Same as shipping address"
-            checked={this.state.sameAsShippingChecked}
-            onPress={this.toggleSameAsShippingChecked}
-            size={16}
-            textStyle={styles.checkBoxText}
-            containerStyle={styles.checkBoxContainer}
-            checkedColor={Colors.mediumCarmine}
-            uncheckedColor={Colors.mediumCarmine}
+          <Button
+            title={'Confirm address'}
+            titleStyle={styles.mainButtonTitle}
+            buttonStyle={styles.mainButtonStyle}
+            onPress={() => {}}
           />
-          {this.renderBillingAddress()}
         </View>
-      </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: Colors.mainBackground,
-    marginTop: 60,
+    marginTop: 70,
+    paddingHorizontal: 20,
+    flex: 1,
+    width: width,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addressSummaryContainer: {
     marginTop: 14,
@@ -206,5 +253,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 0,
     zIndex: 100,
+  },
+  mainButtonStyle: {
+    backgroundColor: Colors.mediumCarmine,
+    width: width,
+    height: 56,
+  },
+  mainButtonTitle: {
+    ...commonStyles.fontRalewayBold,
+    ...commonStyles.textWhite,
+    fontSize: 20,
   },
 });

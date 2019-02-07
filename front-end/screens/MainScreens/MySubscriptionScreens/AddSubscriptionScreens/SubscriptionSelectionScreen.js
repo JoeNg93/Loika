@@ -10,10 +10,10 @@ import {
   Animated
 } from 'react-native';
 import SideSwipe from 'react-native-sideswipe';
-
+import { Icon } from 'react-native-elements';
 import Carousel from '../../../../components/Carousel';
-
-import colors from '../../../../constants/Colors';
+import Colors from '../../../../constants/Colors';
+import commonStyles from "../../../../constants/commonStyles";
 
 const boxes = [
   {
@@ -52,22 +52,20 @@ export default class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Choose your subscription',
     headerTransparent: true,
-    headerTintColor: colors.mediumCarmine,
+    headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
-      <Image
-        style={{ width: 16, height: 16, marginLeft: 20 }}
-        source={require('../../../../assets/images/previous.png')}
-      />
+      <TouchableOpacity style={{ marginLeft: 20 }}>
+        <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
+      </TouchableOpacity>
     ),
     headerRight: (
-      <TouchableOpacity>
-        <Image
-          style={{ width: 16, height: 16, marginRight: 20 }}
-          source={require('../../../../assets/images/cart.png')}
-        />
+      <TouchableOpacity style={{ marginRight: 20 }}>
+        <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
       </TouchableOpacity>
     ),
     headerStyle: {
+      ...commonStyles.fontRalewayBold,
+      fontSize: 18,
       marginTop: 8,
     },
   };

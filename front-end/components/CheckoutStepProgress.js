@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import PropTypes from 'prop-types';
-
+import commonStyles from '../constants/commonStyles';
 import colors from '../constants/Colors';
 
 export default function CheckoutStepProgress({ currentStep }) {
@@ -80,7 +80,7 @@ CheckoutStepProgress.defaultProps = {
 const styles = StyleSheet.create({
   topProgressBar: {
     marginTop: 20,
-    width: '80%',
+    minWidth: 353,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -107,11 +107,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   progressText: {
-    // fontFamily: 'Raleway',
+    ...commonStyles.fontRalewaySemiBold,
     marginLeft: 5,
     fontSize: 10,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     color: colors.mediumCarmine,
   },
   greyProgressText: {
@@ -122,7 +120,7 @@ const styles = StyleSheet.create({
     marginLeft: 14,
     flex: 1,
     borderColor: '#282828',
-    borderWidth: 0.8,
+    borderWidth: 0.5,
     margin: 5,
   },
   greyDivider: {
