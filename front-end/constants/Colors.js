@@ -19,5 +19,6 @@ export default {
   darkGrey: '#979797',
   mediumCarmine: '#AA3C3B',
   lightCardboard: '#E8DFCA',
+  mainBackground: '#FCFAF6',
   macaroniCheese: '#FCB79A',
 };

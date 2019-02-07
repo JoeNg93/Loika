@@ -22,7 +22,7 @@ export default function AddressForm({
   onAddressInputEndEditing,
 }) {
   return (
-    <View style={styles.formContainer}>
+    <View>
       <TextField
         label={'Full name'}
         textColor={Colors.black}
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     height: 58,
   },
   smallInputContainer: {
-    width: 130,
+    width: '45%',
   },
   inputLabel: {
     ...commonStyles.fontRalewayMedium,
