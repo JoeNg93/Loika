@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Icon, Button, CheckBox } from 'react-native-elements';
-import AddressForm from '../../components/AddressForm';
-import AddressSummary from '../../components/AddressSummary';
-import AddNewAddressModal from '../../components/AddNewAddressModal';
-import CheckoutStepProgress from '../../components/CheckoutStepProgress';
-import Colors from '../../constants/Colors';
-import commonStyles from '../../constants/commonStyles';
-import Layout from '../../constants/Layout';
+import AddressForm from '../../../../components/AddressForm';
+import AddressSummary from '../../../../components/AddressSummary';
+import AddNewAddressModal from '../../../../components/AddNewAddressModal';
+import CheckoutStepProgress from '../../../../components/CheckoutStepProgress';
+import Colors from '../../../../constants/Colors';
+import commonStyles from '../../../../constants/commonStyles';
+import Layout from '../../../../constants/Layout';
 import _ from 'lodash';
 
 const width = Layout.window.width;

@@ -1,12 +1,11 @@
 import React from 'react';
-import colors from '../../constants/Colors';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
-import Colors from '../../constants/Colors';
-import CheckoutStepProgress from '../../components/CheckoutStepProgress';
-import DeliverySchedule from '../../components/DeliverySchedule';
-import commonStyles from "../../constants/commonStyles";
-import Layout from "../../constants/Layout";
+import Colors from '../../../../constants/Colors';
+import CheckoutStepProgress from '../../../../components/CheckoutStepProgress';
+import DeliverySchedule from '../../../../components/DeliverySchedule';
+import commonStyles from '../../../../constants/commonStyles';
+import Layout from '../../../../constants/Layout';
 
 const width = Layout.window.width;
 
@@ -82,7 +81,7 @@ export default class DeliveryScheduleCheckoutScreen extends React.Component {
           <View style={styles.imageContainer}>
             <Image
               style={styles.image}
-              source={require('../../assets/images/slide3.png')}
+              source={require('../../../../assets/images/slide3.png')}
             />
           </View>
         </View>
