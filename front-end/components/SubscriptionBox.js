@@ -5,15 +5,12 @@ import commonStyles from '../constants/commonStyles';
 import PropTypes from 'prop-types';
 
 const subscriptionImageMapper = {
-  'mixed': require('../assets/images/mixed.png'),
-  'vegan': require('../assets/images/vegan.png'),
-  'meat': require('../assets/images/meat.png'),
+  mixed: require('../assets/images/mixed.png'),
+  vegan: require('../assets/images/vegan.png'),
+  meat: require('../assets/images/meat.png'),
 };
 
-export default function SubscriptionBox({
-  subscriptionTitle,
-  isActive,
-}) {
+export default function SubscriptionBox({ subscriptionTitle, isActive }) {
   return (
     <View
       style={[
@@ -67,6 +64,6 @@ const styles = StyleSheet.create({
     ...commonStyles.textBlack,
     fontSize: 14,
     textTransform: 'uppercase',
-    marginTop: 18
+    marginTop: 18,
   },
 });

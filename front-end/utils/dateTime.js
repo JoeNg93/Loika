@@ -13,7 +13,9 @@ const DAY_OF_WEEKS = [
 
 const getNextDayOfWeek = (date, dayOfWeekIndex, range) => {
   let resultDate = date;
-  resultDate.setDate(date.getDate() + range + dayOfWeekIndex - date.getDay() - 7);
+  resultDate.setDate(
+    date.getDate() + range + dayOfWeekIndex - date.getDay() - 7
+  );
   return resultDate;
 };
 
@@ -32,7 +34,7 @@ export const
       // Get all next delivery date 4 weeks from order date
       orderDate = new Date(orderDate);
       if (dayOfWeekIndex - orderDate.getDay() < 0) {
-        ranges = ranges.map(el => el + 7)
+        ranges = ranges.map(el => el + 7);
       }
       let deliveryDateList = ranges.map(range => {
         return getNextDayOfWeek(new Date(orderDate), dayOfWeekIndex, range);
