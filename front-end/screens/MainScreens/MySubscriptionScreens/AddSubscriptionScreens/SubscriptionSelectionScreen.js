@@ -5,17 +5,17 @@ import {
   Dimensions,
   Image,
   Text,
-  TouchableOpacity,
+  TouchableHighlight,
   Platform,
   Animated,
   Modal,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import SideSwipe from 'react-native-sideswipe';
 import { Icon } from 'react-native-elements';
 import Carousel from './Carousel';
 import Colors from '../../../../constants/Colors';
-import commonStyles from "../../../../constants/commonStyles";
+import commonStyles from '../../../../constants/commonStyles';
 
 const boxes = [
   {
@@ -57,48 +57,63 @@ export default class SubscriptionSelectionScreen extends React.Component {
       headerTransparent: true,
       headerTintColor: Colors.mediumCarmine,
       headerBackImage: (
-        <TouchableOpacity style={{ marginLeft: 20 }}>
+        <TouchableHighlight style={{ marginLeft: 20 }}>
           <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
-        </TouchableOpacity>
+        </TouchableHighlight>
       ),
       headerRight: (
-        <TouchableOpacity style={{ marginRight: 20 }} onPress={navigation.getParam('setCartVisible')}>
-          <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
-            <View style={[{
+        <TouchableHighlight
+          style={{ marginRight: 20 }}
+          onPress={navigation.getParam('setCartVisible')}
+        >
+          <Icon
+            name={'shopping-basket'}
+            size={22}
+            color={Colors.mediumCarmine}
+          />
+          <View
+            style={[
+              {
                 width: 11,
                 height: 11,
                 left: 10,
                 top: -18,
                 backgroundColor: '#FFFFFF',
-                borderRadius: 5.5
-              }, {opacity : navigation.getParam('opacity') ? navigation.getParam('opacity') : 0}]}>
-                <Text
-                style={{
-                  ...commonStyles.fontRalewayBold,
-                  fontWeight: '600',
-                  fontSize: 9,
-                  textAlign: 'center',
-                  ...commonStyles.textMediumCarmine
-                }}
-                >{navigation.getParam('items')}</Text>
-              </View>
-        </TouchableOpacity>
+                borderRadius: 5.5,
+              },
+              {
+                opacity: navigation.getParam('opacity')
+                  ? navigation.getParam('opacity')
+                  : 0,
+              },
+            ]}
+          >
+            <Text
+              style={{
+                ...commonStyles.fontRalewayBold,
+                fontWeight: '600',
+                fontSize: 9,
+                textAlign: 'center',
+                ...commonStyles.textMediumCarmine,
+              }}
+            >
+              {navigation.getParam('items')}
+            </Text>
+          </View>
+        </TouchableHighlight>
       ),
       headerStyle: {
         ...commonStyles.fontRalewayBold,
         fontSize: 18,
         marginTop: 8,
       },
-    }
+    };
   };
 
-    
-
-
   componentDidMount() {
-    this.props.navigation.setParams({setCartVisible: this._setCartVisible })
-    this.props.navigation.setParams({items: this.state.indexInCart.length })
-    this.props.navigation.setParams({opacity: 0 })
+    this.props.navigation.setParams({ setCartVisible: this._setCartVisible });
+    this.props.navigation.setParams({ items: this.state.indexInCart.length });
+    this.props.navigation.setParams({ opacity: 0 });
   }
 
   state = {
@@ -106,144 +121,149 @@ export default class SubscriptionSelectionScreen extends React.Component {
     shoppingCart: [],
     indexInCart: [],
     totalPrice: 0,
-    cartVisible: false
+    cartVisible: false,
   };
 
-
   _setCartVisible = () => {
-    if(this.state.cartVisible == false) {
-      this.setState({cartVisible: true});
+    if (this.state.cartVisible == false) {
+      this.setState({ cartVisible: true });
     } else {
-      this.setState({cartVisible: false});
+      this.setState({ cartVisible: false });
     }
-  }
+  };
 
   onPressPlus = () => {
     var indexInCart = this.state.indexInCart;
 
-    if(indexInCart.indexOf(this.state.currentIndex) == -1) {
+    if (indexInCart.indexOf(this.state.currentIndex) == -1) {
       let total = this.state.totalPrice;
       total += boxes[this.state.currentIndex].price;
-      this.setState(() => ({totalPrice: total}));
+      this.setState(() => ({ totalPrice: total }));
       indexArray = this.state.indexInCart;
       indexArray.push(this.state.currentIndex);
       this.setState(() => ({ indexInCart: indexInCart }));
     } else {
       let total = this.state.totalPrice;
       total -= boxes[this.state.currentIndex].price;
-      this.setState(() => ({totalPrice: total}));
+      this.setState(() => ({ totalPrice: total }));
       indexArray = this.state.indexInCart;
       let i = indexArray.indexOf(this.state.currentIndex);
       indexArray.splice(i, 1);
       this.setState(() => ({ indexInCart: indexInCart }));
     }
-    this.props.navigation.setParams({items: this.state.indexInCart.length })
-    if(this.state.indexInCart.length != 0) {
-      this.props.navigation.setParams({opacity: 1 })
+    this.props.navigation.setParams({ items: this.state.indexInCart.length });
+    if (this.state.indexInCart.length != 0) {
+      this.props.navigation.setParams({ opacity: 1 });
     } else {
-      this.props.navigation.setParams({opacity: 0 })
+      this.props.navigation.setParams({ opacity: 0 });
     }
-  }
+  };
 
   displayAddToCartButton = () => {
     if (this.state.indexInCart.indexOf(this.state.currentIndex) == -1) {
-      return (<View style={styles.plusCircle}>
-                <Icon
-                  color={Colors.mediumCarmine}
-                  size={23}
-                  name={'add'}
-                />
-              </View>);
+      return (
+        <View style={styles.plusCircle}>
+          <Icon color={Colors.mediumCarmine} size={23} name={'add'} />
+        </View>
+      );
     } else {
-      return (<View style={styles.checkCircle}>
-                <Icon
-                  color={Colors.white}
-                  size={23}
-                  name={'done'}
-                />
-              </View>);
+      return (
+        <View style={styles.checkCircle}>
+          <Icon color={Colors.white} size={23} name={'done'} />
+        </View>
+      );
     }
-  }
+  };
 
   displayCartItems = () => {
     let indexArray = this.state.indexInCart;
     let i;
     let items = [];
     if (indexArray.length != 0) {
-      items.push(<View
-        key="hr"
-        style={{
-          borderBottomColor: '#E1E1E1',
-          borderBottomWidth: 1,
-          marginBottom: 10
-        }}
-      />)
+      items.push(
+        <View
+          key="hr"
+          style={{
+            borderBottomColor: '#E1E1E1',
+            borderBottomWidth: 1,
+            marginBottom: 10,
+          }}
+        />
+      );
       for (i = 0; i < indexArray.length; ++i) {
         items.push(
           <View key={i}>
             <View style={styles.cartItem}>
               <Text style={styles.textInCart}>{boxes[i].title}</Text>
               <Text style={styles.cartSize}>{boxes[i].size}</Text>
-              <Text style={[styles.cartPrice, {top: -45}]}>{boxes[i].price} €</Text>
+              <Text style={[styles.cartPrice, { top: -45 }]}>
+                {boxes[i].price} €
+              </Text>
             </View>
             <View
               style={{
                 borderBottomColor: '#E1E1E1',
                 borderBottomWidth: 1,
-                marginBottom: 10
+                marginBottom: 10,
               }}
             />
           </View>
         );
       }
       items.push(
-        <View key="total" style={{marginTop: 24, marginBottom: 24}}>
+        <View key="total" style={{ marginTop: 24, marginBottom: 24 }}>
           <Text style={styles.textInCart}>Total</Text>
           <Text style={styles.cartPrice}>{this.state.totalPrice} €</Text>
           <Text style={styles.cartTax}>*Total included VAT</Text>
         </View>
-      )
-      return (items);
+      );
+      return items;
     } else {
-      return (<Text style={styles.textInCart}>No items in cart</Text>)
+      return <Text style={styles.textInCart}>No items in cart</Text>;
     }
-  }
+  };
 
   clearCart = () => {
     this.setState(() => ({ indexInCart: [] }));
-    this.props.navigation.setParams({items: this.state.indexInCart.length })
-    this.props.navigation.setParams({opacity: 0 })
-  }
+    this.props.navigation.setParams({ items: this.state.indexInCart.length });
+    this.props.navigation.setParams({ opacity: 0 });
+  };
 
   render() {
     const { width } = Dimensions.get('window');
     const contentOffset = (width - Carousel.WIDTH) / 2;
 
     return (
-      <View style={{flex: 1, justifyContent: 'space-between'}}>
-				<View style={{height: 60}}>
-          <View style={styles.bigCircle}></View>
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        <View style={{ height: 60 }}>
+          <View style={styles.bigCircle} />
 
           <View style={styles.priceTag}>
-            <Text style={styles.priceText}>{boxes[this.state.currentIndex].price} €</Text>
+            <Text style={styles.priceText}>
+              {boxes[this.state.currentIndex].price} €
+            </Text>
           </View>
         </View>
-				<View style={{height: 305}}>
+        <View style={{ height: 305 }}>
           <SideSwipe
             shouldCapture={() => true}
             extractKey={item => item.title}
             itemWidth={Carousel.WIDTH}
             threshold={5}
             style={{ width }}
-            contentContainerStyle={{  paddingTop: 20, overflow: 'visible', marginBottom: 10 }}
+            contentContainerStyle={{
+              paddingTop: 20,
+              overflow: 'visible',
+              marginBottom: 10,
+            }}
             data={boxes}
             contentOffset={contentOffset}
             onIndexChange={index =>
               this.setState(() => ({ currentIndex: index }))
             }
             renderItem={({ itemIndex, currentIndex, item, animatedValue }) => (
-             <Carousel
-                box= {item}
+              <Carousel
+                box={item}
                 index={itemIndex}
                 currentIndex={currentIndex}
                 animatedValue={animatedValue}
@@ -253,29 +273,39 @@ export default class SubscriptionSelectionScreen extends React.Component {
         </View>
         <Animated.View style={styles.textContainer}>
           <View style={styles.textTag}>
-            <Text style={styles.textTagText}>{boxes[this.state.currentIndex].tag}</Text>
+            <Text style={styles.textTagText}>
+              {boxes[this.state.currentIndex].tag}
+            </Text>
           </View>
-          <Text style={styles.title}>{boxes[this.state.currentIndex].title}</Text>
+          <Text style={styles.title}>
+            {boxes[this.state.currentIndex].title}
+          </Text>
           <View style={styles.valueContainer}>
-            <Text style={styles.valueText}>{boxes[this.state.currentIndex].size}</Text>
-            <View style={styles.circle}></View>
-            <Text style={styles.valueText}>{boxes[this.state.currentIndex].divprice}</Text>
+            <Text style={styles.valueText}>
+              {boxes[this.state.currentIndex].size}
+            </Text>
+            <View style={styles.circle} />
+            <Text style={styles.valueText}>
+              {boxes[this.state.currentIndex].divprice}
+            </Text>
           </View>
-          <Text style={styles.description}>{boxes[this.state.currentIndex].description}</Text>
+          <Text style={styles.description}>
+            {boxes[this.state.currentIndex].description}
+          </Text>
         </Animated.View>
         <View style={styles.totalContainer}>
-          <TouchableOpacity
+          <TouchableHighlight
             onPress={this.onPressPlus}
-            style={{alignItems: 'center'}}
-            >
+            style={{ alignItems: 'center' }}
+          >
             {this.displayAddToCartButton()}
-          </TouchableOpacity>
+          </TouchableHighlight>
           <Text style={styles.total}>TOTAL: {this.state.totalPrice}€</Text>
         </View>
         <View style={styles.bottom}>
-          <TouchableOpacity style={styles.orderButton}>
+          <TouchableHighlight style={styles.orderButton}>
             <Text style={styles.orderText}>Confirm order</Text>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
         {/* Shopping cart */}
         <Modal
@@ -284,61 +314,60 @@ export default class SubscriptionSelectionScreen extends React.Component {
           visible={this.state.cartVisible}
           onRequestClose={() => {
             console.log('Modal has been closed.');
-          }}>
+          }}
+        >
           <View style={styles.cartModal}>
-            <TouchableOpacity
-              style={{flex: 1}}
+            <TouchableHighlight
+              style={{ flex: 1 }}
               onPress={() => {
                 this._setCartVisible();
               }}
-              >
-            </TouchableOpacity>
-            <View style={{bottom: 0}}>
+            />
+            <View style={{ bottom: 0 }}>
               <ScrollView style={styles.cart}>
                 <View>
-                  <View style={{flexDirection: 'row', marginBottom: 15}}>
+                  <View style={{ flexDirection: 'row', marginBottom: 15 }}>
                     <Icon
-                      style={{width: 29, 
-                              height: 26,
-                              marginRight: 13
-                            }}
+                      style={{ width: 29, height: 26, marginRight: 13 }}
                       source={require('../../../../assets/images/cart.png')}
                     />
                     <Text style={styles.textInCart}>My cart</Text>
                   </View>
-                  <TouchableOpacity 
+                  <TouchableHighlight
                     style={styles.clearButton}
-                    onPress={() => {this.clearCart()}}
-                    >
+                    onPress={() => {
+                      this.clearCart();
+                    }}
+                  >
                     <Text style={styles.clearText}>Clear</Text>
-                  </TouchableOpacity>
+                  </TouchableHighlight>
                 </View>
                 <View>{this.displayCartItems()}</View>
               </ScrollView>
               <View style={styles.bottom}>
-                <TouchableOpacity style={styles.orderButton}>
+                <TouchableHighlight style={styles.orderButton}>
                   <Text style={styles.orderText}>Confirm order</Text>
-                </TouchableOpacity>
+                </TouchableHighlight>
               </View>
             </View>
           </View>
         </Modal>
-			</View>
-		);
+      </View>
+    );
   }
 }
 const styles = StyleSheet.create({
   bigCircle: {
-		position: 'absolute',
-		width: 622,
-		height: 622,
-		left: -104,
-		top: -321,
-		borderRadius: 311,
-		backgroundColor: Colors.macaroniCheese
+    position: 'absolute',
+    width: 622,
+    height: 622,
+    left: -104,
+    top: -321,
+    borderRadius: 311,
+    backgroundColor: Colors.macaroniCheese,
   },
   cart: {
-    backgroundColor: Colors.white, 
+    backgroundColor: Colors.white,
     padding: 20,
     height: 369,
     borderTopLeftRadius: 29,
@@ -346,13 +375,12 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     paddingTop: 30,
-    overflow: 'visible'
-
+    overflow: 'visible',
   },
   cartModal: {
-    flex:1, 
-    justifyContent: 'flex-end', 
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   clearButton: {
     width: 62,
@@ -362,10 +390,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.macaroniCheese,
     borderRadius: 13.5,
-    marginBottom: 16
+    marginBottom: 16,
   },
   cartItem: {
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   cartPrice: {
     top: -25,
@@ -373,8 +401,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'right',
-    color: Colors.macaroniCheese
-
+    color: Colors.macaroniCheese,
   },
   cartTax: {
     top: -20,
@@ -382,20 +409,20 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 10,
     color: Colors.black,
-    textAlign: 'right'
+    textAlign: 'right',
   },
   cartSize: {
     ...commonStyles.fontRalewayBold,
     fontWeight: '600',
     fontSize: 12,
-    color: Colors.darkGrey
+    color: Colors.darkGrey,
   },
   clearText: {
     ...commonStyles.fontRalewayBold,
     fontWeight: '600',
     fontSize: 12,
     textAlign: 'center',
-    color: Colors.macaroniCheese
+    color: Colors.macaroniCheese,
   },
   topBar: {
     flexDirection: 'row',
@@ -404,7 +431,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 30,
     marginRight: 30,
-    marginTop:30
+    marginTop: 30,
   },
   topText: {
     ...commonStyles.fontRalewayBold,
@@ -412,7 +439,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
-    color: Colors.mediumCarmine
+    color: Colors.mediumCarmine,
   },
   checkCircle: {
     width: 48,
@@ -421,7 +448,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -25
+    marginTop: -25,
   },
   plusCircle: {
     width: 48,
@@ -431,19 +458,19 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -25
+    marginTop: -25,
   },
   textInCart: {
     ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 20,
   },
   textInCart: {
     ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 20,
   },
   total: {
     ...commonStyles.fontRalewayBold,
@@ -452,19 +479,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     color: Colors.mediumCarmine,
-    paddingTop: 16
+    paddingTop: 16,
   },
   totalContainer: {
-    height: 90, 
+    height: 90,
     justifyContent: 'center',
-    marginTop: 25
+    marginTop: 25,
   },
   orderButton: {
     width: this.width,
     height: 56,
     backgroundColor: Colors.mediumCarmine,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   orderText: {
     ...commonStyles.fontRalewayBold,
@@ -475,7 +502,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     justifyContent: 'flex-end',
-    height: 56
+    height: 56,
   },
   priceTag: Platform.select({
     ios: {
@@ -487,8 +514,8 @@ const styles = StyleSheet.create({
       borderRadius: 38,
       backgroundColor: Colors.mediumCarmine,
       shadowRadius: 4,
-      shadowOffset: {height: 0, width: 4},
-      shadowColor: 'rgba(91, 91, 91, 0.25)'
+      shadowOffset: { height: 0, width: 4 },
+      shadowColor: 'rgba(91, 91, 91, 0.25)',
     },
     android: {
       position: 'absolute',
@@ -498,8 +525,8 @@ const styles = StyleSheet.create({
       top: 100,
       borderRadius: 38,
       backgroundColor: Colors.mediumCarmine,
-      elevation: 4
-    }
+      elevation: 4,
+    },
   }),
   priceText: Platform.select({
     ios: {
@@ -519,7 +546,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       fontSize: 22,
       color: '#FFFFFF',
-    }
+    },
   }),
   textTag: {
     width: 127,
@@ -528,11 +555,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.mediumCarmine,
     shadowRadius: 4,
-    shadowOffset: {height: 0, width: 4},
+    shadowOffset: { height: 0, width: 4 },
     shadowColor: 'rgba(91, 91, 91, 0.25)',
     elevation: 4,
     borderRadius: 13.5,
-    marginBottom: 17
+    marginBottom: 17,
   },
   textTagText: {
     ...commonStyles.fontRalewayBold,
@@ -545,7 +572,7 @@ const styles = StyleSheet.create({
   textContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 180
+    height: 180,
   },
   title: {
     ...commonStyles.fontRalewayBold,
@@ -553,12 +580,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 30,
     textAlign: 'center',
-    color: Colors.black
+    color: Colors.black,
   },
   valueContainer: {
     flexDirection: 'row',
     paddingTop: 3,
-    paddingBottom: 17
+    paddingBottom: 17,
   },
   circle: {
     marginTop: 6,
@@ -567,7 +594,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.mediumCarmine
+    backgroundColor: Colors.mediumCarmine,
   },
   valueText: {
     ...commonStyles.fontRalewayBold,
@@ -575,7 +602,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
-    color: Colors.darkGrey
+    color: Colors.darkGrey,
   },
   description: {
     ...commonStyles.fontRalewayBold,
@@ -584,6 +611,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     color: Colors.black,
-    width: 280
+    width: 280,
   },
 });

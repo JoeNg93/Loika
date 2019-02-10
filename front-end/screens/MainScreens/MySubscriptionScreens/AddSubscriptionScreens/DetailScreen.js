@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   View,
   Image,
-  TouchableOpacity,
+  TouchableHighlight,
   Text,
-  ScrollView
-} from "react-native";
+  ScrollView,
+} from 'react-native';
 import { Icon } from 'react-native-elements';
 import Colors from '../../../../constants/Colors';
-import commonStyles from "../../../../constants/commonStyles";
+import commonStyles from '../../../../constants/commonStyles';
 
 const box = {
   title: 'Mixed Box',
@@ -20,8 +20,8 @@ const box = {
     'Best of both worl. Can include beef, pork , chicken, milk, eggs, potatoes, brocoli, cabbage... Check to see more details.',
   tag: 'Best seller',
   image: require('../../../../assets/images/mixed.png'),
-  content: 
-    'Ground beef - 2x1lb NY strip - 2x10oz Top sirloin - 4x6oz Whole pork tenderloin - 1lb Boneless skinless chicken breast - 3x1lb *Exact cuts are subject to change'
+  content:
+    'Ground beef - 2x1lb NY strip - 2x10oz Top sirloin - 4x6oz Whole pork tenderloin - 1lb Boneless skinless chicken breast - 3x1lb *Exact cuts are subject to change',
 };
 
 export default class DetailScreen extends React.Component {
@@ -29,9 +29,9 @@ export default class DetailScreen extends React.Component {
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
-      <TouchableOpacity style={{ marginLeft: 20 }}>
+      <TouchableHighlight style={{ marginLeft: 20 }}>
         <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
-      </TouchableOpacity>
+      </TouchableHighlight>
     ),
     headerStyle: {
       marginTop: 8,
@@ -39,26 +39,24 @@ export default class DetailScreen extends React.Component {
   };
 
   render() {
-
     return (
       <View>
         <View style={styles.topContainer}>
-          <Image
-            style={styles.image}
-            source={box.image}
-          />
-          <View style={styles.priceTag}></View>
-          <Text style={styles.price}>{box.price} {'\u20AC'}</Text>
+          <Image style={styles.image} source={box.image} />
+          <View style={styles.priceTag} />
+          <Text style={styles.price}>
+            {box.price} {'\u20AC'}
+          </Text>
         </View>
         <View>
-          <View style={styles.titleContainer}></View>
+          <View style={styles.titleContainer} />
           <Text style={styles.title}>{box.title}</Text>
-          <View style={styles.tagBox}></View>
+          <View style={styles.tagBox} />
           <Text style={styles.tag}>{box.tag}</Text>
         </View>
         <View>
           <Text style={styles.size}>{box.size}</Text>
-          <View style={styles.dot}></View>
+          <View style={styles.dot} />
           <Text style={styles.divprice}>{box.divprice}</Text>
         </View>
         <View>
@@ -71,7 +69,7 @@ export default class DetailScreen extends React.Component {
         </View>
       </View>
     );
-  }  
+  }
 }
 
 const styles = StyleSheet.create({
@@ -84,7 +82,7 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewayBold,
     fontSize: 16,
     textAlign: 'center',
-    color: Colors.macaroniCheese
+    color: Colors.macaroniCheese,
   },
   content: {
     position: 'absolute',
@@ -94,7 +92,7 @@ const styles = StyleSheet.create({
     top: 537,
     ...commonStyles.fontRalewayRegular,
     fontSize: 14,
-    color: Colors.black
+    color: Colors.black,
   },
   description: {
     position: 'absolute',
@@ -104,7 +102,7 @@ const styles = StyleSheet.create({
     top: 433,
     ...commonStyles.fontRalewayRegular,
     fontSize: 14,
-    color: Colors.black
+    color: Colors.black,
   },
   divprice: {
     position: 'absolute',
@@ -115,7 +113,7 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewayBold,
     fontSize: 14,
     textAlign: 'center',
-    color: Colors.darkGrey
+    color: Colors.darkGrey,
   },
   dot: {
     position: 'absolute',
@@ -124,14 +122,14 @@ const styles = StyleSheet.create({
     left: 197,
     top: 360,
     borderRadius: 4,
-    backgroundColor: Colors.mediumCarmine
+    backgroundColor: Colors.mediumCarmine,
   },
-	image: {
+  image: {
     position: 'absolute',
     width: 167,
     height: 178,
     left: 124,
-    top: 66
+    top: 66,
   },
   priceTag: {
     position: 'absolute',
@@ -142,8 +140,8 @@ const styles = StyleSheet.create({
     borderRadius: 37.5,
     backgroundColor: Colors.mediumCarmine,
     shadowRadius: 4,
-    shadowOffset: {height: 0, width: 4},
-    shadowColor: 'rgba(91, 91, 91, 0.25)'
+    shadowOffset: { height: 0, width: 4 },
+    shadowColor: 'rgba(91, 91, 91, 0.25)',
   },
   price: {
     position: 'absolute',
@@ -153,7 +151,7 @@ const styles = StyleSheet.create({
     top: 78,
     ...commonStyles.fontRalewayBold,
     fontSize: 22,
-    color: Colors.white
+    color: Colors.white,
   },
   sampleTitle: {
     position: 'absolute',
@@ -163,7 +161,7 @@ const styles = StyleSheet.create({
     top: 510,
     ...commonStyles.fontRalewayBold,
     fontSize: 16,
-    color: Colors.macaroniCheese
+    color: Colors.macaroniCheese,
   },
   size: {
     position: 'absolute',
@@ -174,7 +172,7 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewayBold,
     fontSize: 14,
     textAlign: 'center',
-    color: Colors.darkGrey
+    color: Colors.darkGrey,
   },
   tag: {
     position: 'absolute',
@@ -185,7 +183,7 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewayBold,
     fontSize: 16,
     textAlign: 'center',
-    color: Colors.white
+    color: Colors.white,
   },
   tagBox: {
     position: 'absolute',
@@ -205,7 +203,7 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewayBold,
     fontSize: 24,
     textAlign: 'center',
-    color: Colors.black
+    color: Colors.black,
   },
   titleContainer: {
     position: 'absolute',
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
     top: 210,
     backgroundColor: Colors.white,
     shadowRadius: 4,
-    shadowOffset: {height: 0, width: 4},
+    shadowOffset: { height: 0, width: 4 },
     shadowColor: 'rgba(91, 91, 91, 0.25)',
     borderRadius: 12,
   },
@@ -225,6 +223,6 @@ const styles = StyleSheet.create({
     height: 262,
     left: 0,
     top: 0,
-    backgroundColor: Colors.macaroniCheese
+    backgroundColor: Colors.macaroniCheese,
   },
 });
