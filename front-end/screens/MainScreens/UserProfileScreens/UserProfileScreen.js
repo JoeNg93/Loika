@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bigCircle: {
-<<<<<<< HEAD
     position: 'absolute',
     width: 622,
     height: 622,
@@ -31,15 +30,6 @@ const styles = StyleSheet.create({
     top: -452,
     borderRadius: 311,
     backgroundColor: Colors.macaroniCheese,
-=======
-		position: 'absolute',
-		width: 622,
-		height: 622,
-		left: -112,
-		top: -452,
-		borderRadius: 311,
-		backgroundColor: Colors.macaroniCheese,
->>>>>>> 0d07eca725ff5f01f055bd736a9f2807b4e1b009
   },
   scrollContainerContent: {
     justifyContent: 'center',
@@ -58,10 +48,7 @@ const styles = StyleSheet.create({
     marginRight: 18,
   },
   editIconContainer: {
-<<<<<<< HEAD
     // check if this part works on iphone 6 
-=======
->>>>>>> 0d07eca725ff5f01f055bd736a9f2807b4e1b009
     position: 'absolute',
     backgroundColor: Colors.mediumCarmine,
     borderRadius: 50,
@@ -98,10 +85,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   editContactsIconContainer: {
-<<<<<<< HEAD
     // also check this part 
-=======
->>>>>>> 0d07eca725ff5f01f055bd736a9f2807b4e1b009
     position: 'absolute',
     backgroundColor: Colors.mediumCarmine,
     borderRadius: 50,
