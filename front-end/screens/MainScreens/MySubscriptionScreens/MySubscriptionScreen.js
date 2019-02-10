@@ -167,7 +167,7 @@ export default class MySubscriptionScreen extends React.Component {
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <Text style={styles.emptyOrderTitle}>
               You haven't subscribed to any box !
             </Text>
@@ -261,14 +261,14 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewayBold,
     ...commonStyles.textBlack,
     fontSize: 18,
-    marginBottom: 34
+    marginBottom: 34,
   },
   emptyOrderBtnStyle: {
     paddingVertical: 14,
     paddingHorizontal: 40,
     marginBottom: 88,
     borderRadius: 26,
-    backgroundColor: Colors.mediumCarmine
+    backgroundColor: Colors.mediumCarmine,
   },
   emptyOrderBtnTitle: {
     ...commonStyles.fontRalewayBold,
