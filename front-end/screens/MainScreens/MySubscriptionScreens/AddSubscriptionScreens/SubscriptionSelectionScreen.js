@@ -5,7 +5,7 @@ import {
   Dimensions,
   Image,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   Platform,
   Animated,
   Modal,
@@ -57,12 +57,12 @@ export default class SubscriptionSelectionScreen extends React.Component {
       headerTransparent: true,
       headerTintColor: Colors.mediumCarmine,
       headerBackImage: (
-        <TouchableHighlight style={{ marginLeft: 20 }}>
+        <TouchableOpacity style={{ marginLeft: 20 }}>
           <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
-        </TouchableHighlight>
+        </TouchableOpacity>
       ),
       headerRight: (
-        <TouchableHighlight
+        <TouchableOpacity
           style={{ marginRight: 20 }}
           onPress={navigation.getParam('setCartVisible')}
         >
@@ -100,7 +100,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
               {navigation.getParam('items')}
             </Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       ),
       headerStyle: {
         ...commonStyles.fontRalewayBold,
@@ -294,18 +294,18 @@ export default class SubscriptionSelectionScreen extends React.Component {
           </Text>
         </Animated.View>
         <View style={styles.totalContainer}>
-          <TouchableHighlight
+          <TouchableOpacity
             onPress={this.onPressPlus}
             style={{ alignItems: 'center' }}
           >
             {this.displayAddToCartButton()}
-          </TouchableHighlight>
+          </TouchableOpacity>
           <Text style={styles.total}>TOTAL: {this.state.totalPrice}€</Text>
         </View>
         <View style={styles.bottom}>
-          <TouchableHighlight style={styles.orderButton}>
+          <TouchableOpacity style={styles.orderButton}>
             <Text style={styles.orderText}>Confirm order</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
         {/* Shopping cart */}
         <Modal
@@ -317,7 +317,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
           }}
         >
           <View style={styles.cartModal}>
-            <TouchableHighlight
+            <TouchableOpacity
               style={{ flex: 1 }}
               onPress={() => {
                 this._setCartVisible();
@@ -333,21 +333,21 @@ export default class SubscriptionSelectionScreen extends React.Component {
                     />
                     <Text style={styles.textInCart}>My cart</Text>
                   </View>
-                  <TouchableHighlight
+                  <TouchableOpacity
                     style={styles.clearButton}
                     onPress={() => {
                       this.clearCart();
                     }}
                   >
                     <Text style={styles.clearText}>Clear</Text>
-                  </TouchableHighlight>
+                  </TouchableOpacity>
                 </View>
                 <View>{this.displayCartItems()}</View>
               </ScrollView>
               <View style={styles.bottom}>
-                <TouchableHighlight style={styles.orderButton}>
+                <TouchableOpacity style={styles.orderButton}>
                   <Text style={styles.orderText}>Confirm order</Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
