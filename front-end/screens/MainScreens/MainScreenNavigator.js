@@ -13,18 +13,12 @@ import SubscriptionSelectionScreen from './MySubscriptionScreens/AddSubscription
 import OrderHistoryScreen from './OrderHistoryScreens/OrderHistoryScreen';
 import UserProfileScreen from './UserProfileScreens/UserProfileScreen';
 import SubscriptionManagementScreen from './MySubscriptionScreens/SubscriptionManagementScreens/SubscriptionManagementScreen';
-import ChangeDeliveryScheduleScreen from './MySubscriptionScreens/SubscriptionManagementScreens/ChangeDeliveryScheduleScreen';
-import SubscriptionDetailScreen from './MySubscriptionScreens/AddSubscriptionScreens/SubscriptionDetailScreen';
-import ChangeShippingAddressScreen from './MySubscriptionScreens/SubscriptionManagementScreens/ChangeShippingAddressScreen';
 
 const MySubscriptionStack = createStackNavigator(
   {
     Home: MySubscriptionScreen,
     AddSubscription: SubscriptionSelectionScreen,
     SubscriptionManagement: SubscriptionManagementScreen,
-    ChangeDeliverySchedule: ChangeDeliveryScheduleScreen,
-    ChangeShippingAddress: ChangeShippingAddressScreen,
-    SubscriptionDetail: SubscriptionDetailScreen,
   },
   {
     initialRouteName: 'Home',

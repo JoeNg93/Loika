@@ -2,9 +2,9 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
+  Image,
   View,
   ScrollView,
-  TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
@@ -28,20 +28,17 @@ const width = Layout.window.width,
 export default class SubscriptionManagementScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Subscriptions Management',
-    headerBackTitle: null,
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
-      <TouchableHighlight style={{ marginLeft: 20 }}>
+      <TouchableOpacity style={{ marginLeft: 20 }}>
         <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
-      </TouchableHighlight>
+      </TouchableOpacity>
     ),
-    headerTitleStyle: {
+    headerStyle: {
       ...commonStyles.fontRalewayBold,
       fontSize: 18,
-    },
-    headerStyle: {
-      marginTop: 10,
+      marginTop: 8,
     },
   };
 
@@ -49,7 +46,7 @@ export default class SubscriptionManagementScreen extends React.Component {
     // Fetch order according to order ID send from MySubscriptionScreen
     fetchedOrder: {
       id: 123,
-      isActive: false,
+      isActive: true,
       subscriptions: [
         {
           id: 1,
@@ -57,12 +54,12 @@ export default class SubscriptionManagementScreen extends React.Component {
           weight: 5,
           price: 199,
           pricePerMeal: 3.4,
-          isActive: false,
+          isActive: true,
         },
         {
           id: 2,
           title: 'Vegan',
-          isActive: false,
+          isActive: true,
           weight: 5,
           price: 199,
           pricePerMeal: 3.4,
@@ -101,21 +98,15 @@ export default class SubscriptionManagementScreen extends React.Component {
     return nextPaymentDate ? nextPaymentDate.toLocaleDateString(locale) : '';
   };
 
+  onPressSubscriptionDetails = () => {};
+
   onPressCancelAllSubscriptions = () => {};
 
   onPressCancelSingleSubscription = () => {};
 
-  onPressSubscriptionDetails = () => {
-    this.props.navigation.navigate('SubscriptionDetail');
-  };
+  onPressChangeShippingAddress = () => {};
 
-  onPressChangeShippingAddress = () => {
-    this.props.navigation.navigate('ChangeShippingAddress');
-  };
-
-  onPressChangeDeliverySchedule = () => {
-    this.props.navigation.navigate('ChangeDeliverySchedule');
-  };
+  onPressChangeDeliverySchedule = () => {};
 
   renderSubscriptionSummaryList = () => {
     return this.state.fetchedOrder.subscriptions.map((subscription, index) => (
@@ -129,7 +120,7 @@ export default class SubscriptionManagementScreen extends React.Component {
           boxWeight={subscription.weight}
           boxPrice={subscription.price}
           pricePerMeal={subscription.pricePerMeal}
-          hasRemoveButton={subscription.isActive}
+          hasRemoveButton
           onPressRemoveSubscription={this.onPressCancelSingleSubscription}
           containerWidth={width - horizontalPadding * 2 - offset}
         />
@@ -138,10 +129,10 @@ export default class SubscriptionManagementScreen extends React.Component {
   };
 
   renderAddressSummary = shippingAddress => {
-    const { address, postCode, city, name, phoneNumber } = shippingAddress;
+    const {address, postCode, city, name, phoneNumber} = shippingAddress;
     return (
       <AddressSummary
-        shippingAddress={{ address, postCode, city }}
+        shippingAddress={{address, postCode, city}}
         name={name}
         phoneNumber={phoneNumber}
         hasSelectedButton={false}
@@ -156,7 +147,7 @@ export default class SubscriptionManagementScreen extends React.Component {
       <View style={styles.mainContainer}>
         {this.state.fetchedOrder && (
           <ScrollView>
-            <View style={{ paddingRight: offset }}>
+            <View style={{paddingRight: offset}}>
               <View style={styles.orderTitleContainer}>
                 <Text style={styles.orderTitle}>
                   Order ID: #{this.state.fetchedOrder.id}
@@ -169,27 +160,14 @@ export default class SubscriptionManagementScreen extends React.Component {
                   {this.getOrderNextDeliveryDate(this.state.fetchedOrder)}
                 </Text>
               </View>
-              {this.state.fetchedOrder.isActive ? (
-                <View style={styles.dateContainer}>
-                  <Text style={styles.textDefaultStyle}>
-                    Next Payment Date:
-                  </Text>
-                  <Text
-                    style={[styles.textDefaultStyle, commonStyles.textBlack]}
-                  >
-                    {this.getOrderEndSubscriptionDate(
-                      this.state.fetchedOrder.orderDate
-                    )}
-                  </Text>
-                </View>
-              ) : (
-                <Text style={styles.endSubscriptionText}>
-                  *Your subscription will end on{' '}
+              <View style={styles.dateContainer}>
+                <Text style={styles.textDefaultStyle}>Next Payment Date:</Text>
+                <Text style={[styles.textDefaultStyle, commonStyles.textBlack]}>
                   {this.getOrderEndSubscriptionDate(
                     this.state.fetchedOrder.orderDate
                   )}
                 </Text>
-              )}
+              </View>
             </View>
             {/* Order Summary Section */}
             <View>
@@ -197,27 +175,25 @@ export default class SubscriptionManagementScreen extends React.Component {
                 <Text style={styles.textDefaultStyle}>
                   {'Subscriptions'.toUpperCase()}
                 </Text>
-                {this.state.fetchedOrder.isActive && (
-                  <Button
-                    type={'clear'}
-                    title={'Cancel subscriptions'}
-                    icon={
-                      <Icon
-                        name={'chevron-right'}
-                        size={16}
-                        color={Colors.lightGrey}
-                      />
-                    }
-                    iconRight={true}
-                    titleStyle={[
-                      styles.textDefaultStyle,
-                      commonStyles.textLightGrey,
-                      { paddingTop: 0 },
-                    ]}
-                    buttonStyle={{ alignItems: 'center', padding: 0 }}
-                    onPress={this.onPressCancelAllSubscriptions}
-                  />
-                )}
+                <Button
+                  type={'clear'}
+                  title={'Cancel subscriptions'}
+                  icon={
+                    <Icon
+                      name={'chevron-right'}
+                      size={16}
+                      color={Colors.lightGrey}
+                    />
+                  }
+                  iconRight={true}
+                  titleStyle={[
+                    styles.textDefaultStyle,
+                    commonStyles.textLightGrey,
+                    { paddingTop: 0 },
+                  ]}
+                  buttonStyle={{ alignItems: 'center', padding: 0 }}
+                  onPress={this.onPressCancelAllSubscriptions()}
+                />
               </View>
               <View>
                 {this.state.fetchedOrder.subscriptions &&
@@ -231,42 +207,35 @@ export default class SubscriptionManagementScreen extends React.Component {
                   <Text style={styles.textDefaultStyle}>
                     {'Shipping address'.toUpperCase()}
                   </Text>
-                  <Text
-                    style={[
-                      styles.textDefaultStyle,
-                      { fontSize: 10, marginTop: 6 },
-                    ]}
-                  >
+                  <Text style={[styles.textDefaultStyle, { fontSize: 10, marginTop: 6 }]}>
                     (Changes are only possible for next order)
                   </Text>
                 </View>
-                {this.state.fetchedOrder.isActive && (
-                  <Button
-                    type={'clear'}
-                    title={'Change'}
-                    icon={
-                      <Icon
-                        name={'chevron-right'}
-                        size={14}
-                        color={Colors.macaroniCheese}
-                      />
-                    }
-                    iconRight={true}
-                    titleStyle={[
-                      styles.textDefaultStyle,
-                      commonStyles.textMacaroniCheese,
-                      { paddingTop: 0 },
-                    ]}
-                    buttonStyle={{ alignItems: 'center', padding: 0 }}
-                    onPress={this.onPressChangeShippingAddress}
-                  />
-                )}
+                <Button
+                  type={'clear'}
+                  title={'Change'}
+                  icon={
+                    <Icon
+                      name={'chevron-right'}
+                      size={14}
+                      color={Colors.macaroniCheese}
+                    />
+                  }
+                  iconRight={true}
+                  titleStyle={[
+                    styles.textDefaultStyle,
+                    commonStyles.textMacaroniCheese,
+                    { paddingTop: 0 },
+                  ]}
+                  buttonStyle={{ alignItems: 'center', padding: 0 }}
+                  onPress={this.onPressChangeShippingAddress()}
+                />
               </View>
               <View style={styles.summaryBox}>
                 {this.state.fetchedOrder.shippingAddress &&
-                  this.renderAddressSummary(
-                    this.state.fetchedOrder.shippingAddress
-                  )}
+                this.renderAddressSummary(
+                  this.state.fetchedOrder.shippingAddress
+                )}
               </View>
             </View>
             {/* Delivery Schedule Summary Section */}
@@ -276,36 +245,29 @@ export default class SubscriptionManagementScreen extends React.Component {
                   <Text style={styles.textDefaultStyle}>
                     {'Delivery schedule'.toUpperCase()}
                   </Text>
-                  <Text
-                    style={[
-                      styles.textDefaultStyle,
-                      { fontSize: 10, marginTop: 6 },
-                    ]}
-                  >
+                  <Text style={[styles.textDefaultStyle, { fontSize: 10, marginTop: 6 }]}>
                     (Changes are only possible for next order)
                   </Text>
                 </View>
-                {this.state.fetchedOrder.isActive && (
-                  <Button
-                    type={'clear'}
-                    title={'Change'}
-                    icon={
-                      <Icon
-                        name={'chevron-right'}
-                        size={14}
-                        color={Colors.macaroniCheese}
-                      />
-                    }
-                    iconRight={true}
-                    titleStyle={[
-                      styles.textDefaultStyle,
-                      commonStyles.textMacaroniCheese,
-                      { paddingTop: 0 },
-                    ]}
-                    buttonStyle={{ padding: 0 }}
-                    onPress={this.onPressChangeDeliverySchedule}
-                  />
-                )}
+                <Button
+                  type={'clear'}
+                  title={'Change'}
+                  icon={
+                    <Icon
+                      name={'chevron-right'}
+                      size={14}
+                      color={Colors.macaroniCheese}
+                    />
+                  }
+                  iconRight={true}
+                  titleStyle={[
+                    styles.textDefaultStyle,
+                    commonStyles.textMacaroniCheese,
+                    { paddingTop: 0 },
+                  ]}
+                  buttonStyle={{ padding: 0 }}
+                  onPress={this.onPressChangeDeliverySchedule()}
+                />
               </View>
               <View style={styles.summaryBox}>
                 <View style={styles.deliveryScheduleSummaryContainer}>
@@ -318,7 +280,7 @@ export default class SubscriptionManagementScreen extends React.Component {
                     <Text style={styles.deliveryScheduleText}>
                       {`${this.state.fetchedOrder.deliveryDayOfWeek}, around ${
                         this.state.fetchedOrder.deliveryTime
-                      }`}
+                        }`}
                     </Text>
                   </View>
                 </View>
@@ -364,26 +326,21 @@ const styles = StyleSheet.create({
     ...commonStyles.textGrey,
     fontSize: 12,
   },
-  endSubscriptionText: {
-    ...commonStyles.fontRalewayMedium,
-    ...commonStyles.textGrey,
-    fontSize: 10,
-    marginTop: 22,
-  },
   sectionTitleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 40,
-    paddingRight: offset,
+    paddingRight: 6
   },
   sectionSummaryContainer: {
     marginTop: 20,
   },
   summaryBox: {
     marginTop: 20,
+    alignItems: 'center',
   },
   deliveryScheduleSummaryContainer: {
-    width: width - horizontalPadding * 2 - offset - 6,
+    width: width - horizontalPadding * 2 - offset*2,
     height: 45,
     borderRadius: 6,
 
@@ -396,7 +353,7 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewayMedium,
     ...commonStyles.textBlack,
     fontSize: 12,
-    marginLeft: 8,
+    marginLeft: 8
   },
   totalPriceContainer: {
     marginVertical: 61,

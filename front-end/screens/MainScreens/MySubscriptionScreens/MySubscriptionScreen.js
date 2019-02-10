@@ -24,15 +24,13 @@ const width = Layout.window.width,
 
 export default class MySubscriptionScreen extends React.Component {
   static navigationOptions = {
-    headerTitle: '',
+    headerTitle: null,
     headerBackTitle: null,
     headerTransparent: true,
-    headerTitleStyle: {
+    headerStyle: {
       ...commonStyles.fontRalewayBold,
       fontSize: 18,
-    },
-    headerStyle: {
-      marginTop: 10,
+      marginTop: 8,
     },
   };
   state = {
@@ -98,13 +96,11 @@ export default class MySubscriptionScreen extends React.Component {
     this.props.navigation.navigate('AddSubscription');
   };
 
-  onPressManageSubscription = orderId => {
+  onPressManageSubscription = (orderId) => {
     this.props.navigation.navigate('SubscriptionManagement');
   };
 
-  onPressSubscriptionDetails = () => {
-    this.props.navigation.navigate('SubscriptionDetail');
-  };
+  onPressSubscriptionDetails = () => {};
 
   renderSubscriptionListPerOrder = () => {
     return this.state.currentOrders.map(order => (
