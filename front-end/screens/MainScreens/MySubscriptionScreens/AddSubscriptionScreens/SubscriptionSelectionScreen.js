@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import SideSwipe from 'react-native-sideswipe';
 import { Icon } from 'react-native-elements';
-import Carousel from '../../../../components/Carousel';
+import Carousel from './Carousel';
 import Colors from '../../../../constants/Colors';
 import commonStyles from "../../../../constants/commonStyles";
 
@@ -51,8 +51,8 @@ const boxes = [
 ];
 
 export default class SubscriptionSelectionScreen extends React.Component {
-  static navigationOptions = {
-    headerTitle: 'Choose your subscription',
+  static navigationOptions = ({ navigation }) => {
+    return {headerTitle: 'Choose your subscription',
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
@@ -61,9 +61,9 @@ export default class SubscriptionSelectionScreen extends React.Component {
       </TouchableOpacity>
     ),
     headerRight: (
-      <TouchableOpacity style={{ marginRight: 20 }}>
+      <TouchableOpacity style={{ marginRight: 20 }} onPress={navigation.getParam('setCartVisible')}>
         <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
-		<View style={[{
+		      <View style={[{
               width: 11,
               height: 11,
               left: 10,
@@ -87,7 +87,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
       ...commonStyles.fontRalewayBold,
       fontSize: 18,
       marginTop: 8,
-    },
+    },}
   };
 
     
@@ -147,15 +147,17 @@ export default class SubscriptionSelectionScreen extends React.Component {
     if (this.state.indexInCart.indexOf(this.state.currentIndex) == -1) {
       return (<View style={styles.plusCircle}>
                 <Icon
-                  style={styles.plus}
-                  source={require('../../../../assets/images/plus.png')}
+                  color={Colors.mediumCarmine}
+                  size={23}
+                  name={'add'}
                 />
               </View>);
     } else {
-      return (<View style={styles.checkCircle}>
+      return (<View style={styles.plusCircle}>
                 <Icon
-                  style={styles.check}
-                  source={require('../../../../assets/images/check.png')}
+                  color={Colors.mediumCarmine}
+                  size={23}
+                  name={'done'}
                 />
               </View>);
     }
@@ -393,20 +395,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.macaroniCheese
   },
-  checkCircle: {
-    width: 48,
-    height: 48,
-    borderWidth: 2,
-    backgroundColor: Colors.mediumCarmine,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: -25
-  },
-  check: {
-    width: 23.17, 
-    height: 23.17,
-  },
   topBar: {
     flexDirection: 'row',
     paddingTop: 20,
@@ -433,10 +421,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -25
-  },
-  plus: {
-    width: 23.17, 
-    height: 23.17,
   },
   textInCart: {
     ...commonStyles.fontRalewayBold,
