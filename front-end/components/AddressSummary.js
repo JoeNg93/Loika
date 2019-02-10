@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import Colors from '../constants/Colors';
 import commonStyles from '../constants/commonStyles';
@@ -34,7 +34,7 @@ export default class AddressSummary extends React.Component {
     return (
       <View style={styles.mainContainer}>
         {this.props.canEditAddress && (
-          <TouchableOpacity
+          <TouchableHighlight
             onPress={this.toggleEditMode}
             style={{ zIndex: 100 }}
           >
@@ -44,7 +44,7 @@ export default class AddressSummary extends React.Component {
               color={Colors.white}
               containerStyle={styles.editIconContainer}
             />
-          </TouchableOpacity>
+          </TouchableHighlight>
         )}
         <View
           style={[

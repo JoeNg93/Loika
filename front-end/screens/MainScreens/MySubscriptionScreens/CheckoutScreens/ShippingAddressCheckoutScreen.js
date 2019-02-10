@@ -4,7 +4,7 @@ import {
   View,
   ScrollView,
   Text,
-  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import { Icon, Button, CheckBox } from 'react-native-elements';
 import AddressForm from '../../../../components/AddressForm';
@@ -24,14 +24,14 @@ export default class ShippingAddressCheckoutScreen extends React.Component {
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
-      <TouchableOpacity style={{ marginLeft: 20 }}>
+      <TouchableHighlight style={{ marginLeft: 20 }}>
         <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
-      </TouchableOpacity>
+      </TouchableHighlight>
     ),
     headerRight: (
-      <TouchableOpacity style={{ marginRight: 20 }}>
+      <TouchableHighlight style={{ marginRight: 20 }}>
         <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
-      </TouchableOpacity>
+      </TouchableHighlight>
     ),
     headerStyle: {
       ...commonStyles.fontRalewayBold,
