@@ -12,11 +12,13 @@ import SubscriptionSelectionScreen from './MySubscriptionScreens/AddSubscription
 
 import OrderHistoryScreen from './OrderHistoryScreens/OrderHistoryScreen';
 import UserProfileScreen from './UserProfileScreens/UserProfileScreen';
+import SubscriptionManagementScreen from './MySubscriptionScreens/SubscriptionManagementScreens/SubscriptionManagementScreen';
 
 const MySubscriptionStack = createStackNavigator(
   {
     Home: MySubscriptionScreen,
     AddSubscription: SubscriptionSelectionScreen,
+    SubscriptionManagement: SubscriptionManagementScreen,
   },
   {
     initialRouteName: 'Home',

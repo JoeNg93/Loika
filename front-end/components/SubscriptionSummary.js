@@ -19,9 +19,10 @@ export default function SubscriptionSummary({
   pricePerMeal,
   hasRemoveButton,
   onPressRemoveSubscription,
+  containerWidth
 }) {
   return (
-    <View style={styles.mainContainer}>
+    <View style={{ width: containerWidth }}>
       {hasRemoveButton && (
         <TouchableOpacity
           onPress={onPressRemoveSubscription}
@@ -29,30 +30,32 @@ export default function SubscriptionSummary({
         >
           <Icon
             name="close"
-            size={12}
+            size={10}
             color={Colors.white}
             containerStyle={styles.removeSubscriptionIconContainer}
           />
         </TouchableOpacity>
       )}
-      <View style={styles.boxImageContainer}>
-        <Image
-          source={boxNameToImageMapper[boxName.toLowerCase()]}
-          style={{ height: 72, width: 67 }}
-        />
-      </View>
-      <View style={styles.boxInfoContainer}>
-        <Text style={styles.boxNameText}>{boxName.toUpperCase()} BOX</Text>
-        <Text style={styles.boxWeightText}>{boxWeight}kg/box</Text>
-      </View>
-      <View style={styles.priceInfoContainer}>
-        <Text style={styles.boxPriceText}>
-          {boxPrice.toFixed(2).replace('.', ',')} {'\u20AC'}
-        </Text>
-        <Text style={styles.pricePerMealText}>
-          {pricePerMeal}
-          {'\u20AC'}/meal
-        </Text>
+      <View style={[styles.boxContainer, {width: containerWidth - 6,}]}>
+        <View style={styles.boxImageContainer}>
+          <Image
+            source={boxNameToImageMapper[boxName.toLowerCase()]}
+            style={{ height: 72, width: 67 }}
+          />
+        </View>
+        <View style={styles.boxInfoContainer}>
+          <Text style={styles.boxNameText}>{boxName.toUpperCase()} BOX</Text>
+          <Text style={styles.boxWeightText}>{boxWeight}kg/box</Text>
+        </View>
+        <View style={styles.priceInfoContainer}>
+          <Text style={styles.boxPriceText}>
+            {boxPrice.toFixed(2).replace('.', ',')} {'\u20AC'}
+          </Text>
+          <Text style={styles.pricePerMealText}>
+            {pricePerMeal}
+            {'\u20AC'}/meal
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -65,6 +68,7 @@ SubscriptionSummary.propTypes = {
   pricePerMeal: PropTypes.number,
   hasRemoveButton: PropTypes.bool,
   onPressRemoveSubscription: PropTypes.func,
+  containerWidth: PropTypes.number,
 };
 
 SubscriptionSummary.defaultProps = {
@@ -74,17 +78,19 @@ SubscriptionSummary.defaultProps = {
   pricePerMeal: 0,
   hasRemoveButton: false,
   onPressRemoveSubscription: () => {},
+  containerWidth: 352,
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  boxContainer: {
     flexDirection: 'row',
     borderRadius: 11,
     backgroundColor: Colors.white,
+    marginTop: 8,
 
     shadowColor: Colors.darkGrey,
-    shadowRadius: 6,
-    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 4 },
   },
   boxInfoContainer: {
@@ -95,13 +101,12 @@ const styles = StyleSheet.create({
   },
   priceInfoContainer: {
     paddingLeft: 30,
-    paddingRight: 50,
     paddingTop: 32,
     paddingBottom: 38,
   },
   boxImageContainer: {
     paddingVertical: 16,
-    paddingLeft: 4,
+    paddingLeft: 22,
     paddingRight: 10,
   },
   boxNameText: {
@@ -130,8 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightGrey,
     borderRadius: 50,
     padding: 4,
-    position: 'relative',
-    right: 10,
-    top: -10,
+    position: 'absolute',
+    right: 0
   },
 });

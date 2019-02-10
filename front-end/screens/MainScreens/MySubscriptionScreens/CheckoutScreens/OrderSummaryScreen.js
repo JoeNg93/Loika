@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     marginTop: 36,
   },
   totalPriceContainer: {
-    marginTop: 61,
+    marginVertical: 61,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },

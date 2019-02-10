@@ -26,6 +26,9 @@ export default StyleSheet.create({
   textGrey: {
     color: Colors.darkGrey,
   },
+  textLightGrey: {
+    color: Colors.lightGrey,
+  },
   textMediumCarmine: {
     color: Colors.mediumCarmine,
   },
