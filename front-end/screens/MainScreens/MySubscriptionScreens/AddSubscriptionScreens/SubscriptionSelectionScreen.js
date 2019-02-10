@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   StyleSheet,
   View,
   Dimensions,
@@ -7,11 +8,13 @@ import {
   Text,
   TouchableOpacity,
   Platform,
-  Animated
+  Animated,
+  Modal,
+  ScrollView
 } from 'react-native';
 import SideSwipe from 'react-native-sideswipe';
 
-import Carousel from '../../../../components/Carousel';
+import Carousel from './Carousel';
 
 import colors from '../../../../constants/Colors';
 
@@ -49,35 +52,74 @@ const boxes = [
 ];
 
 export default class SubscriptionSelectionScreen extends React.Component {
-  static navigationOptions = {
-    headerTitle: 'Choose your subscription',
-    headerTransparent: true,
-    headerTintColor: colors.mediumCarmine,
-    headerBackImage: (
-      <Image
-        style={{ width: 16, height: 16, marginLeft: 20 }}
-        source={require('../../../../assets/images/previous.png')}
-      />
-    ),
-    headerRight: (
-      <TouchableOpacity>
-        <Image
-          style={{ width: 16, height: 16, marginRight: 20 }}
-          source={require('../../../../assets/images/cart.png')}
-        />
-      </TouchableOpacity>
-    ),
-    headerStyle: {
-      marginTop: 8,
-    },
+  static navigationOptions = ({ navigation }) => {
+      return {
+        headerTitle: 'Choose your subscription',
+        headerTransparent: true,
+        headerTintColor: colors.mediumCarmine,
+        headerBackImage: (
+          <Image
+            style={{ width: 16, height: 16, marginLeft: 20 }}
+            source={require('../../../../assets/images/previous.png')}
+          />
+        ),
+        headerRight: (
+          <TouchableOpacity onPress={navigation.getParam('setCartVisible')}>
+            <Image
+              style={{ width: 16, height: 16, marginRight: 20 }}
+              source={require('../../../../assets/images/cart.png')}
+            />
+            <View style={[{
+              width: 11,
+              height: 11,
+              left: 10,
+              top: -18,
+              backgroundColor: '#FFFFFF',
+              borderRadius: 5.5
+            }, {opacity : navigation.getParam('opacity') ? navigation.getParam('opacity') : 0}]}>
+              <Text
+              style={{
+                fontFamily: 'Raleway',
+                fontWeight: '600',
+                fontSize: 9,
+                textAlign: 'center',
+                color: '#AA3C3B'
+              }}
+              >{navigation.getParam('items')}</Text>
+            </View>
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          marginTop: 8,
+        },
+      }
   };
+
+    
+
+
+  componentDidMount() {
+    this.props.navigation.setParams({setCartVisible: this._setCartVisible })
+    this.props.navigation.setParams({items: this.state.indexInCart.length })
+    this.props.navigation.setParams({opacity: 0 })
+  }
 
   state = {
     currentIndex: 0,
     shoppingCart: [],
     indexInCart: [],
     totalPrice: 0,
+    cartVisible: false
   };
+
+
+  _setCartVisible = () => {
+    if(this.state.cartVisible == false) {
+      this.setState({cartVisible: true});
+    } else {
+      this.setState({cartVisible: false});
+    }
+  }
 
   onPressPlus = () => {
     var indexInCart = this.state.indexInCart;
@@ -86,10 +128,23 @@ export default class SubscriptionSelectionScreen extends React.Component {
       let total = this.state.totalPrice;
       total += boxes[this.state.currentIndex].price;
       this.setState(() => ({totalPrice: total}));
-      indexInCart.push(this.state.currentIndex);
+      indexArray = this.state.indexInCart;
+      indexArray.push(this.state.currentIndex);
       this.setState(() => ({ indexInCart: indexInCart }));
     } else {
-      console.log('item is in cart already');
+      let total = this.state.totalPrice;
+      total -= boxes[this.state.currentIndex].price;
+      this.setState(() => ({totalPrice: total}));
+      indexArray = this.state.indexInCart;
+      let i = indexArray.indexOf(this.state.currentIndex);
+      indexArray.splice(i, 1);
+      this.setState(() => ({ indexInCart: indexInCart }));
+    }
+    this.props.navigation.setParams({items: this.state.indexInCart.length })
+    if(this.state.indexInCart.length != 0) {
+      this.props.navigation.setParams({opacity: 1 })
+    } else {
+      this.props.navigation.setParams({opacity: 0 })
     }
   }
 
@@ -109,6 +164,56 @@ export default class SubscriptionSelectionScreen extends React.Component {
                 />
               </View>);
     }
+  }
+
+  displayCartItems = () => {
+    let indexArray = this.state.indexInCart;
+    let i;
+    let items = [];
+    if (indexArray.length != 0) {
+      items.push(<View
+        key="hr"
+        style={{
+          borderBottomColor: '#E1E1E1',
+          borderBottomWidth: 1,
+          marginBottom: 10
+        }}
+      />)
+      for (i = 0; i < indexArray.length; ++i) {
+        items.push(
+          <View key={i}>
+            <View style={styles.cartItem}>
+              <Text style={styles.textInCart}>{boxes[i].title}</Text>
+              <Text style={styles.cartSize}>{boxes[i].size}</Text>
+              <Text style={[styles.cartPrice, {top: -45}]}>{boxes[i].price} €</Text>
+            </View>
+            <View
+              style={{
+                borderBottomColor: '#E1E1E1',
+                borderBottomWidth: 1,
+                marginBottom: 10
+              }}
+            />
+          </View>
+        );
+      }
+      items.push(
+        <View key="total" style={{marginTop: 24, marginBottom: 24}}>
+          <Text style={styles.textInCart}>Total</Text>
+          <Text style={styles.cartPrice}>{this.state.totalPrice} €</Text>
+          <Text style={styles.cartTax}>*Total included VAT</Text>
+        </View>
+      )
+      return (items);
+    } else {
+      return (<Text style={styles.textInCart}>No items in cart</Text>)
+    }
+  }
+
+  clearCart = () => {
+    this.setState(() => ({ indexInCart: [] }));
+    this.props.navigation.setParams({items: this.state.indexInCart.length })
+    this.props.navigation.setParams({opacity: 0 })
   }
 
   render() {
@@ -168,11 +273,57 @@ export default class SubscriptionSelectionScreen extends React.Component {
           </TouchableOpacity>
           <Text style={styles.total}>TOTAL: {this.state.totalPrice}€</Text>
         </View>
-        <View style={ styles.bottom}>
+        <View style={styles.bottom}>
           <TouchableOpacity style={styles.orderButton}>
             <Text style={styles.orderText}>Confirm order</Text>
           </TouchableOpacity>
         </View>
+        {/* Shopping cart */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.cartVisible}
+          onRequestClose={() => {
+            console.log('Modal has been closed.');
+          }}>
+          <View style={styles.cartModal}>
+            <TouchableOpacity
+              style={{flex: 1}}
+              onPress={() => {
+                this._setCartVisible();
+              }}
+              >
+            </TouchableOpacity>
+            <View style={{bottom: 0}}>
+              <ScrollView style={styles.cart}>
+                <View>
+                  <View style={{flexDirection: 'row', marginBottom: 15}}>
+                    <Image
+                      style={{width: 29, 
+                              height: 26,
+                              marginRight: 13
+                            }}
+                      source={require('../../../../assets/images/cart.png')}
+                    />
+                    <Text style={styles.textInCart}>My cart</Text>
+                  </View>
+                  <TouchableOpacity 
+                    style={styles.clearButton}
+                    onPress={() => {this.clearCart()}}
+                    >
+                    <Text style={styles.clearText}>Clear</Text>
+                  </TouchableOpacity>
+                </View>
+                <View>{this.displayCartItems()}</View>
+              </ScrollView>
+              <View style={styles.bottom}>
+                <TouchableOpacity style={styles.orderButton}>
+                  <Text style={styles.orderText}>Confirm order</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
 			</View>
 		);
   }
@@ -186,6 +337,80 @@ const styles = StyleSheet.create({
 		top: -321,
 		borderRadius: 311,
 		backgroundColor: "#FCB79A"
+  },
+  cart: {
+    backgroundColor: '#fff', 
+    padding: 20,
+    height: 369,
+    borderTopLeftRadius: 29,
+    borderTopRightRadius: 29,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 30,
+    overflow: 'visible'
+
+  },
+  cartModal: {
+    flex:1, 
+    justifyContent: 'flex-end', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  clearButton: {
+    width: 62,
+    height: 22,
+    left: 336,
+    top: -35,
+    borderWidth: 1,
+    borderColor: '#FCB79A',
+    borderRadius: 13.5,
+    marginBottom: 16
+  },
+  cartItem: {
+    justifyContent: 'center'
+  },
+  cartPrice: {
+    top: -25,
+    fontFamily: 'Raleway',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'right',
+    color: '#AA3C3B'
+
+  },
+  cartTax: {
+    top: -20,
+    fontFamily: 'Raleway',
+    fontWeight: '500',
+    fontSize: 10,
+    color: '#282828',
+    textAlign: 'right'
+  },
+  cartSize: {
+    fontFamily: 'Raleway',
+    fontWeight: '600',
+    fontSize: 12,
+    color: '#979797'
+  },
+  clearText: {
+    fontFamily: 'Raleway',
+    fontWeight: '600',
+    fontSize: 12,
+    textAlign: 'center',
+    color: '#FCB79A'
+  },
+  checkCircle: {
+    width: 48,
+    height: 48,
+    borderWidth: 2,
+    backgroundColor: '#AA3C3B',
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -25
+  },
+  check: {
+    width: 23.17, 
+    height: 23.17,
   },
   topBar: {
     flexDirection: 'row',
@@ -205,11 +430,11 @@ const styles = StyleSheet.create({
     color: '#AA3C3B'
   },
   plusCircle: {
-    width: 60, //48,
-    height: 60,  //48,
+    width: 48,
+    height: 48,
     borderWidth: 2,
     borderColor: '#AA3C3B',
-    borderRadius: 30, //24,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -25
@@ -218,19 +443,11 @@ const styles = StyleSheet.create({
     width: 23.17, 
     height: 23.17,
   },
-  checkCircle: {
-    width: 60, //48,
-    height: 60, //48,
-    borderWidth: 2,
-    backgroundColor: '#AA3C3B',
-    borderRadius: 30, //24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: -25
-  },
-  check: {
-    width: 23.17, 
-    height: 23.17,
+  textInCart: {
+    fontFamily: 'Raleway',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 20
   },
   total: {
     fontFamily: 'Raleway',
@@ -377,5 +594,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#282828',
     width: 280
-  }
+  },
 });
