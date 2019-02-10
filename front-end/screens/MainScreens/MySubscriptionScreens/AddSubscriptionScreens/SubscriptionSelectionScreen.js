@@ -52,42 +52,44 @@ const boxes = [
 
 export default class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
-    return {headerTitle: 'Choose your subscription',
-    headerTransparent: true,
-    headerTintColor: Colors.mediumCarmine,
-    headerBackImage: (
-      <TouchableOpacity style={{ marginLeft: 20 }}>
-        <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
-      </TouchableOpacity>
-    ),
-    headerRight: (
-      <TouchableOpacity style={{ marginRight: 20 }} onPress={navigation.getParam('setCartVisible')}>
-        <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
-		      <View style={[{
-              width: 11,
-              height: 11,
-              left: 10,
-              top: -18,
-              backgroundColor: '#FFFFFF',
-              borderRadius: 5.5
-            }, {opacity : navigation.getParam('opacity') ? navigation.getParam('opacity') : 0}]}>
-              <Text
-              style={{
-                ...commonStyles.fontRalewayBold,
-                fontWeight: '600',
-                fontSize: 9,
-                textAlign: 'center',
-                ...commonStyles.textMediumCarmine
-              }}
-              >{navigation.getParam('items')}</Text>
-            </View>
-      </TouchableOpacity>
-    ),
-    headerStyle: {
-      ...commonStyles.fontRalewayBold,
-      fontSize: 18,
-      marginTop: 8,
-    },}
+    return {
+      headerTitle: 'Choose your subscription',
+      headerTransparent: true,
+      headerTintColor: Colors.mediumCarmine,
+      headerBackImage: (
+        <TouchableOpacity style={{ marginLeft: 20 }}>
+          <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
+        </TouchableOpacity>
+      ),
+      headerRight: (
+        <TouchableOpacity style={{ marginRight: 20 }} onPress={navigation.getParam('setCartVisible')}>
+          <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
+            <View style={[{
+                width: 11,
+                height: 11,
+                left: 10,
+                top: -18,
+                backgroundColor: '#FFFFFF',
+                borderRadius: 5.5
+              }, {opacity : navigation.getParam('opacity') ? navigation.getParam('opacity') : 0}]}>
+                <Text
+                style={{
+                  ...commonStyles.fontRalewayBold,
+                  fontWeight: '600',
+                  fontSize: 9,
+                  textAlign: 'center',
+                  ...commonStyles.textMediumCarmine
+                }}
+                >{navigation.getParam('items')}</Text>
+              </View>
+        </TouchableOpacity>
+      ),
+      headerStyle: {
+        ...commonStyles.fontRalewayBold,
+        fontSize: 18,
+        marginTop: 8,
+      },
+    }
   };
 
     
@@ -153,9 +155,9 @@ export default class SubscriptionSelectionScreen extends React.Component {
                 />
               </View>);
     } else {
-      return (<View style={styles.plusCircle}>
+      return (<View style={styles.checkCircle}>
                 <Icon
-                  color={Colors.mediumCarmine}
+                  color={Colors.white}
                   size={23}
                   name={'done'}
                 />
@@ -412,6 +414,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.mediumCarmine
   },
+  checkCircle: {
+    width: 48,
+    height: 48,
+    backgroundColor: Colors.mediumCarmine,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -25
+  },
   plusCircle: {
     width: 48,
     height: 48,
@@ -421,6 +432,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -25
+  },
+  textInCart: {
+    ...commonStyles.fontRalewayBold,
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 20
   },
   textInCart: {
     ...commonStyles.fontRalewayBold,
