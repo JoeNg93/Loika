@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { Divider, Icon } from 'react-native-elements';
 
@@ -49,9 +49,9 @@ export default function ShippedToSummary({
           {deliveryDayOfWeek}, around {deliveryTime}
         </Text>
         {hasChangeButton && (
-          <TouchableHighlight onPress={onPressChangeButton}>
+          <TouchableOpacity onPress={onPressChangeButton}>
             <Text style={styles.changeText}>Change ></Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         )}
       </View>
     </View>

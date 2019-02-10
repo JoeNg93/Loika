@@ -5,7 +5,7 @@ import {
   View,
   Dimensions,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   Platform,
   StatusBar,
 } from 'react-native';
@@ -86,9 +86,9 @@ export default class AppIntroSlider extends React.Component {
     const style = (name === 'Skip' || name === 'Prev') ? styles.skipButtonContainer : styles.leftButtonContainer;
     return (
       <View style={this.props.bottomButton ? styles.bottomButtonContainer : style}>
-        <TouchableHighlight onPress={onPress} style={this.props.bottomButton ? styles.flexOne : this.props.buttonStyle}>
+        <TouchableOpacity onPress={onPress} style={this.props.bottomButton ? styles.flexOne : this.props.buttonStyle}>
           {content}
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     )
   }

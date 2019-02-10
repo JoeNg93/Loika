@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
@@ -24,14 +24,14 @@ export default class OrderSummaryScreen extends React.Component {
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
-      <TouchableHighlight style={{ marginLeft: 20 }}>
+      <TouchableOpacity style={{ marginLeft: 20 }}>
         <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
-      </TouchableHighlight>
+      </TouchableOpacity>
     ),
     headerRight: (
-      <TouchableHighlight style={{ marginRight: 20 }}>
+      <TouchableOpacity style={{ marginRight: 20 }}>
         <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
-      </TouchableHighlight>
+      </TouchableOpacity>
     ),
     headerStyle: {
       ...commonStyles.fontRalewayBold,

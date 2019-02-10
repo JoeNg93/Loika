@@ -5,7 +5,7 @@ import {
   Image,
   View,
   ScrollView,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import SubscriptionBox from '../../../components/SubscriptionBox';
@@ -128,7 +128,7 @@ export default class MySubscriptionScreen extends React.Component {
   renderSubscriptionBoxes = subscriptionList => {
     return subscriptionList.map(subscription => {
       return (
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={this.onPressSubscriptionDetails}
           key={subscription.id}
         >
@@ -136,7 +136,7 @@ export default class MySubscriptionScreen extends React.Component {
             subscriptionTitle={subscription.title}
             isActive={subscription.isActive}
           />
-        </TouchableHighlight>
+        </TouchableOpacity>
       );
     });
   };
@@ -154,10 +154,7 @@ export default class MySubscriptionScreen extends React.Component {
               <Text style={styles.mainTitle}>Current subscriptions</Text>
               {this.renderSubscriptionListPerOrder()}
             </ScrollView>
-            <TouchableHighlight
-              onPress={this.onPressAddSubscription}
-              rejectResponderTermination
-            >
+            <TouchableOpacity onPress={this.onPressAddSubscription}>
               <View style={styles.addSubscriptionButtonContainer}>
                 <Icon name={'shopping-basket'} size={28} color={Colors.white} />
                 <Icon
@@ -167,7 +164,7 @@ export default class MySubscriptionScreen extends React.Component {
                   containerStyle={styles.addCircleIcon}
                 />
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         ) : (
           <View style={{ alignItems: 'center' }}>

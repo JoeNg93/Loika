@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TouchableHighlight, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import Colors from '../../../../constants/Colors';
 import CheckoutStepProgress from '../../../../components/CheckoutStepProgress';
@@ -52,14 +52,14 @@ export default class DeliveryScheduleCheckoutScreen extends React.Component {
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
-      <TouchableHighlight style={{ marginLeft: 20 }}>
+      <TouchableOpacity style={{ marginLeft: 20 }}>
         <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
-      </TouchableHighlight>
+      </TouchableOpacity>
     ),
     headerRight: (
-      <TouchableHighlight style={{ marginRight: 20 }}>
+      <TouchableOpacity style={{ marginRight: 20 }}>
         <Icon name={'shopping-basket'} size={22} color={Colors.mediumCarmine} />
-      </TouchableHighlight>
+      </TouchableOpacity>
     ),
     headerStyle: {
       ...commonStyles.fontRalewayBold,

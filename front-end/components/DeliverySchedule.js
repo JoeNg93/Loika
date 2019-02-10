@@ -1,6 +1,6 @@
 import React from 'react';
 import colors from '../constants/Colors';
-import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
@@ -125,7 +125,7 @@ export default class DeliverySchedule extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.dayPickerContainer}>
-          <TouchableHighlight
+          <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('MON', 'btn')]}
             onPress={() => this._changeDayPick('MON')}
           >
@@ -134,9 +134,9 @@ export default class DeliverySchedule extends React.Component {
             >
               MON
             </Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight
+          <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('TUE', 'btn')]}
             onPress={() => this._changeDayPick('TUE')}
           >
@@ -145,9 +145,9 @@ export default class DeliverySchedule extends React.Component {
             >
               TUE
             </Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight
+          <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('WED', 'btn')]}
             onPress={() => this._changeDayPick('WED')}
           >
@@ -156,9 +156,9 @@ export default class DeliverySchedule extends React.Component {
             >
               WED
             </Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight
+          <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('THU', 'btn')]}
             onPress={() => this._changeDayPick('THU')}
           >
@@ -167,9 +167,9 @@ export default class DeliverySchedule extends React.Component {
             >
               THU
             </Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight
+          <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('FRI', 'btn')]}
             onPress={() => this._changeDayPick('FRI')}
           >
@@ -178,9 +178,9 @@ export default class DeliverySchedule extends React.Component {
             >
               FRI
             </Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight
+          <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('SAT', 'btn')]}
             onPress={() => this._changeDayPick('SAT')}
           >
@@ -189,7 +189,7 @@ export default class DeliverySchedule extends React.Component {
             >
               SAT
             </Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.timeAndTextContainer}>
@@ -197,7 +197,7 @@ export default class DeliverySchedule extends React.Component {
 
           <View style={styles.timePickerContainer}>
             <View style={styles.timeSideContainer}>
-              <TouchableHighlight
+              <TouchableOpacity
                 style={[
                   styles.timeButton,
                   this._checkTimeClick('10:00 - 12:00', 'btn'),
@@ -212,9 +212,9 @@ export default class DeliverySchedule extends React.Component {
                 >
                   10:00 - 12:00
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
 
-              <TouchableHighlight
+              <TouchableOpacity
                 style={[
                   styles.timeButton,
                   this._checkTimeClick('14:00 - 16:00', 'btn'),
@@ -229,11 +229,11 @@ export default class DeliverySchedule extends React.Component {
                 >
                   14:00 - 16:00
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.timeSideContainer}>
-              <TouchableHighlight
+              <TouchableOpacity
                 style={[
                   styles.timeButton,
                   this._checkTimeClick('12:00 - 14:00', 'btn'),
@@ -248,9 +248,9 @@ export default class DeliverySchedule extends React.Component {
                 >
                   12:00 - 14:00
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
 
-              <TouchableHighlight
+              <TouchableOpacity
                 style={[
                   styles.timeButton,
                   this._checkTimeClick('16:00 - 18:00', 'btn'),
@@ -265,7 +265,7 @@ export default class DeliverySchedule extends React.Component {
                 >
                   16:00 - 18:00
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
           </View>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
@@ -23,7 +23,7 @@ export default function SubscriptionSummary({
   return (
     <View style={styles.mainContainer}>
       {hasRemoveButton && (
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={onPressRemoveSubscription}
           style={{ zIndex: 100 }}
         >
@@ -33,7 +33,7 @@ export default function SubscriptionSummary({
             color={Colors.white}
             containerStyle={styles.removeSubscriptionIconContainer}
           />
-        </TouchableHighlight>
+        </TouchableOpacity>
       )}
       <View style={styles.boxImageContainer}>
         <Image
