@@ -146,14 +146,14 @@ export default class SubscriptionSelectionScreen extends React.Component {
   displayAddToCartButton = () => {
     if (this.state.indexInCart.indexOf(this.state.currentIndex) == -1) {
       return (<View style={styles.plusCircle}>
-                <Image
+                <Icon
                   style={styles.plus}
                   source={require('../../../../assets/images/plus.png')}
                 />
               </View>);
     } else {
       return (<View style={styles.checkCircle}>
-                <Image
+                <Icon
                   style={styles.check}
                   source={require('../../../../assets/images/check.png')}
                 />
@@ -293,7 +293,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
               <ScrollView style={styles.cart}>
                 <View>
                   <View style={{flexDirection: 'row', marginBottom: 15}}>
-                    <Image
+                    <Icon
                       style={{width: 29, 
                               height: 26,
                               marginRight: 13
@@ -331,10 +331,10 @@ const styles = StyleSheet.create({
 		left: -104,
 		top: -321,
 		borderRadius: 311,
-		backgroundColor: "#FCB79A"
+		backgroundColor: Colors.macaroniCheese
   },
   cart: {
-    backgroundColor: '#fff', 
+    backgroundColor: Colors.white, 
     padding: 20,
     height: 369,
     borderTopLeftRadius: 29,
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
     left: 336,
     top: -35,
     borderWidth: 1,
-    borderColor: '#FCB79A',
+    borderColor: Colors.macaroniCheese,
     borderRadius: 13.5,
     marginBottom: 16
   },
@@ -365,39 +365,39 @@ const styles = StyleSheet.create({
   },
   cartPrice: {
     top: -25,
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'right',
-    color: '#AA3C3B'
+    color: Colors.macaroniCheese
 
   },
   cartTax: {
     top: -20,
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontWeight: '500',
     fontSize: 10,
-    color: '#282828',
+    color: Colors.black,
     textAlign: 'right'
   },
   cartSize: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontWeight: '600',
     fontSize: 12,
-    color: '#979797'
+    color: Colors.darkGrey
   },
   clearText: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontWeight: '600',
     fontSize: 12,
     textAlign: 'center',
-    color: '#FCB79A'
+    color: Colors.macaroniCheese
   },
   checkCircle: {
     width: 48,
     height: 48,
     borderWidth: 2,
-    backgroundColor: '#AA3C3B',
+    backgroundColor: Colors.mediumCarmine,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
@@ -417,18 +417,18 @@ const styles = StyleSheet.create({
     marginTop:30
   },
   topText: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
-    color: '#AA3C3B'
+    color: Colors.mediumCarmine
   },
   plusCircle: {
     width: 48,
     height: 48,
     borderWidth: 2,
-    borderColor: '#AA3C3B',
+    borderColor: Colors.mediumCarmine,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
@@ -439,18 +439,18 @@ const styles = StyleSheet.create({
     height: 23.17,
   },
   textInCart: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 20
   },
   total: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
-    color: '#AA3C3B',
+    color: Colors.mediumCarmine,
     paddingTop: 16
   },
   totalContainer: {
@@ -461,16 +461,16 @@ const styles = StyleSheet.create({
   orderButton: {
     width: this.width,
     height: 56,
-    backgroundColor: '#AA3C3B',
+    backgroundColor: Colors.mediumCarmine,
     justifyContent: 'center',
     alignItems: 'center'
   },
   orderText: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 20,
-    color: '#FFFFFF'
+    ...commonStyles.textWhite,
   },
   bottom: {
     justifyContent: 'flex-end',
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
       left: 267,
       top: 100,
       borderRadius: 38,
-      backgroundColor: '#AA3C3B',
+      backgroundColor: Colors.mediumCarmine,
       shadowRadius: 4,
       shadowOffset: {height: 0, width: 4},
       shadowColor: 'rgba(91, 91, 91, 0.25)'
@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
       left: 287,
       top: 100,
       borderRadius: 38,
-      backgroundColor: '#AA3C3B',
+      backgroundColor: Colors.mediumCarmine,
       elevation: 4
     }
   }),
@@ -504,23 +504,19 @@ const styles = StyleSheet.create({
     ios: {
       paddingTop: 22,
       paddingLeft: 10,
-  
-      fontFamily: 'Raleway',
+      ...commonStyles.fontRalewayBold,
       fontStyle: 'normal',
       fontWeight: 'bold',
       fontSize: 20,
-  
       color: '#FFFFFF',
     },
     android: {
       paddingTop: 22,
       paddingLeft: 10,
-  
-      fontFamily: 'Raleway',
+      ...commonStyles.fontRalewayBold,
       fontStyle: 'normal',
       fontWeight: 'bold',
       fontSize: 22,
-  
       color: '#FFFFFF',
     }
   }),
@@ -529,7 +525,7 @@ const styles = StyleSheet.create({
     height: 27,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#AA3C3B',
+    backgroundColor: Colors.mediumCarmine,
     shadowRadius: 4,
     shadowOffset: {height: 0, width: 4},
     shadowColor: 'rgba(91, 91, 91, 0.25)',
@@ -538,12 +534,11 @@ const styles = StyleSheet.create({
     marginBottom: 17
   },
   textTagText: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',
-
     color: '#FFFFFF',
   },
   textContainer: {
@@ -552,12 +547,12 @@ const styles = StyleSheet.create({
     height: 180
   },
   title: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 30,
     textAlign: 'center',
-    color: '#282828'
+    color: Colors.black
   },
   valueContainer: {
     flexDirection: 'row',
@@ -571,23 +566,23 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#AA3C3B'
+    backgroundColor: Colors.mediumCarmine
   },
   valueText: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
-    color: '#979797'
+    color: Colors.darkGrey
   },
   description: {
-    fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 14,
     textAlign: 'center',
-    color: '#282828',
+    color: Colors.black,
     width: 280
   },
 });
