@@ -35,6 +35,7 @@ export default class App extends React.Component {
         require('./assets/images/cart.png'),
         require('./assets/images/meat.png'),
         require('./assets/images/mixed.png'),
+        require('./assets/images/emptyBox.png'),
         require('./assets/images/plus.png'),
         require('./assets/images/previous.png'),
         require('./assets/images/vegan.png'),

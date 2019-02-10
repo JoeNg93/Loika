@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
     marginTop:30
   },
   topText: {
-    fontFamily: 'Raleway',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 18,
@@ -184,7 +183,6 @@ const styles = StyleSheet.create({
     height: 23.17,
   },
   total: {
-    fontFamily: 'Raleway',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 14,
@@ -205,7 +203,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   orderText: {
-    fontFamily: 'Raleway',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 20,
@@ -243,8 +240,7 @@ const styles = StyleSheet.create({
     ios: {
       paddingTop: 22,
       paddingLeft: 10,
-  
-      fontFamily: 'Raleway',
+
       fontStyle: 'normal',
       fontWeight: 'bold',
       fontSize: 20,
@@ -254,8 +250,7 @@ const styles = StyleSheet.create({
     android: {
       paddingTop: 22,
       paddingLeft: 10,
-  
-      fontFamily: 'Raleway',
+
       fontStyle: 'normal',
       fontWeight: 'bold',
       fontSize: 22,
@@ -277,7 +272,6 @@ const styles = StyleSheet.create({
     marginBottom: 17
   },
   textTagText: {
-    fontFamily: 'Raleway',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 16,
@@ -291,7 +285,6 @@ const styles = StyleSheet.create({
     height: 180
   },
   title: {
-    fontFamily: 'Raleway',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 30,
@@ -313,7 +306,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#AA3C3B'
   },
   valueText: {
-    fontFamily: 'Raleway',
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 14,
@@ -321,7 +313,6 @@ const styles = StyleSheet.create({
     color: '#979797'
   },
   description: {
-    fontFamily: 'Raleway',
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 14,
