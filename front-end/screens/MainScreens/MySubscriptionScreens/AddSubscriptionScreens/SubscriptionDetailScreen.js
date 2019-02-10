@@ -24,7 +24,7 @@ const box = {
     'Ground beef - 2x1lb NY strip - 2x10oz Top sirloin - 4x6oz Whole pork tenderloin - 1lb Boneless skinless chicken breast - 3x1lb *Exact cuts are subject to change',
 };
 
-export default class DetailScreen extends React.Component {
+export default class SubscriptionDetailScreen extends React.Component {
   static navigationOptions = {
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
@@ -33,9 +33,13 @@ export default class DetailScreen extends React.Component {
         <Icon name={'arrow-back'} size={22} color={Colors.mediumCarmine} />
       </TouchableHighlight>
     ),
-    headerStyle: {
-      marginTop: 8,
+    headerTitleStyle: {
+      ...commonStyles.fontRalewayBold,
+      fontSize: 18,
     },
+    headerStyle: {
+      marginTop: 10
+    }
   };
 
   render() {
