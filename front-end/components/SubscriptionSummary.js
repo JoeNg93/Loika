@@ -8,6 +8,8 @@ import Colors from '../constants/Colors';
 
 const boxNameToImageMapper = {
   vegan: require('../assets/images/vegan.png'),
+  mixed: require('../assets/images/mixed.png'),
+  meat: require('../assets/images/meat.png'),
 };
 
 export default function SubscriptionSummary({
