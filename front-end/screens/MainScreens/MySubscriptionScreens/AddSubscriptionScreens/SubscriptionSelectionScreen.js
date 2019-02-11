@@ -67,39 +67,41 @@ export default class SubscriptionSelectionScreen extends React.Component {
           style={{ marginRight: 20 }}
           onPress={navigation.getParam('setCartVisible')}
         >
-          <Icon
-            name={'shopping-basket'}
-            size={22}
-            color={Colors.mediumCarmine}
-          />
-          <View
-            style={[
-              {
-                width: 11,
-                height: 11,
-                left: 10,
-                top: -18,
-                backgroundColor: '#FFFFFF',
-                borderRadius: 5.5,
-              },
-              {
-                opacity: navigation.getParam('opacity')
-                  ? navigation.getParam('opacity')
-                  : 0,
-              },
-            ]}
-          >
-            <Text
-              style={{
-                ...commonStyles.fontRalewayBold,
-                fontWeight: '600',
-                fontSize: 9,
-                textAlign: 'center',
-                ...commonStyles.textMediumCarmine,
-              }}
+          <View>
+            <Icon
+              name={'shopping-basket'}
+              size={22}
+              color={Colors.mediumCarmine}
+            />
+            <View
+              style={[
+                {
+                  width: 11,
+                  height: 11,
+                  left: 10,
+                  top: -18,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 5.5,
+                },
+                {
+                  opacity: navigation.getParam('opacity')
+                    ? navigation.getParam('opacity')
+                    : 0,
+                },
+              ]}
             >
-              {navigation.getParam('items')}
-            </Text>
+              <Text
+                style={{
+                  ...commonStyles.fontRalewayBold,
+                  fontWeight: '600',
+                  fontSize: 9,
+                  textAlign: 'center',
+                  ...commonStyles.textMediumCarmine,
+                }}
+              >
+                {navigation.getParam('items')}
+              </Text>
+            </View>
           </View>
         </TouchableHighlight>
       ),

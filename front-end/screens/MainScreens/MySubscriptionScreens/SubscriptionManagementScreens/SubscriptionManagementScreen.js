@@ -49,7 +49,7 @@ export default class SubscriptionManagementScreen extends React.Component {
     // Fetch order according to order ID send from MySubscriptionScreen
     fetchedOrder: {
       id: 123,
-      isActive: false,
+      isActive: true,
       subscriptions: [
         {
           id: 1,
@@ -57,12 +57,12 @@ export default class SubscriptionManagementScreen extends React.Component {
           weight: 5,
           price: 199,
           pricePerMeal: 3.4,
-          isActive: false,
+          isActive: true,
         },
         {
           id: 2,
           title: 'Vegan',
-          isActive: false,
+          isActive: true,
           weight: 5,
           price: 199,
           pricePerMeal: 3.4,
