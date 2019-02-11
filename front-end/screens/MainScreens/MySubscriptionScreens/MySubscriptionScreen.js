@@ -24,8 +24,16 @@ const width = Layout.window.width,
 
 export default class MySubscriptionScreen extends React.Component {
   static navigationOptions = {
-    headerTitle: null,
+    headerTitle: '',
+    headerBackTitle: null,
     headerTransparent: true,
+    headerTitleStyle: {
+      ...commonStyles.fontRalewayBold,
+      fontSize: 18,
+    },
+    headerStyle: {
+      marginTop: 10,
+    },
   };
   state = {
     // Fetch all orders of this current month (eg. all orders that are in range of February)
@@ -90,9 +98,13 @@ export default class MySubscriptionScreen extends React.Component {
     this.props.navigation.navigate('AddSubscription');
   };
 
-  onPressManageSubscription = () => {};
+  onPressManageSubscription = orderId => {
+    this.props.navigation.navigate('SubscriptionManagement');
+  };
 
-  onPressSubscriptionDetails = () => {};
+  onPressSubscriptionDetails = () => {
+    this.props.navigation.navigate('SubscriptionDetail');
+  };
 
   renderSubscriptionListPerOrder = () => {
     return this.state.currentOrders.map(order => (
@@ -112,7 +124,7 @@ export default class MySubscriptionScreen extends React.Component {
         </View>
         <Button
           type={'clear'}
-          title={'Manage your subscription'}
+          title={'Manage your subscriptions'}
           icon={
             <Icon name={'chevron-right'} size={18} color={Colors.darkGrey} />
           }
@@ -120,7 +132,7 @@ export default class MySubscriptionScreen extends React.Component {
           titleStyle={[styles.manageButtonText, { marginRight: 2 }]}
           buttonStyle={{ alignItems: 'center' }}
           containerStyle={styles.manageButtonContainer}
-          onPress={this.onPressManageSubscription}
+          onPress={() => this.onPressManageSubscription(order.id)}
         />
       </View>
     ));

@@ -32,7 +32,7 @@ export default class AddressSummary extends React.Component {
 
   render() {
     return (
-      <View style={styles.mainContainer}>
+      <View style={{ width: this.props.containerWidth }}>
         {this.props.canEditAddress && (
           <TouchableOpacity
             onPress={this.toggleEditMode}
@@ -53,6 +53,7 @@ export default class AddressSummary extends React.Component {
               borderColor: this.state.isEditing
                 ? Colors.mediumCarmine
                 : Colors.lightGrey,
+              width: this.props.containerWidth - 6,
             },
           ]}
         >
@@ -128,6 +129,7 @@ AddressSummary.propTypes = {
   onPressSelectedButton: PropTypes.func,
   canEditAddress: PropTypes.bool,
   onPressSaveAddressForm: PropTypes.func,
+  containerWidth: PropTypes.number,
 };
 
 AddressSummary.defaultProps = {
@@ -139,14 +141,11 @@ AddressSummary.defaultProps = {
   onPressSelectedButton: () => {},
   canEditAddress: false,
   onPressSaveAddressForm: () => {},
+  containerWidth: 336,
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    width: 336,
-  },
   boxContainer: {
-    width: 330,
     minHeight: 90,
     borderRadius: 6,
     borderWidth: 1,
