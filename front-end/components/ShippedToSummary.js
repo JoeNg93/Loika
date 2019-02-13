@@ -16,10 +16,10 @@ export default function ShippedToSummary({
   deliveryTime,
   hasChangeButton,
   onPressChangeButton,
-  width,
+  containerWidth,
 }) {
   return (
-    <View style={[styles.container, { width: width }]}>
+    <View style={[styles.container, { width: containerWidth }]}>
       <Text
         style={[
           { marginBottom: 9 },
