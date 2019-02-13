@@ -23,7 +23,7 @@ type User {
   permissions: [Permission]
   phone: String
   billingAddress: Address @relation(name: "UserBillingAddress")
-  shippingAddress: Address @relation(name: "UserShippingAddresses")
+  shippingAddress: [Address!] @relation(name: "UserShippingAddresses")
   paymentId: String
   avatar: String
   cart: [CartItem!]!

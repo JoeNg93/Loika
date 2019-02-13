@@ -440,8 +440,15 @@ export type UserOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface UserCreatepermissionsInput {
-  set?: Permission[] | Permission;
+export interface OrderCreateWithoutUserInput {
+  items?: OrderItemCreateManyInput;
+  billingAddress: AddressCreateOneInput;
+  shippingAddress: AddressCreateOneInput;
+  deliveryTime: String;
+  deliveryDayOfWeek: String;
+  paymentDate: DateTimeInput;
+  total: Int;
+  charge: String;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -456,64 +463,25 @@ export interface UserUpdateManyMutationInput {
   avatar?: String;
 }
 
-export interface OrderItemCreateInput {
-  title: String;
-  shortDescription: String;
-  longDescription: String;
-  totalPrice: Int;
-  mealPrice: Int;
-  thumbnailImage?: String;
-  largeImage?: String;
-  quantity?: Int;
-  user?: UserCreateOneInput;
+export interface UserCreateInput {
+  name: String;
+  email: String;
+  password: String;
+  resetToken?: String;
+  resetTokenExpiry?: Float;
+  permissions?: UserCreatepermissionsInput;
+  phone?: String;
+  billingAddress?: AddressCreateOneInput;
+  shippingAddress?: AddressCreateManyInput;
+  paymentId?: String;
+  avatar?: String;
+  cart?: CartItemCreateManyWithoutUserInput;
+  orders?: OrderCreateManyWithoutUserInput;
 }
 
 export type AddressWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
-
-export interface AddressUpdateInput {
-  street1?: String;
-  street2?: String;
-  city?: String;
-  postcode?: Int;
-  country?: String;
-  isBillingAddress?: Boolean;
-}
-
-export interface CartItemUpdateWithWhereUniqueWithoutUserInput {
-  where: CartItemWhereUniqueInput;
-  data: CartItemUpdateWithoutUserDataInput;
-}
-
-export interface AddressUpdateManyMutationInput {
-  street1?: String;
-  street2?: String;
-  city?: String;
-  postcode?: Int;
-  country?: String;
-  isBillingAddress?: Boolean;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface CartItemUpdateManyWithWhereNestedInput {
-  where: CartItemScalarWhereInput;
-  data: CartItemUpdateManyDataInput;
-}
-
-export interface SubscriptionUpdateManyMutationInput {
-  title?: String;
-  shortDescription?: String;
-  longDescription?: String;
-  totalPrice?: Int;
-  mealPrice?: Int;
-  thumbnailImage?: String;
-  largeImage?: String;
-}
 
 export interface CartItemScalarWhereInput {
   id?: ID_Input;
@@ -543,6 +511,47 @@ export interface CartItemScalarWhereInput {
   NOT?: CartItemScalarWhereInput[] | CartItemScalarWhereInput;
 }
 
+export interface CartItemUpdateWithWhereUniqueWithoutUserInput {
+  where: CartItemWhereUniqueInput;
+  data: CartItemUpdateWithoutUserDataInput;
+}
+
+export interface CartItemCreateInput {
+  quantity?: Int;
+  item?: SubscriptionCreateOneInput;
+  user: UserCreateOneWithoutCartInput;
+}
+
+export interface CartItemCreateManyWithoutUserInput {
+  create?: CartItemCreateWithoutUserInput[] | CartItemCreateWithoutUserInput;
+  connect?: CartItemWhereUniqueInput[] | CartItemWhereUniqueInput;
+}
+
+export interface SubscriptionCreateOneInput {
+  create?: SubscriptionCreateInput;
+  connect?: SubscriptionWhereUniqueInput;
+}
+
+export interface SubscriptionUpdateManyMutationInput {
+  title?: String;
+  shortDescription?: String;
+  longDescription?: String;
+  totalPrice?: Int;
+  mealPrice?: Int;
+  thumbnailImage?: String;
+  largeImage?: String;
+}
+
+export interface SubscriptionCreateInput {
+  title: String;
+  shortDescription: String;
+  longDescription: String;
+  totalPrice: Int;
+  mealPrice: Int;
+  thumbnailImage?: String;
+  largeImage?: String;
+}
+
 export interface OrderItemUpdateManyMutationInput {
   title?: String;
   shortDescription?: String;
@@ -554,10 +563,9 @@ export interface OrderItemUpdateManyMutationInput {
   quantity?: Int;
 }
 
-export interface CartItemCreateInput {
-  quantity?: Int;
-  item?: SubscriptionCreateOneInput;
-  user: UserCreateOneWithoutCartInput;
+export interface UserCreateOneWithoutCartInput {
+  create?: UserCreateWithoutCartInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface CartItemWhereInput {
@@ -590,9 +598,19 @@ export interface CartItemWhereInput {
   NOT?: CartItemWhereInput[] | CartItemWhereInput;
 }
 
-export interface SubscriptionCreateOneInput {
-  create?: SubscriptionCreateInput;
-  connect?: SubscriptionWhereUniqueInput;
+export interface UserCreateWithoutCartInput {
+  name: String;
+  email: String;
+  password: String;
+  resetToken?: String;
+  resetTokenExpiry?: Float;
+  permissions?: UserCreatepermissionsInput;
+  phone?: String;
+  billingAddress?: AddressCreateOneInput;
+  shippingAddress?: AddressCreateManyInput;
+  paymentId?: String;
+  avatar?: String;
+  orders?: OrderCreateManyWithoutUserInput;
 }
 
 export interface UserWhereInput {
@@ -689,7 +707,9 @@ export interface UserWhereInput {
   phone_ends_with?: String;
   phone_not_ends_with?: String;
   billingAddress?: AddressWhereInput;
-  shippingAddress?: AddressWhereInput;
+  shippingAddress_every?: AddressWhereInput;
+  shippingAddress_some?: AddressWhereInput;
+  shippingAddress_none?: AddressWhereInput;
   paymentId?: String;
   paymentId_not?: String;
   paymentId_in?: String[] | String;
@@ -745,14 +765,8 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface SubscriptionCreateInput {
-  title: String;
-  shortDescription: String;
-  longDescription: String;
-  totalPrice: Int;
-  mealPrice: Int;
-  thumbnailImage?: String;
-  largeImage?: String;
+export interface UserCreatepermissionsInput {
+  set?: Permission[] | Permission;
 }
 
 export interface OrderItemWhereInput {
@@ -870,9 +884,9 @@ export interface OrderItemWhereInput {
   NOT?: OrderItemWhereInput[] | OrderItemWhereInput;
 }
 
-export interface UserCreateOneWithoutCartInput {
-  create?: UserCreateWithoutCartInput;
-  connect?: UserWhereUniqueInput;
+export interface AddressCreateOneInput {
+  create?: AddressCreateInput;
+  connect?: AddressWhereUniqueInput;
 }
 
 export interface OrderUpdateManyMutationInput {
@@ -883,19 +897,9 @@ export interface OrderUpdateManyMutationInput {
   charge?: String;
 }
 
-export interface UserCreateWithoutCartInput {
-  name: String;
-  email: String;
-  password: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserCreatepermissionsInput;
-  phone?: String;
-  billingAddress?: AddressCreateOneInput;
-  shippingAddress?: AddressCreateOneInput;
-  paymentId?: String;
-  avatar?: String;
-  orders?: OrderCreateManyWithoutUserInput;
+export interface AddressCreateManyInput {
+  create?: AddressCreateInput[] | AddressCreateInput;
+  connect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
 }
 
 export interface UserUpdateWithoutOrdersDataInput {
@@ -907,16 +911,15 @@ export interface UserUpdateWithoutOrdersDataInput {
   permissions?: UserUpdatepermissionsInput;
   phone?: String;
   billingAddress?: AddressUpdateOneInput;
-  shippingAddress?: AddressUpdateOneInput;
+  shippingAddress?: AddressUpdateManyInput;
   paymentId?: String;
   avatar?: String;
   cart?: CartItemUpdateManyWithoutUserInput;
 }
 
-export interface CartItemUpsertWithWhereUniqueWithoutUserInput {
-  where: CartItemWhereUniqueInput;
-  update: CartItemUpdateWithoutUserDataInput;
-  create: CartItemCreateWithoutUserInput;
+export interface OrderCreateManyWithoutUserInput {
+  create?: OrderCreateWithoutUserInput[] | OrderCreateWithoutUserInput;
+  connect?: OrderWhereUniqueInput[] | OrderWhereUniqueInput;
 }
 
 export interface OrderUpdateInput {
@@ -931,9 +934,10 @@ export interface OrderUpdateInput {
   charge?: String;
 }
 
-export interface AddressCreateOneInput {
-  create?: AddressCreateInput;
-  connect?: AddressWhereUniqueInput;
+export interface CartItemUpsertWithWhereUniqueWithoutUserInput {
+  where: CartItemWhereUniqueInput;
+  update: CartItemUpdateWithoutUserDataInput;
+  create: CartItemCreateWithoutUserInput;
 }
 
 export interface UserCreateOneWithoutOrdersInput {
@@ -941,9 +945,9 @@ export interface UserCreateOneWithoutOrdersInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface OrderCreateManyWithoutUserInput {
-  create?: OrderCreateWithoutUserInput[] | OrderCreateWithoutUserInput;
-  connect?: OrderWhereUniqueInput[] | OrderWhereUniqueInput;
+export interface OrderItemCreateManyInput {
+  create?: OrderItemCreateInput[] | OrderItemCreateInput;
+  connect?: OrderItemWhereUniqueInput[] | OrderItemWhereUniqueInput;
 }
 
 export interface OrderCreateInput {
@@ -958,15 +962,16 @@ export interface OrderCreateInput {
   charge: String;
 }
 
-export interface OrderCreateWithoutUserInput {
-  items?: OrderItemCreateManyInput;
-  billingAddress: AddressCreateOneInput;
-  shippingAddress: AddressCreateOneInput;
-  deliveryTime: String;
-  deliveryDayOfWeek: String;
-  paymentDate: DateTimeInput;
-  total: Int;
-  charge: String;
+export interface OrderItemCreateInput {
+  title: String;
+  shortDescription: String;
+  longDescription: String;
+  totalPrice: Int;
+  mealPrice: Int;
+  thumbnailImage?: String;
+  largeImage?: String;
+  quantity?: Int;
+  user?: UserCreateOneInput;
 }
 
 export interface UserUpsertWithoutCartInput {
@@ -974,9 +979,9 @@ export interface UserUpsertWithoutCartInput {
   create: UserCreateWithoutCartInput;
 }
 
-export interface OrderItemCreateManyInput {
-  create?: OrderItemCreateInput[] | OrderItemCreateInput;
-  connect?: OrderItemWhereUniqueInput[] | OrderItemWhereUniqueInput;
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface OrderUpdateManyDataInput {
@@ -1096,20 +1101,9 @@ export interface OrderUpsertWithWhereUniqueWithoutUserInput {
   create: OrderCreateWithoutUserInput;
 }
 
-export interface UserCreateInput {
-  name: String;
-  email: String;
-  password: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserCreatepermissionsInput;
-  phone?: String;
-  billingAddress?: AddressCreateOneInput;
-  shippingAddress?: AddressCreateOneInput;
-  paymentId?: String;
-  avatar?: String;
-  cart?: CartItemCreateManyWithoutUserInput;
-  orders?: OrderCreateManyWithoutUserInput;
+export interface CartItemCreateWithoutUserInput {
+  quantity?: Int;
+  item?: SubscriptionCreateOneInput;
 }
 
 export interface OrderItemUpdateManyDataInput {
@@ -1123,36 +1117,16 @@ export interface OrderItemUpdateManyDataInput {
   quantity?: Int;
 }
 
-export interface CartItemCreateManyWithoutUserInput {
-  create?: CartItemCreateWithoutUserInput[] | CartItemCreateWithoutUserInput;
-  connect?: CartItemWhereUniqueInput[] | CartItemWhereUniqueInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-}>;
-
-export interface CartItemCreateWithoutUserInput {
-  quantity?: Int;
-  item?: SubscriptionCreateOneInput;
-}
-
-export interface OrderItemUpsertWithWhereUniqueNestedInput {
-  where: OrderItemWhereUniqueInput;
-  update: OrderItemUpdateDataInput;
-  create: OrderItemCreateInput;
-}
-
 export interface CartItemUpdateInput {
   quantity?: Int;
   item?: SubscriptionUpdateOneInput;
   user?: UserUpdateOneRequiredWithoutCartInput;
 }
 
-export interface CartItemUpdateManyDataInput {
-  quantity?: Int;
-}
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+}>;
 
 export interface SubscriptionUpdateOneInput {
   create?: SubscriptionCreateInput;
@@ -1163,13 +1137,10 @@ export interface SubscriptionUpdateOneInput {
   connect?: SubscriptionWhereUniqueInput;
 }
 
-export interface AddressCreateInput {
-  street1: String;
-  street2?: String;
-  city: String;
-  postcode: Int;
-  country: String;
-  isBillingAddress: Boolean;
+export interface OrderItemUpsertWithWhereUniqueNestedInput {
+  where: OrderItemWhereUniqueInput;
+  update: OrderItemUpdateDataInput;
+  create: OrderItemCreateInput;
 }
 
 export interface SubscriptionUpdateDataInput {
@@ -1182,7 +1153,76 @@ export interface SubscriptionUpdateDataInput {
   largeImage?: String;
 }
 
-export interface SubscriptionUpdateInput {
+export interface CartItemUpdateManyDataInput {
+  quantity?: Int;
+}
+
+export interface SubscriptionUpsertNestedInput {
+  update: SubscriptionUpdateDataInput;
+  create: SubscriptionCreateInput;
+}
+
+export interface AddressCreateInput {
+  street1: String;
+  street2?: String;
+  city: String;
+  postcode: Int;
+  country: String;
+  isBillingAddress: Boolean;
+}
+
+export interface UserUpdateOneRequiredWithoutCartInput {
+  create?: UserCreateWithoutCartInput;
+  update?: UserUpdateWithoutCartDataInput;
+  upsert?: UserUpsertWithoutCartInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface AddressUpdateManyMutationInput {
+  street1?: String;
+  street2?: String;
+  city?: String;
+  postcode?: Int;
+  country?: String;
+  isBillingAddress?: Boolean;
+}
+
+export interface UserUpdateWithoutCartDataInput {
+  name?: String;
+  email?: String;
+  password?: String;
+  resetToken?: String;
+  resetTokenExpiry?: Float;
+  permissions?: UserUpdatepermissionsInput;
+  phone?: String;
+  billingAddress?: AddressUpdateOneInput;
+  shippingAddress?: AddressUpdateManyInput;
+  paymentId?: String;
+  avatar?: String;
+  orders?: OrderUpdateManyWithoutUserInput;
+}
+
+export interface UserUpdateInput {
+  name?: String;
+  email?: String;
+  password?: String;
+  resetToken?: String;
+  resetTokenExpiry?: Float;
+  permissions?: UserUpdatepermissionsInput;
+  phone?: String;
+  billingAddress?: AddressUpdateOneInput;
+  shippingAddress?: AddressUpdateManyInput;
+  paymentId?: String;
+  avatar?: String;
+  cart?: CartItemUpdateManyWithoutUserInput;
+  orders?: OrderUpdateManyWithoutUserInput;
+}
+
+export interface UserUpdatepermissionsInput {
+  set?: Permission[] | Permission;
+}
+
+export interface OrderItemUpdateInput {
   title?: String;
   shortDescription?: String;
   longDescription?: String;
@@ -1190,11 +1230,414 @@ export interface SubscriptionUpdateInput {
   mealPrice?: Int;
   thumbnailImage?: String;
   largeImage?: String;
+  quantity?: Int;
+  user?: UserUpdateOneInput;
 }
 
-export interface SubscriptionUpsertNestedInput {
-  update: SubscriptionUpdateDataInput;
-  create: SubscriptionCreateInput;
+export interface AddressUpdateOneInput {
+  create?: AddressCreateInput;
+  update?: AddressUpdateDataInput;
+  upsert?: AddressUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: AddressWhereUniqueInput;
+}
+
+export interface OrderWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  user?: UserWhereInput;
+  items_every?: OrderItemWhereInput;
+  items_some?: OrderItemWhereInput;
+  items_none?: OrderItemWhereInput;
+  billingAddress?: AddressWhereInput;
+  shippingAddress?: AddressWhereInput;
+  deliveryTime?: String;
+  deliveryTime_not?: String;
+  deliveryTime_in?: String[] | String;
+  deliveryTime_not_in?: String[] | String;
+  deliveryTime_lt?: String;
+  deliveryTime_lte?: String;
+  deliveryTime_gt?: String;
+  deliveryTime_gte?: String;
+  deliveryTime_contains?: String;
+  deliveryTime_not_contains?: String;
+  deliveryTime_starts_with?: String;
+  deliveryTime_not_starts_with?: String;
+  deliveryTime_ends_with?: String;
+  deliveryTime_not_ends_with?: String;
+  deliveryDayOfWeek?: String;
+  deliveryDayOfWeek_not?: String;
+  deliveryDayOfWeek_in?: String[] | String;
+  deliveryDayOfWeek_not_in?: String[] | String;
+  deliveryDayOfWeek_lt?: String;
+  deliveryDayOfWeek_lte?: String;
+  deliveryDayOfWeek_gt?: String;
+  deliveryDayOfWeek_gte?: String;
+  deliveryDayOfWeek_contains?: String;
+  deliveryDayOfWeek_not_contains?: String;
+  deliveryDayOfWeek_starts_with?: String;
+  deliveryDayOfWeek_not_starts_with?: String;
+  deliveryDayOfWeek_ends_with?: String;
+  deliveryDayOfWeek_not_ends_with?: String;
+  paymentDate?: DateTimeInput;
+  paymentDate_not?: DateTimeInput;
+  paymentDate_in?: DateTimeInput[] | DateTimeInput;
+  paymentDate_not_in?: DateTimeInput[] | DateTimeInput;
+  paymentDate_lt?: DateTimeInput;
+  paymentDate_lte?: DateTimeInput;
+  paymentDate_gt?: DateTimeInput;
+  paymentDate_gte?: DateTimeInput;
+  total?: Int;
+  total_not?: Int;
+  total_in?: Int[] | Int;
+  total_not_in?: Int[] | Int;
+  total_lt?: Int;
+  total_lte?: Int;
+  total_gt?: Int;
+  total_gte?: Int;
+  charge?: String;
+  charge_not?: String;
+  charge_in?: String[] | String;
+  charge_not_in?: String[] | String;
+  charge_lt?: String;
+  charge_lte?: String;
+  charge_gt?: String;
+  charge_gte?: String;
+  charge_contains?: String;
+  charge_not_contains?: String;
+  charge_starts_with?: String;
+  charge_not_starts_with?: String;
+  charge_ends_with?: String;
+  charge_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: OrderWhereInput[] | OrderWhereInput;
+  OR?: OrderWhereInput[] | OrderWhereInput;
+  NOT?: OrderWhereInput[] | OrderWhereInput;
+}
+
+export interface AddressUpdateDataInput {
+  street1?: String;
+  street2?: String;
+  city?: String;
+  postcode?: Int;
+  country?: String;
+  isBillingAddress?: Boolean;
+}
+
+export interface UserUpsertWithoutOrdersInput {
+  update: UserUpdateWithoutOrdersDataInput;
+  create: UserCreateWithoutOrdersInput;
+}
+
+export interface AddressUpsertNestedInput {
+  update: AddressUpdateDataInput;
+  create: AddressCreateInput;
+}
+
+export interface UserCreateWithoutOrdersInput {
+  name: String;
+  email: String;
+  password: String;
+  resetToken?: String;
+  resetTokenExpiry?: Float;
+  permissions?: UserCreatepermissionsInput;
+  phone?: String;
+  billingAddress?: AddressCreateOneInput;
+  shippingAddress?: AddressCreateManyInput;
+  paymentId?: String;
+  avatar?: String;
+  cart?: CartItemCreateManyWithoutUserInput;
+}
+
+export interface AddressUpdateManyInput {
+  create?: AddressCreateInput[] | AddressCreateInput;
+  update?:
+    | AddressUpdateWithWhereUniqueNestedInput[]
+    | AddressUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | AddressUpsertWithWhereUniqueNestedInput[]
+    | AddressUpsertWithWhereUniqueNestedInput;
+  delete?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
+  connect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
+  disconnect?: AddressWhereUniqueInput[] | AddressWhereUniqueInput;
+  deleteMany?: AddressScalarWhereInput[] | AddressScalarWhereInput;
+  updateMany?:
+    | AddressUpdateManyWithWhereNestedInput[]
+    | AddressUpdateManyWithWhereNestedInput;
+}
+
+export interface CartItemUpdateManyMutationInput {
+  quantity?: Int;
+}
+
+export interface AddressUpdateWithWhereUniqueNestedInput {
+  where: AddressWhereUniqueInput;
+  data: AddressUpdateDataInput;
+}
+
+export interface OrderUpdateManyWithWhereNestedInput {
+  where: OrderScalarWhereInput;
+  data: OrderUpdateManyDataInput;
+}
+
+export interface AddressUpsertWithWhereUniqueNestedInput {
+  where: AddressWhereUniqueInput;
+  update: AddressUpdateDataInput;
+  create: AddressCreateInput;
+}
+
+export interface AddressUpdateOneRequiredInput {
+  create?: AddressCreateInput;
+  update?: AddressUpdateDataInput;
+  upsert?: AddressUpsertNestedInput;
+  connect?: AddressWhereUniqueInput;
+}
+
+export interface AddressScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  street1?: String;
+  street1_not?: String;
+  street1_in?: String[] | String;
+  street1_not_in?: String[] | String;
+  street1_lt?: String;
+  street1_lte?: String;
+  street1_gt?: String;
+  street1_gte?: String;
+  street1_contains?: String;
+  street1_not_contains?: String;
+  street1_starts_with?: String;
+  street1_not_starts_with?: String;
+  street1_ends_with?: String;
+  street1_not_ends_with?: String;
+  street2?: String;
+  street2_not?: String;
+  street2_in?: String[] | String;
+  street2_not_in?: String[] | String;
+  street2_lt?: String;
+  street2_lte?: String;
+  street2_gt?: String;
+  street2_gte?: String;
+  street2_contains?: String;
+  street2_not_contains?: String;
+  street2_starts_with?: String;
+  street2_not_starts_with?: String;
+  street2_ends_with?: String;
+  street2_not_ends_with?: String;
+  city?: String;
+  city_not?: String;
+  city_in?: String[] | String;
+  city_not_in?: String[] | String;
+  city_lt?: String;
+  city_lte?: String;
+  city_gt?: String;
+  city_gte?: String;
+  city_contains?: String;
+  city_not_contains?: String;
+  city_starts_with?: String;
+  city_not_starts_with?: String;
+  city_ends_with?: String;
+  city_not_ends_with?: String;
+  postcode?: Int;
+  postcode_not?: Int;
+  postcode_in?: Int[] | Int;
+  postcode_not_in?: Int[] | Int;
+  postcode_lt?: Int;
+  postcode_lte?: Int;
+  postcode_gt?: Int;
+  postcode_gte?: Int;
+  country?: String;
+  country_not?: String;
+  country_in?: String[] | String;
+  country_not_in?: String[] | String;
+  country_lt?: String;
+  country_lte?: String;
+  country_gt?: String;
+  country_gte?: String;
+  country_contains?: String;
+  country_not_contains?: String;
+  country_starts_with?: String;
+  country_not_starts_with?: String;
+  country_ends_with?: String;
+  country_not_ends_with?: String;
+  isBillingAddress?: Boolean;
+  isBillingAddress_not?: Boolean;
+  AND?: AddressScalarWhereInput[] | AddressScalarWhereInput;
+  OR?: AddressScalarWhereInput[] | AddressScalarWhereInput;
+  NOT?: AddressScalarWhereInput[] | AddressScalarWhereInput;
+}
+
+export interface OrderItemScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  shortDescription?: String;
+  shortDescription_not?: String;
+  shortDescription_in?: String[] | String;
+  shortDescription_not_in?: String[] | String;
+  shortDescription_lt?: String;
+  shortDescription_lte?: String;
+  shortDescription_gt?: String;
+  shortDescription_gte?: String;
+  shortDescription_contains?: String;
+  shortDescription_not_contains?: String;
+  shortDescription_starts_with?: String;
+  shortDescription_not_starts_with?: String;
+  shortDescription_ends_with?: String;
+  shortDescription_not_ends_with?: String;
+  longDescription?: String;
+  longDescription_not?: String;
+  longDescription_in?: String[] | String;
+  longDescription_not_in?: String[] | String;
+  longDescription_lt?: String;
+  longDescription_lte?: String;
+  longDescription_gt?: String;
+  longDescription_gte?: String;
+  longDescription_contains?: String;
+  longDescription_not_contains?: String;
+  longDescription_starts_with?: String;
+  longDescription_not_starts_with?: String;
+  longDescription_ends_with?: String;
+  longDescription_not_ends_with?: String;
+  totalPrice?: Int;
+  totalPrice_not?: Int;
+  totalPrice_in?: Int[] | Int;
+  totalPrice_not_in?: Int[] | Int;
+  totalPrice_lt?: Int;
+  totalPrice_lte?: Int;
+  totalPrice_gt?: Int;
+  totalPrice_gte?: Int;
+  mealPrice?: Int;
+  mealPrice_not?: Int;
+  mealPrice_in?: Int[] | Int;
+  mealPrice_not_in?: Int[] | Int;
+  mealPrice_lt?: Int;
+  mealPrice_lte?: Int;
+  mealPrice_gt?: Int;
+  mealPrice_gte?: Int;
+  thumbnailImage?: String;
+  thumbnailImage_not?: String;
+  thumbnailImage_in?: String[] | String;
+  thumbnailImage_not_in?: String[] | String;
+  thumbnailImage_lt?: String;
+  thumbnailImage_lte?: String;
+  thumbnailImage_gt?: String;
+  thumbnailImage_gte?: String;
+  thumbnailImage_contains?: String;
+  thumbnailImage_not_contains?: String;
+  thumbnailImage_starts_with?: String;
+  thumbnailImage_not_starts_with?: String;
+  thumbnailImage_ends_with?: String;
+  thumbnailImage_not_ends_with?: String;
+  largeImage?: String;
+  largeImage_not?: String;
+  largeImage_in?: String[] | String;
+  largeImage_not_in?: String[] | String;
+  largeImage_lt?: String;
+  largeImage_lte?: String;
+  largeImage_gt?: String;
+  largeImage_gte?: String;
+  largeImage_contains?: String;
+  largeImage_not_contains?: String;
+  largeImage_starts_with?: String;
+  largeImage_not_starts_with?: String;
+  largeImage_ends_with?: String;
+  largeImage_not_ends_with?: String;
+  quantity?: Int;
+  quantity_not?: Int;
+  quantity_in?: Int[] | Int;
+  quantity_not_in?: Int[] | Int;
+  quantity_lt?: Int;
+  quantity_lte?: Int;
+  quantity_gt?: Int;
+  quantity_gte?: Int;
+  AND?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
+  OR?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
+  NOT?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
+}
+
+export interface AddressUpdateManyWithWhereNestedInput {
+  where: AddressScalarWhereInput;
+  data: AddressUpdateManyDataInput;
+}
+
+export interface CartItemUpdateManyWithWhereNestedInput {
+  where: CartItemScalarWhereInput;
+  data: CartItemUpdateManyDataInput;
+}
+
+export interface AddressUpdateManyDataInput {
+  street1?: String;
+  street2?: String;
+  city?: String;
+  postcode?: Int;
+  country?: String;
+  isBillingAddress?: Boolean;
 }
 
 export interface SubscriptionWhereInput {
@@ -1319,11 +1762,84 @@ export interface SubscriptionWhereInput {
   NOT?: SubscriptionWhereInput[] | SubscriptionWhereInput;
 }
 
-export interface UserUpdateOneRequiredWithoutCartInput {
-  create?: UserCreateWithoutCartInput;
-  update?: UserUpdateWithoutCartDataInput;
-  upsert?: UserUpsertWithoutCartInput;
+export interface OrderUpdateManyWithoutUserInput {
+  create?: OrderCreateWithoutUserInput[] | OrderCreateWithoutUserInput;
+  delete?: OrderWhereUniqueInput[] | OrderWhereUniqueInput;
+  connect?: OrderWhereUniqueInput[] | OrderWhereUniqueInput;
+  disconnect?: OrderWhereUniqueInput[] | OrderWhereUniqueInput;
+  update?:
+    | OrderUpdateWithWhereUniqueWithoutUserInput[]
+    | OrderUpdateWithWhereUniqueWithoutUserInput;
+  upsert?:
+    | OrderUpsertWithWhereUniqueWithoutUserInput[]
+    | OrderUpsertWithWhereUniqueWithoutUserInput;
+  deleteMany?: OrderScalarWhereInput[] | OrderScalarWhereInput;
+  updateMany?:
+    | OrderUpdateManyWithWhereNestedInput[]
+    | OrderUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateOneRequiredWithoutOrdersInput {
+  create?: UserCreateWithoutOrdersInput;
+  update?: UserUpdateWithoutOrdersDataInput;
+  upsert?: UserUpsertWithoutOrdersInput;
   connect?: UserWhereUniqueInput;
+}
+
+export interface OrderUpdateWithWhereUniqueWithoutUserInput {
+  where: OrderWhereUniqueInput;
+  data: OrderUpdateWithoutUserDataInput;
+}
+
+export type OrderItemWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface OrderUpdateWithoutUserDataInput {
+  items?: OrderItemUpdateManyInput;
+  billingAddress?: AddressUpdateOneRequiredInput;
+  shippingAddress?: AddressUpdateOneRequiredInput;
+  deliveryTime?: String;
+  deliveryDayOfWeek?: String;
+  paymentDate?: DateTimeInput;
+  total?: Int;
+  charge?: String;
+}
+
+export interface OrderItemUpdateManyWithWhereNestedInput {
+  where: OrderItemScalarWhereInput;
+  data: OrderItemUpdateManyDataInput;
+}
+
+export interface OrderItemUpdateManyInput {
+  create?: OrderItemCreateInput[] | OrderItemCreateInput;
+  update?:
+    | OrderItemUpdateWithWhereUniqueNestedInput[]
+    | OrderItemUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | OrderItemUpsertWithWhereUniqueNestedInput[]
+    | OrderItemUpsertWithWhereUniqueNestedInput;
+  delete?: OrderItemWhereUniqueInput[] | OrderItemWhereUniqueInput;
+  connect?: OrderItemWhereUniqueInput[] | OrderItemWhereUniqueInput;
+  disconnect?: OrderItemWhereUniqueInput[] | OrderItemWhereUniqueInput;
+  deleteMany?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
+  updateMany?:
+    | OrderItemUpdateManyWithWhereNestedInput[]
+    | OrderItemUpdateManyWithWhereNestedInput;
+}
+
+export interface AddressUpdateInput {
+  street1?: String;
+  street2?: String;
+  city?: String;
+  postcode?: Int;
+  country?: String;
+  isBillingAddress?: Boolean;
+}
+
+export interface OrderItemUpdateWithWhereUniqueNestedInput {
+  where: OrderItemWhereUniqueInput;
+  data: OrderItemUpdateDataInput;
 }
 
 export interface AddressWhereInput {
@@ -1412,382 +1928,6 @@ export interface AddressWhereInput {
   NOT?: AddressWhereInput[] | AddressWhereInput;
 }
 
-export interface UserUpdateWithoutCartDataInput {
-  name?: String;
-  email?: String;
-  password?: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserUpdatepermissionsInput;
-  phone?: String;
-  billingAddress?: AddressUpdateOneInput;
-  shippingAddress?: AddressUpdateOneInput;
-  paymentId?: String;
-  avatar?: String;
-  orders?: OrderUpdateManyWithoutUserInput;
-}
-
-export interface UserUpdateOneRequiredWithoutOrdersInput {
-  create?: UserCreateWithoutOrdersInput;
-  update?: UserUpdateWithoutOrdersDataInput;
-  upsert?: UserUpsertWithoutOrdersInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpdatepermissionsInput {
-  set?: Permission[] | Permission;
-}
-
-export type OrderWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface AddressUpdateOneInput {
-  create?: AddressCreateInput;
-  update?: AddressUpdateDataInput;
-  upsert?: AddressUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: AddressWhereUniqueInput;
-}
-
-export type OrderItemWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface AddressUpdateDataInput {
-  street1?: String;
-  street2?: String;
-  city?: String;
-  postcode?: Int;
-  country?: String;
-  isBillingAddress?: Boolean;
-}
-
-export type SubscriptionWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface AddressUpsertNestedInput {
-  update: AddressUpdateDataInput;
-  create: AddressCreateInput;
-}
-
-export interface OrderItemUpdateManyWithWhereNestedInput {
-  where: OrderItemScalarWhereInput;
-  data: OrderItemUpdateManyDataInput;
-}
-
-export interface OrderUpdateManyWithoutUserInput {
-  create?: OrderCreateWithoutUserInput[] | OrderCreateWithoutUserInput;
-  delete?: OrderWhereUniqueInput[] | OrderWhereUniqueInput;
-  connect?: OrderWhereUniqueInput[] | OrderWhereUniqueInput;
-  disconnect?: OrderWhereUniqueInput[] | OrderWhereUniqueInput;
-  update?:
-    | OrderUpdateWithWhereUniqueWithoutUserInput[]
-    | OrderUpdateWithWhereUniqueWithoutUserInput;
-  upsert?:
-    | OrderUpsertWithWhereUniqueWithoutUserInput[]
-    | OrderUpsertWithWhereUniqueWithoutUserInput;
-  deleteMany?: OrderScalarWhereInput[] | OrderScalarWhereInput;
-  updateMany?:
-    | OrderUpdateManyWithWhereNestedInput[]
-    | OrderUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface OrderUpdateWithWhereUniqueWithoutUserInput {
-  where: OrderWhereUniqueInput;
-  data: OrderUpdateWithoutUserDataInput;
-}
-
-export interface UserUpdateInput {
-  name?: String;
-  email?: String;
-  password?: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserUpdatepermissionsInput;
-  phone?: String;
-  billingAddress?: AddressUpdateOneInput;
-  shippingAddress?: AddressUpdateOneInput;
-  paymentId?: String;
-  avatar?: String;
-  cart?: CartItemUpdateManyWithoutUserInput;
-  orders?: OrderUpdateManyWithoutUserInput;
-}
-
-export interface OrderUpdateWithoutUserDataInput {
-  items?: OrderItemUpdateManyInput;
-  billingAddress?: AddressUpdateOneRequiredInput;
-  shippingAddress?: AddressUpdateOneRequiredInput;
-  deliveryTime?: String;
-  deliveryDayOfWeek?: String;
-  paymentDate?: DateTimeInput;
-  total?: Int;
-  charge?: String;
-}
-
-export interface OrderWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  user?: UserWhereInput;
-  items_every?: OrderItemWhereInput;
-  items_some?: OrderItemWhereInput;
-  items_none?: OrderItemWhereInput;
-  billingAddress?: AddressWhereInput;
-  shippingAddress?: AddressWhereInput;
-  deliveryTime?: String;
-  deliveryTime_not?: String;
-  deliveryTime_in?: String[] | String;
-  deliveryTime_not_in?: String[] | String;
-  deliveryTime_lt?: String;
-  deliveryTime_lte?: String;
-  deliveryTime_gt?: String;
-  deliveryTime_gte?: String;
-  deliveryTime_contains?: String;
-  deliveryTime_not_contains?: String;
-  deliveryTime_starts_with?: String;
-  deliveryTime_not_starts_with?: String;
-  deliveryTime_ends_with?: String;
-  deliveryTime_not_ends_with?: String;
-  deliveryDayOfWeek?: String;
-  deliveryDayOfWeek_not?: String;
-  deliveryDayOfWeek_in?: String[] | String;
-  deliveryDayOfWeek_not_in?: String[] | String;
-  deliveryDayOfWeek_lt?: String;
-  deliveryDayOfWeek_lte?: String;
-  deliveryDayOfWeek_gt?: String;
-  deliveryDayOfWeek_gte?: String;
-  deliveryDayOfWeek_contains?: String;
-  deliveryDayOfWeek_not_contains?: String;
-  deliveryDayOfWeek_starts_with?: String;
-  deliveryDayOfWeek_not_starts_with?: String;
-  deliveryDayOfWeek_ends_with?: String;
-  deliveryDayOfWeek_not_ends_with?: String;
-  paymentDate?: DateTimeInput;
-  paymentDate_not?: DateTimeInput;
-  paymentDate_in?: DateTimeInput[] | DateTimeInput;
-  paymentDate_not_in?: DateTimeInput[] | DateTimeInput;
-  paymentDate_lt?: DateTimeInput;
-  paymentDate_lte?: DateTimeInput;
-  paymentDate_gt?: DateTimeInput;
-  paymentDate_gte?: DateTimeInput;
-  total?: Int;
-  total_not?: Int;
-  total_in?: Int[] | Int;
-  total_not_in?: Int[] | Int;
-  total_lt?: Int;
-  total_lte?: Int;
-  total_gt?: Int;
-  total_gte?: Int;
-  charge?: String;
-  charge_not?: String;
-  charge_in?: String[] | String;
-  charge_not_in?: String[] | String;
-  charge_lt?: String;
-  charge_lte?: String;
-  charge_gt?: String;
-  charge_gte?: String;
-  charge_contains?: String;
-  charge_not_contains?: String;
-  charge_starts_with?: String;
-  charge_not_starts_with?: String;
-  charge_ends_with?: String;
-  charge_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: OrderWhereInput[] | OrderWhereInput;
-  OR?: OrderWhereInput[] | OrderWhereInput;
-  NOT?: OrderWhereInput[] | OrderWhereInput;
-}
-
-export interface OrderItemUpdateManyInput {
-  create?: OrderItemCreateInput[] | OrderItemCreateInput;
-  update?:
-    | OrderItemUpdateWithWhereUniqueNestedInput[]
-    | OrderItemUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | OrderItemUpsertWithWhereUniqueNestedInput[]
-    | OrderItemUpsertWithWhereUniqueNestedInput;
-  delete?: OrderItemWhereUniqueInput[] | OrderItemWhereUniqueInput;
-  connect?: OrderItemWhereUniqueInput[] | OrderItemWhereUniqueInput;
-  disconnect?: OrderItemWhereUniqueInput[] | OrderItemWhereUniqueInput;
-  deleteMany?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
-  updateMany?:
-    | OrderItemUpdateManyWithWhereNestedInput[]
-    | OrderItemUpdateManyWithWhereNestedInput;
-}
-
-export interface UserCreateWithoutOrdersInput {
-  name: String;
-  email: String;
-  password: String;
-  resetToken?: String;
-  resetTokenExpiry?: Float;
-  permissions?: UserCreatepermissionsInput;
-  phone?: String;
-  billingAddress?: AddressCreateOneInput;
-  shippingAddress?: AddressCreateOneInput;
-  paymentId?: String;
-  avatar?: String;
-  cart?: CartItemCreateManyWithoutUserInput;
-}
-
-export interface OrderItemUpdateWithWhereUniqueNestedInput {
-  where: OrderItemWhereUniqueInput;
-  data: OrderItemUpdateDataInput;
-}
-
-export interface OrderUpdateManyWithWhereNestedInput {
-  where: OrderScalarWhereInput;
-  data: OrderUpdateManyDataInput;
-}
-
-export interface OrderItemScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  shortDescription?: String;
-  shortDescription_not?: String;
-  shortDescription_in?: String[] | String;
-  shortDescription_not_in?: String[] | String;
-  shortDescription_lt?: String;
-  shortDescription_lte?: String;
-  shortDescription_gt?: String;
-  shortDescription_gte?: String;
-  shortDescription_contains?: String;
-  shortDescription_not_contains?: String;
-  shortDescription_starts_with?: String;
-  shortDescription_not_starts_with?: String;
-  shortDescription_ends_with?: String;
-  shortDescription_not_ends_with?: String;
-  longDescription?: String;
-  longDescription_not?: String;
-  longDescription_in?: String[] | String;
-  longDescription_not_in?: String[] | String;
-  longDescription_lt?: String;
-  longDescription_lte?: String;
-  longDescription_gt?: String;
-  longDescription_gte?: String;
-  longDescription_contains?: String;
-  longDescription_not_contains?: String;
-  longDescription_starts_with?: String;
-  longDescription_not_starts_with?: String;
-  longDescription_ends_with?: String;
-  longDescription_not_ends_with?: String;
-  totalPrice?: Int;
-  totalPrice_not?: Int;
-  totalPrice_in?: Int[] | Int;
-  totalPrice_not_in?: Int[] | Int;
-  totalPrice_lt?: Int;
-  totalPrice_lte?: Int;
-  totalPrice_gt?: Int;
-  totalPrice_gte?: Int;
-  mealPrice?: Int;
-  mealPrice_not?: Int;
-  mealPrice_in?: Int[] | Int;
-  mealPrice_not_in?: Int[] | Int;
-  mealPrice_lt?: Int;
-  mealPrice_lte?: Int;
-  mealPrice_gt?: Int;
-  mealPrice_gte?: Int;
-  thumbnailImage?: String;
-  thumbnailImage_not?: String;
-  thumbnailImage_in?: String[] | String;
-  thumbnailImage_not_in?: String[] | String;
-  thumbnailImage_lt?: String;
-  thumbnailImage_lte?: String;
-  thumbnailImage_gt?: String;
-  thumbnailImage_gte?: String;
-  thumbnailImage_contains?: String;
-  thumbnailImage_not_contains?: String;
-  thumbnailImage_starts_with?: String;
-  thumbnailImage_not_starts_with?: String;
-  thumbnailImage_ends_with?: String;
-  thumbnailImage_not_ends_with?: String;
-  largeImage?: String;
-  largeImage_not?: String;
-  largeImage_in?: String[] | String;
-  largeImage_not_in?: String[] | String;
-  largeImage_lt?: String;
-  largeImage_lte?: String;
-  largeImage_gt?: String;
-  largeImage_gte?: String;
-  largeImage_contains?: String;
-  largeImage_not_contains?: String;
-  largeImage_starts_with?: String;
-  largeImage_not_starts_with?: String;
-  largeImage_ends_with?: String;
-  largeImage_not_ends_with?: String;
-  quantity?: Int;
-  quantity_not?: Int;
-  quantity_in?: Int[] | Int;
-  quantity_not_in?: Int[] | Int;
-  quantity_lt?: Int;
-  quantity_lte?: Int;
-  quantity_gt?: Int;
-  quantity_gte?: Int;
-  AND?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
-  OR?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
-  NOT?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
-}
-
 export interface CartItemUpdateManyWithoutUserInput {
   create?: CartItemCreateWithoutUserInput[] | CartItemCreateWithoutUserInput;
   delete?: CartItemWhereUniqueInput[] | CartItemWhereUniqueInput;
@@ -1814,7 +1954,7 @@ export interface UserUpdateDataInput {
   permissions?: UserUpdatepermissionsInput;
   phone?: String;
   billingAddress?: AddressUpdateOneInput;
-  shippingAddress?: AddressUpdateOneInput;
+  shippingAddress?: AddressUpdateManyInput;
   paymentId?: String;
   avatar?: String;
   cart?: CartItemUpdateManyWithoutUserInput;
@@ -1842,23 +1982,11 @@ export interface OrderItemUpdateDataInput {
   user?: UserUpdateOneInput;
 }
 
-export interface AddressUpdateOneRequiredInput {
-  create?: AddressCreateInput;
-  update?: AddressUpdateDataInput;
-  upsert?: AddressUpsertNestedInput;
-  connect?: AddressWhereUniqueInput;
-}
+export type OrderWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
-export interface CartItemUpdateManyMutationInput {
-  quantity?: Int;
-}
-
-export interface UserUpsertWithoutOrdersInput {
-  update: UserUpdateWithoutOrdersDataInput;
-  create: UserCreateWithoutOrdersInput;
-}
-
-export interface OrderItemUpdateInput {
+export interface SubscriptionUpdateInput {
   title?: String;
   shortDescription?: String;
   longDescription?: String;
@@ -1866,9 +1994,16 @@ export interface OrderItemUpdateInput {
   mealPrice?: Int;
   thumbnailImage?: String;
   largeImage?: String;
-  quantity?: Int;
-  user?: UserUpdateOneInput;
 }
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export type SubscriptionWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface NodeNode {
   id: ID_Output;
@@ -2279,7 +2414,17 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   permissions: () => Promise<Permission[]>;
   phone: () => Promise<String>;
   billingAddress: <T = AddressPromise>() => T;
-  shippingAddress: <T = AddressPromise>() => T;
+  shippingAddress: <T = FragmentableArray<Address>>(
+    args?: {
+      where?: AddressWhereInput;
+      orderBy?: AddressOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   paymentId: () => Promise<String>;
   avatar: () => Promise<String>;
   cart: <T = FragmentableArray<CartItem>>(
@@ -2320,7 +2465,17 @@ export interface UserSubscription
   permissions: () => Promise<AsyncIterator<Permission[]>>;
   phone: () => Promise<AsyncIterator<String>>;
   billingAddress: <T = AddressSubscription>() => T;
-  shippingAddress: <T = AddressSubscription>() => T;
+  shippingAddress: <T = Promise<AsyncIterator<AddressSubscription>>>(
+    args?: {
+      where?: AddressWhereInput;
+      orderBy?: AddressOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   paymentId: () => Promise<AsyncIterator<String>>;
   avatar: () => Promise<AsyncIterator<String>>;
   cart: <T = Promise<AsyncIterator<CartItemSubscription>>>(

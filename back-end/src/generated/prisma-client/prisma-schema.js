@@ -24,6 +24,11 @@ input AddressCreateInput {
   isBillingAddress: Boolean!
 }
 
+input AddressCreateManyInput {
+  create: [AddressCreateInput!]
+  connect: [AddressWhereUniqueInput!]
+}
+
 input AddressCreateOneInput {
   create: AddressCreateInput
   connect: AddressWhereUniqueInput
@@ -55,6 +60,92 @@ enum AddressOrderByInput {
   updatedAt_DESC
 }
 
+input AddressScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  street1: String
+  street1_not: String
+  street1_in: [String!]
+  street1_not_in: [String!]
+  street1_lt: String
+  street1_lte: String
+  street1_gt: String
+  street1_gte: String
+  street1_contains: String
+  street1_not_contains: String
+  street1_starts_with: String
+  street1_not_starts_with: String
+  street1_ends_with: String
+  street1_not_ends_with: String
+  street2: String
+  street2_not: String
+  street2_in: [String!]
+  street2_not_in: [String!]
+  street2_lt: String
+  street2_lte: String
+  street2_gt: String
+  street2_gte: String
+  street2_contains: String
+  street2_not_contains: String
+  street2_starts_with: String
+  street2_not_starts_with: String
+  street2_ends_with: String
+  street2_not_ends_with: String
+  city: String
+  city_not: String
+  city_in: [String!]
+  city_not_in: [String!]
+  city_lt: String
+  city_lte: String
+  city_gt: String
+  city_gte: String
+  city_contains: String
+  city_not_contains: String
+  city_starts_with: String
+  city_not_starts_with: String
+  city_ends_with: String
+  city_not_ends_with: String
+  postcode: Int
+  postcode_not: Int
+  postcode_in: [Int!]
+  postcode_not_in: [Int!]
+  postcode_lt: Int
+  postcode_lte: Int
+  postcode_gt: Int
+  postcode_gte: Int
+  country: String
+  country_not: String
+  country_in: [String!]
+  country_not_in: [String!]
+  country_lt: String
+  country_lte: String
+  country_gt: String
+  country_gte: String
+  country_contains: String
+  country_not_contains: String
+  country_starts_with: String
+  country_not_starts_with: String
+  country_ends_with: String
+  country_not_ends_with: String
+  isBillingAddress: Boolean
+  isBillingAddress_not: Boolean
+  AND: [AddressScalarWhereInput!]
+  OR: [AddressScalarWhereInput!]
+  NOT: [AddressScalarWhereInput!]
+}
+
 input AddressUpdateDataInput {
   street1: String
   street2: String
@@ -73,6 +164,26 @@ input AddressUpdateInput {
   isBillingAddress: Boolean
 }
 
+input AddressUpdateManyDataInput {
+  street1: String
+  street2: String
+  city: String
+  postcode: Int
+  country: String
+  isBillingAddress: Boolean
+}
+
+input AddressUpdateManyInput {
+  create: [AddressCreateInput!]
+  update: [AddressUpdateWithWhereUniqueNestedInput!]
+  upsert: [AddressUpsertWithWhereUniqueNestedInput!]
+  delete: [AddressWhereUniqueInput!]
+  connect: [AddressWhereUniqueInput!]
+  disconnect: [AddressWhereUniqueInput!]
+  deleteMany: [AddressScalarWhereInput!]
+  updateMany: [AddressUpdateManyWithWhereNestedInput!]
+}
+
 input AddressUpdateManyMutationInput {
   street1: String
   street2: String
@@ -80,6 +191,11 @@ input AddressUpdateManyMutationInput {
   postcode: Int
   country: String
   isBillingAddress: Boolean
+}
+
+input AddressUpdateManyWithWhereNestedInput {
+  where: AddressScalarWhereInput!
+  data: AddressUpdateManyDataInput!
 }
 
 input AddressUpdateOneInput {
@@ -98,7 +214,18 @@ input AddressUpdateOneRequiredInput {
   connect: AddressWhereUniqueInput
 }
 
+input AddressUpdateWithWhereUniqueNestedInput {
+  where: AddressWhereUniqueInput!
+  data: AddressUpdateDataInput!
+}
+
 input AddressUpsertNestedInput {
+  update: AddressUpdateDataInput!
+  create: AddressCreateInput!
+}
+
+input AddressUpsertWithWhereUniqueNestedInput {
+  where: AddressWhereUniqueInput!
   update: AddressUpdateDataInput!
   create: AddressCreateInput!
 }
@@ -1406,7 +1533,7 @@ type User {
   permissions: [Permission!]!
   phone: String
   billingAddress: Address
-  shippingAddress: Address
+  shippingAddress(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address!]
   paymentId: String
   avatar: String
   cart(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartItem!]
@@ -1430,7 +1557,7 @@ input UserCreateInput {
   permissions: UserCreatepermissionsInput
   phone: String
   billingAddress: AddressCreateOneInput
-  shippingAddress: AddressCreateOneInput
+  shippingAddress: AddressCreateManyInput
   paymentId: String
   avatar: String
   cart: CartItemCreateManyWithoutUserInput
@@ -1465,7 +1592,7 @@ input UserCreateWithoutCartInput {
   permissions: UserCreatepermissionsInput
   phone: String
   billingAddress: AddressCreateOneInput
-  shippingAddress: AddressCreateOneInput
+  shippingAddress: AddressCreateManyInput
   paymentId: String
   avatar: String
   orders: OrderCreateManyWithoutUserInput
@@ -1480,7 +1607,7 @@ input UserCreateWithoutOrdersInput {
   permissions: UserCreatepermissionsInput
   phone: String
   billingAddress: AddressCreateOneInput
-  shippingAddress: AddressCreateOneInput
+  shippingAddress: AddressCreateManyInput
   paymentId: String
   avatar: String
   cart: CartItemCreateManyWithoutUserInput
@@ -1525,7 +1652,7 @@ input UserUpdateDataInput {
   permissions: UserUpdatepermissionsInput
   phone: String
   billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateOneInput
+  shippingAddress: AddressUpdateManyInput
   paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
@@ -1541,7 +1668,7 @@ input UserUpdateInput {
   permissions: UserUpdatepermissionsInput
   phone: String
   billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateOneInput
+  shippingAddress: AddressUpdateManyInput
   paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
@@ -1596,7 +1723,7 @@ input UserUpdateWithoutCartDataInput {
   permissions: UserUpdatepermissionsInput
   phone: String
   billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateOneInput
+  shippingAddress: AddressUpdateManyInput
   paymentId: String
   avatar: String
   orders: OrderUpdateManyWithoutUserInput
@@ -1611,7 +1738,7 @@ input UserUpdateWithoutOrdersDataInput {
   permissions: UserUpdatepermissionsInput
   phone: String
   billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateOneInput
+  shippingAddress: AddressUpdateManyInput
   paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
@@ -1726,7 +1853,9 @@ input UserWhereInput {
   phone_ends_with: String
   phone_not_ends_with: String
   billingAddress: AddressWhereInput
-  shippingAddress: AddressWhereInput
+  shippingAddress_every: AddressWhereInput
+  shippingAddress_some: AddressWhereInput
+  shippingAddress_none: AddressWhereInput
   paymentId: String
   paymentId_not: String
   paymentId_in: [String!]
