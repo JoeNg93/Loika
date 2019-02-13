@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import SubscriptionSummary from '../../../../components/SubscriptionSummary';
+import CancelConfirmModal from '../../../../components/CancelConfirmModal';
 import AddressSummary from '../../../../components/AddressSummary';
 import TotalComponent from '../../../../components/TotalComponent';
 import commonStyles from '../../../../constants/commonStyles';
@@ -80,6 +81,7 @@ export default class SubscriptionManagementScreen extends React.Component {
       },
       total: 388,
     },
+    cancelDialogVisible: false,
   };
 
   getOrderNextDeliveryDate = order => {
@@ -104,6 +106,14 @@ export default class SubscriptionManagementScreen extends React.Component {
   onPressCancelAllSubscriptions = () => {};
 
   onPressCancelSingleSubscription = () => {};
+
+  onPressOpenCancelDialogModal = () => {
+    this.setState({ cancelDialogVisible: true });
+  };
+
+  onPressCloseCancelDialogModal = () => {
+    this.setState({ cancelDialogVisible: false });
+  };
 
   onPressSubscriptionDetails = () => {
     this.props.navigation.navigate('SubscriptionDetail');
@@ -132,6 +142,12 @@ export default class SubscriptionManagementScreen extends React.Component {
           hasRemoveButton={subscription.isActive}
           onPressRemoveSubscription={this.onPressCancelSingleSubscription}
           containerWidth={width - horizontalPadding * 2 - offset}
+          modalTitle={'Hold on!'}
+          modalTextContent={`Are you sure that you want to cancel ${
+            subscription.title
+          } Box? Your subscription will end on ${this.getOrderEndSubscriptionDate(
+            this.state.fetchedOrder.orderDate
+          )} and you will lose your favourite box !`}
         />
       </TouchableOpacity>
     ));
@@ -215,9 +231,19 @@ export default class SubscriptionManagementScreen extends React.Component {
                       { paddingTop: 0 },
                     ]}
                     buttonStyle={{ alignItems: 'center', padding: 0 }}
-                    onPress={this.onPressCancelAllSubscriptions}
+                    onPress={this.onPressOpenCancelDialogModal}
                   />
                 )}
+                <CancelConfirmModal
+                  visible={this.state.cancelDialogVisible}
+                  onPressCancelSubscription={
+                    this.props.onPressRemoveSubscription
+                  }
+                  onPressCloseModal={this.onPressCloseCancelDialogModal}
+                  modalTitle={'Hold on!'}
+                  modalTextContent={`Are you sure that you want to cancel all subscriptions? Your subscriptions will end on ${
+                    this.getOrderEndSubscriptionDate(this.state.fetchedOrder.orderDate)} and you will lose your favourite boxes!`}
+                />
               </View>
               <View>
                 {this.state.fetchedOrder.subscriptions &&
