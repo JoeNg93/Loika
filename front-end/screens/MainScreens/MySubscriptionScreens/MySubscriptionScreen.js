@@ -15,12 +15,12 @@ import {
   getNextDeliveryDate,
   getNextPaymentDate,
   parseDeliveryTime,
+  formatDate,
 } from '../../../utils/dateTime';
 import Colors from '../../../constants/Colors';
 import Layout from '../../../constants/Layout';
 
-const width = Layout.window.width,
-  locale = 'fi-FI';
+const width = Layout.window.width;
 
 export default class MySubscriptionScreen extends React.Component {
   static navigationOptions = {
@@ -86,12 +86,12 @@ export default class MySubscriptionScreen extends React.Component {
     ) {
       nextDeliveryDate = getNextDeliveryDate(order.deliveryDayOfWeek, 14);
     }
-    return nextDeliveryDate && nextDeliveryDate.toLocaleDateString(locale);
+    return formatDate(nextDeliveryDate);
   };
 
   getOrderEndSubscriptionDate = orderDate => {
     let nextPaymentDate = getNextPaymentDate(orderDate);
-    return nextPaymentDate ? nextPaymentDate.toLocaleDateString(locale) : '';
+    return formatDate(nextPaymentDate);
   };
 
   onPressAddSubscription = () => {

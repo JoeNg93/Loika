@@ -16,14 +16,14 @@ import {
   getNextDeliveryDate,
   getNextPaymentDate,
   parseDeliveryTime,
+  formatDate,
 } from '../../../../utils/dateTime';
 import Colors from '../../../../constants/Colors';
 import Layout from '../../../../constants/Layout';
 
 const width = Layout.window.width,
   horizontalPadding = 32,
-  offset = 10,
-  locale = 'fi-FI';
+  offset = 10;
 
 export default class SubscriptionManagementScreen extends React.Component {
   static navigationOptions = {
@@ -68,16 +68,16 @@ export default class SubscriptionManagementScreen extends React.Component {
           pricePerMeal: 3.4,
         },
       ],
-      deliveryDayOfWeek: 'Tuesday',
-      deliveryTime: '10:00-12:00',
-      orderDate: '2019/02/02',
+      name: 'Joe Nguyen',
+      phoneNumber: '+358469512914',
       shippingAddress: {
-        name: 'Joe Nguyen',
         address: 'Ylioppilaantie 10 B 25',
         postCode: 90130,
         city: 'Oulu',
-        phoneNumber: '+358469512914',
       },
+      deliveryDayOfWeek: 'Tuesday',
+      deliveryTime: '10:00-12:00',
+      orderDate: '2019/02/02',
       total: 388,
     },
   };
@@ -93,12 +93,12 @@ export default class SubscriptionManagementScreen extends React.Component {
     ) {
       nextDeliveryDate = getNextDeliveryDate(order.deliveryDayOfWeek, 14);
     }
-    return nextDeliveryDate && nextDeliveryDate.toLocaleDateString(locale);
+    return formatDate(nextDeliveryDate);
   };
 
   getOrderEndSubscriptionDate = orderDate => {
     let nextPaymentDate = getNextPaymentDate(orderDate);
-    return nextPaymentDate ? nextPaymentDate.toLocaleDateString(locale) : '';
+    return formatDate(nextPaymentDate);
   };
 
   onPressCancelAllSubscriptions = () => {};
@@ -137,11 +137,11 @@ export default class SubscriptionManagementScreen extends React.Component {
     ));
   };
 
-  renderAddressSummary = shippingAddress => {
-    const { address, postCode, city, name, phoneNumber } = shippingAddress;
+  renderAddressSummary = () => {
+    const { name, phoneNumber, shippingAddress } = this.state.fetchedOrder;
     return (
       <AddressSummary
-        shippingAddress={{ address, postCode, city }}
+        shippingAddress={shippingAddress}
         name={name}
         phoneNumber={phoneNumber}
         hasSelectedButton={false}
@@ -264,9 +264,7 @@ export default class SubscriptionManagementScreen extends React.Component {
               </View>
               <View style={styles.summaryBox}>
                 {this.state.fetchedOrder.shippingAddress &&
-                  this.renderAddressSummary(
-                    this.state.fetchedOrder.shippingAddress
-                  )}
+                  this.renderAddressSummary()}
               </View>
             </View>
             {/* Delivery Schedule Summary Section */}

@@ -10,15 +10,16 @@ const ICON_SIZE = 14;
 
 export default function ShippedToSummary({
   name,
-  address,
+  shippingAddress,
   phoneNumber,
   deliveryDayOfWeek,
   deliveryTime,
   hasChangeButton,
   onPressChangeButton,
+  containerWidth,
 }) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { width: containerWidth }]}>
       <Text
         style={[
           { marginBottom: 9 },
@@ -31,7 +32,9 @@ export default function ShippedToSummary({
       <Divider style={styles.thinLine} />
       <View style={{ flexDirection: 'row', marginTop: 17, marginBottom: 9 }}>
         <Icon name="place" color={Colors.mediumCarmine} size={ICON_SIZE} />
-        <Text style={styles.personalInfoText}>{address}</Text>
+        <Text style={styles.personalInfoText}>
+          {Object.values(shippingAddress).join(', ')}
+        </Text>
       </View>
       <Divider style={styles.thinLine} />
       <View style={{ flexDirection: 'row', marginTop: 17, marginBottom: 9 }}>
@@ -43,11 +46,13 @@ export default function ShippedToSummary({
         <Text style={styles.personalInfoText}>{phoneNumber}</Text>
       </View>
       <Divider style={styles.thinLine} />
-      <View style={{ flexDirection: 'row', marginTop: 17 }}>
-        <Icon name="date-range" color={Colors.mediumCarmine} size={ICON_SIZE} />
-        <Text style={styles.personalInfoText}>
-          {deliveryDayOfWeek}, around {deliveryTime}
-        </Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 17 }}>
+        <View style={{ flexDirection: 'row'}}>
+          <Icon name="date-range" color={Colors.mediumCarmine} size={ICON_SIZE} />
+          <Text style={styles.personalInfoText}>
+            {deliveryDayOfWeek}, around {deliveryTime}
+          </Text>
+        </View>
         {hasChangeButton && (
           <TouchableOpacity onPress={onPressChangeButton}>
             <Text style={styles.changeText}>Change ></Text>
@@ -60,22 +65,28 @@ export default function ShippedToSummary({
 
 ShippedToSummary.propTypes = {
   name: PropTypes.string,
-  address: PropTypes.string,
+  shippingAddress: PropTypes.shape({
+    address: PropTypes.string,
+    postCode: PropTypes.number,
+    city: PropTypes.string,
+  }),
   phoneNumber: PropTypes.string,
   deliveryDayOfWeek: PropTypes.string,
   deliveryTime: PropTypes.string,
   hasChangeButton: PropTypes.bool,
   onPressChangeButton: PropTypes.func,
+  containerWidth: PropTypes.number,
 };
 
 ShippedToSummary.defaultProps = {
   name: '',
-  address: '',
+  shippingAddress: {},
   phoneNumber: '',
   deliveryDayOfWeek: '',
   deliveryTime: '',
   hasChangeButton: false,
   onPressChangeButton: () => {},
+  containerWidth: 347,
 };
 
 const styles = StyleSheet.create({
@@ -83,24 +94,23 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     backgroundColor: Colors.white,
 
-    paddingVertical: 18,
-    paddingHorizontal: 15,
+    paddingVertical: 28,
+    paddingHorizontal: 22,
 
     shadowColor: Colors.darkGrey,
-    shadowRadius: 6,
-    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 4 },
   },
   thinLine: {
     borderColor: '#E1E1E1',
-    height: 0.5,
+    borderWidth: 0.1,
   },
   personalInfoText: {
     marginLeft: 8,
     ...commonStyles.fontRalewayMedium,
   },
   changeText: {
-    marginLeft: 63,
     ...commonStyles.fontRalewaySemiBold,
     ...commonStyles.textMacaroniCheese,
   },

@@ -9,7 +9,8 @@ const DAY_OF_WEEKS = [
   ],
   RANGES = [7, 14, 21, 28],
   DELIVERY_TIME_SEPARATOR = '-',
-  DELIVERY_TIME_SUFFIX = ':00';
+  DELIVERY_TIME_SUFFIX = ':00',
+  locale = 'fi-FI';
 
 const getNextDayOfWeek = (date, dayOfWeekIndex, range) => {
   let resultDate = date;
@@ -19,8 +20,7 @@ const getNextDayOfWeek = (date, dayOfWeekIndex, range) => {
   return resultDate;
 };
 
-export const
-  getNextDeliveryDate = (dayOfWeek, range = RANGES[0]) => {
+export const getNextDeliveryDate = (dayOfWeek, range = RANGES[0]) => {
     let dayOfWeekIndex = dayOfWeek ? DAY_OF_WEEKS.indexOf(dayOfWeek) : -1;
     if (dayOfWeekIndex !== -1) {
       return getNextDayOfWeek(new Date(), dayOfWeekIndex, range);
@@ -68,5 +68,13 @@ export const
         ''
       );
       return +trimDeliveryTime;
+    }
+  },
+  formatDate = date => {
+    if (date instanceof Date) {
+      if (date.getDate() < 10) {
+        return '0' + date.toLocaleDateString(locale);
+      }
+      return date.toLocaleDateString(locale);
     }
   };

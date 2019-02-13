@@ -57,13 +57,15 @@ export default class OrderSummaryScreen extends React.Component {
         pricePerMeal: 3.4,
       },
     ],
+    name: 'Joe Nguyen',
+    phoneNumber: '+358469512914',
     shippingAddress: {
-      name: 'Joe Nguyen',
-      address: 'Ylioppilaantie 10 B 25, 90130, Oulu',
-      phoneNumber: '+358469512914',
-      deliveryDayOfWeek: 'Monday',
-      deliveryTime: '10:00 - 12:00',
+      address: 'Ylioppilaantie 10 B 25',
+      postCode: 90130,
+      city: 'Oulu',
     },
+    deliveryDayOfWeek: 'Monday',
+    deliveryTime: '10:00-12:00',
   };
 
   renderOrderedSubscriptionsList() {
@@ -84,16 +86,16 @@ export default class OrderSummaryScreen extends React.Component {
   renderShippedToAddress() {
     const {
       name,
-      address,
+      shippingAddress,
       phoneNumber,
       deliveryTime,
       deliveryDayOfWeek,
-    } = this.state.shippingAddress;
+    } = this.state;
     return (
       <View style={styles.shippedToContainer}>
         <ShippedToSummary
           name={name}
-          address={address}
+          shippingAddress={shippingAddress}
           phoneNumber={phoneNumber}
           deliveryDayOfWeek={deliveryDayOfWeek}
           deliveryTime={deliveryTime}
