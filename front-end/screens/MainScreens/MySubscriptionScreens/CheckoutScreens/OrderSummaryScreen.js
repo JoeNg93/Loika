@@ -78,6 +78,10 @@ export default class OrderSummaryScreen extends React.Component {
           pricePerMeal={subscription.pricePerMeal}
           hasRemoveButton
           onPressRemoveSubscription={() => console.log('Remove subscription')}
+          modalTitle={'Remove subscription?'}
+          modalTextContent={
+            'Are you sure that you want to remove this subscription from cart?'
+          }
         />
       </View>
     ));
