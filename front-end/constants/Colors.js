@@ -14,9 +14,11 @@ export default {
 
   white: '#fff',
   black: '#282828',
+  mediumBlack: '#595959',
   lightGrey: '#C4C4C4',
   darkGrey: '#979797',
   mediumCarmine: '#AA3C3B',
   lightCardboard: '#E8DFCA',
+  mainBackground: '#FCFAF6',
   macaroniCheese: '#FCB79A',
 };

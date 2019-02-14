@@ -7,16 +7,24 @@ import {
 
 import TabBarIcon from '../../components/TabBarIcon';
 
-import MySubscriptionScreenContainer from './MySubscriptionScreens/MySubscriptionScreenContainer';
+import MySubscriptionScreen from './MySubscriptionScreens/MySubscriptionScreen';
 import SubscriptionSelectionScreen from './MySubscriptionScreens/AddSubscriptionScreens/SubscriptionSelectionScreen';
 
 import OrderHistoryScreen from './OrderHistoryScreens/OrderHistoryScreen';
 import UserProfileScreen from './UserProfileScreens/UserProfileScreen';
+import SubscriptionManagementScreen from './MySubscriptionScreens/SubscriptionManagementScreens/SubscriptionManagementScreen';
+import ChangeDeliveryScheduleScreen from './MySubscriptionScreens/SubscriptionManagementScreens/ChangeDeliveryScheduleScreen';
+import SubscriptionDetailScreen from './MySubscriptionScreens/AddSubscriptionScreens/SubscriptionDetailScreen';
+import ChangeShippingAddressScreen from './MySubscriptionScreens/SubscriptionManagementScreens/ChangeShippingAddressScreen';
 
 const MySubscriptionStack = createStackNavigator(
   {
-    Home: MySubscriptionScreenContainer,
+    Home: MySubscriptionScreen,
     AddSubscription: SubscriptionSelectionScreen,
+    SubscriptionManagement: SubscriptionManagementScreen,
+    ChangeDeliverySchedule: ChangeDeliveryScheduleScreen,
+    ChangeShippingAddress: ChangeShippingAddressScreen,
+    SubscriptionDetail: SubscriptionDetailScreen,
   },
   {
     initialRouteName: 'Home',
@@ -24,7 +32,7 @@ const MySubscriptionStack = createStackNavigator(
 );
 
 MySubscriptionStack.navigationOptions = ({ navigation }) => {
-  const tabBarLabel = 'My Subscriptions';
+  const tabBarLabel = 'Subscriptions';
   const tabBarIcon = ({ focused }) => (
     <TabBarIcon
       focused={focused}
