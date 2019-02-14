@@ -1,15 +1,14 @@
 import React from 'react';
 import {
   View,
-  Button,
   StyleSheet,
   Image,
-  TextInput,
   ImageBackground,
   TouchableOpacity,
   Text,
 } from 'react-native';
-import colors from '../../constants/Colors';
+import { TextField } from 'react-native-material-textfield';
+import Colors from '../../constants/Colors';
 import commonStyles from '../../constants/commonStyles';
 
 export default function LoginScreen({ onPressLogin, onPressSignup }) {
@@ -22,50 +21,55 @@ export default function LoginScreen({ onPressLogin, onPressSignup }) {
         <View style={styles.card}>
           <Image
             source={require('../../assets/images/Loika.png')}
-            style={{ width: 140, height: 100 }}
+            style={{ width: 140, height: 100, marginTop: 30 }}
           />
-          <View>
-            <TextInput
-              containerStyle={[styles.loginField]}
-              inputStyle={[commonStyles.fontMontserratLight, styles.loginText]}
-              placeholder={'email address'}
-              // value={email}
-              placeholderTextColor={[colors.lightGrey]}
-              // onChangeText={onChangeEmail}
-              autoCapitalize="none"
-              autoCorrect={false}
+          <View style={styles.credContainer}>
+            <TextField
+              label={'Email'}
+              textColor={Colors.black}
+              fontSize={12}
+              labelFontSize={10}
+              lineWidth={0.5}
+              activeLineWidth={1}
+              tintColor={Colors.mediumCarmine}
+              baseColor={Colors.mediumBlack}
+              errorColor={Colors.mediumCarmine}
+              inputContainerStyle={styles.inputContainer}
+              labelTextStyle={styles.inputLabel}
             />
-            <TextInput
-              containerStyle={[styles.loginField]}
-              inputStyle={[commonStyles.fontMontserratLight, styles.loginText]}
-              placeholder={'password'}
-              // value={password}
-              secureTextEntry={true}
-              placeholderTextColor={[colors.lightGrey]}
-              // onChangeText={onChangePassword}
-              autoCapitalize="none"
-              autoCorrect={false}
+            <TextField
+              label={'Password'}
+              textColor={Colors.black}
+              fontSize={12}
+              labelFontSize={10}
+              lineWidth={0.5}
+              activeLineWidth={1}
+              tintColor={Colors.mediumCarmine}
+              baseColor={Colors.mediumBlack}
+              errorColor={Colors.mediumCarmine}
+              inputContainerStyle={styles.inputContainer}
+              labelTextStyle={styles.inputLabel}
             />
           </View>
 
           <View style={{ display: 'flex', alignItems: 'center' }}>
-            <Text style={{ fontSize: 14, color: colors.darkGrey }}>
+            <Text style={{ fontSize: 14, color: Colors.darkGrey }}>
               Login using social media:
             </Text>
             <View style={styles.socialButtonContainer}>
-              <TouchableOpacity>
+              <TouchableOpacity style={{ width: 34, height: 34 }}>
                 <Image
                   style={styles.socialButton}
                   source={require('../../assets/images/facebook.png')}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity style={{ width: 34, height: 34 }}>
                 <Image
                   style={styles.socialButton}
                   source={require('../../assets/images/google.png')}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity style={{ width: 34, height: 34 }}>
                 <Image
                   style={styles.socialButton}
                   source={require('../../assets/images/twitter.png')}
@@ -74,12 +78,13 @@ export default function LoginScreen({ onPressLogin, onPressSignup }) {
             </View>
           </View>
         </View>
+        <TouchableOpacity onPress={onPressLogin} style={styles.loginButton}>
+          <Text style={{ color: '#ffffff', fontSize: 20, fontWeight: 'bold' }}>
+            Login
+          </Text>
+        </TouchableOpacity>
       </ImageBackground>
-      <TouchableOpacity onPress={onPressLogin} style={styles.loginButton}>
-        <Text style={{ color: '#ffffff', fontSize: 20, fontWeight: 'bold' }}>
-          Login
-        </Text>
-      </TouchableOpacity>
+
       {/* <Button onPress={onPressSignup} title="Signup" /> */}
     </View>
   );
@@ -87,17 +92,17 @@ export default function LoginScreen({ onPressLogin, onPressSignup }) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    height: '100%',
-    width: '100%',
-    backgroundColor: colors.lightCardboard,
+    // height: 720,
+    // width: '100%',
+    backgroundColor: Colors.lightCardboard,
   },
   backgroundImage: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
     width: '100%',
     height: '100%',
     position: 'absolute',
@@ -107,16 +112,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     width: 299,
-    height: 365,
+    height: 356,
     shadowOffset: { width: 0, height: 4 },
     shadowColor: 'rgb(135, 135, 135)',
     shadowOpacity: 0.25,
     borderRadius: 16,
     backgroundColor: '#FCFAF6',
+    marginTop: 155,
   },
   socialButton: {
-    width: 28,
-    height: 32,
+    width: 34,
+    height: 34,
   },
   socialButtonContainer: {
     display: 'flex',
@@ -125,6 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: 134,
     marginTop: 12,
+    marginBottom: 25,
   },
   loginField: {
     width: 242,
@@ -137,7 +144,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 46,
-    backgroundColor: colors.mediumCarmine,
+    marginTop: 105,
+    height: 56,
+    backgroundColor: Colors.mediumCarmine,
+  },
+  inputContainer: {
+    marginTop: -8,
+    paddingTop: 36,
+    height: 58,
+  },
+  inputLabel: {
+    ...commonStyles.fontRalewayMedium,
+    ...commonStyles.black,
+  },
+  credContainer: {
+    width: 242,
+    height: 70,
+    marginBottom: 85,
   },
 });
