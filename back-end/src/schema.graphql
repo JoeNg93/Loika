@@ -7,6 +7,7 @@ type Mutation {
 
   # address with CRUD
   createAddress(
+    isBillingAddress: Boolean!
     street1: String!
     street2: String
     city: String!
@@ -52,6 +53,9 @@ type Mutation {
   # cart
   addToCart(id: ID!): CartItem
   removeFromCart(id: ID!): CartItem
+
+  # order
+  createOrder(token: String!, deliveryTime: String!, deliveryDayOfWeek: String!): Order!
 }
 
 type Query {

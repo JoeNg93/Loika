@@ -6,6 +6,7 @@ module.exports = {
   city: String!
   postcode: Int!
   country: String!
+  isBillingAddress: Boolean!
 }
 
 type AddressConnection {
@@ -20,6 +21,7 @@ input AddressCreateInput {
   city: String!
   postcode: Int!
   country: String!
+  isBillingAddress: Boolean!
 }
 
 input AddressCreateManyInput {
@@ -50,6 +52,8 @@ enum AddressOrderByInput {
   postcode_DESC
   country_ASC
   country_DESC
+  isBillingAddress_ASC
+  isBillingAddress_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -135,6 +139,8 @@ input AddressScalarWhereInput {
   country_not_starts_with: String
   country_ends_with: String
   country_not_ends_with: String
+  isBillingAddress: Boolean
+  isBillingAddress_not: Boolean
   AND: [AddressScalarWhereInput!]
   OR: [AddressScalarWhereInput!]
   NOT: [AddressScalarWhereInput!]
@@ -146,6 +152,7 @@ input AddressUpdateDataInput {
   city: String
   postcode: Int
   country: String
+  isBillingAddress: Boolean
 }
 
 input AddressUpdateInput {
@@ -154,6 +161,7 @@ input AddressUpdateInput {
   city: String
   postcode: Int
   country: String
+  isBillingAddress: Boolean
 }
 
 input AddressUpdateManyDataInput {
@@ -162,6 +170,7 @@ input AddressUpdateManyDataInput {
   city: String
   postcode: Int
   country: String
+  isBillingAddress: Boolean
 }
 
 input AddressUpdateManyInput {
@@ -181,6 +190,7 @@ input AddressUpdateManyMutationInput {
   city: String
   postcode: Int
   country: String
+  isBillingAddress: Boolean
 }
 
 input AddressUpdateManyWithWhereNestedInput {
@@ -299,6 +309,8 @@ input AddressWhereInput {
   country_not_starts_with: String
   country_ends_with: String
   country_not_ends_with: String
+  isBillingAddress: Boolean
+  isBillingAddress_not: Boolean
   AND: [AddressWhereInput!]
   OR: [AddressWhereInput!]
   NOT: [AddressWhereInput!]
@@ -317,6 +329,10 @@ type AggregateCartItem {
 }
 
 type AggregateOrder {
+  count: Int!
+}
+
+type AggregateOrderItem {
   count: Int!
 }
 
@@ -508,6 +524,12 @@ type Mutation {
   upsertOrder(where: OrderWhereUniqueInput!, create: OrderCreateInput!, update: OrderUpdateInput!): Order!
   deleteOrder(where: OrderWhereUniqueInput!): Order
   deleteManyOrders(where: OrderWhereInput): BatchPayload!
+  createOrderItem(data: OrderItemCreateInput!): OrderItem!
+  updateOrderItem(data: OrderItemUpdateInput!, where: OrderItemWhereUniqueInput!): OrderItem
+  updateManyOrderItems(data: OrderItemUpdateManyMutationInput!, where: OrderItemWhereInput): BatchPayload!
+  upsertOrderItem(where: OrderItemWhereUniqueInput!, create: OrderItemCreateInput!, update: OrderItemUpdateInput!): OrderItem!
+  deleteOrderItem(where: OrderItemWhereUniqueInput!): OrderItem
+  deleteManyOrderItems(where: OrderItemWhereInput): BatchPayload!
   createSubscription(data: SubscriptionCreateInput!): Subscription!
   updateSubscription(data: SubscriptionUpdateInput!, where: SubscriptionWhereUniqueInput!): Subscription
   updateManySubscriptions(data: SubscriptionUpdateManyMutationInput!, where: SubscriptionWhereInput): BatchPayload!
@@ -529,12 +551,14 @@ interface Node {
 type Order {
   id: ID!
   user: User!
-  subscriptions(where: SubscriptionWhereInput, orderBy: SubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Subscription!]
+  items(where: OrderItemWhereInput, orderBy: OrderItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OrderItem!]
   billingAddress: Address!
   shippingAddress: Address!
   deliveryTime: String!
   deliveryDayOfWeek: String!
   paymentDate: DateTime!
+  total: Int!
+  charge: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -546,13 +570,31 @@ type OrderConnection {
 }
 
 input OrderCreateInput {
-  user: UserCreateOneInput!
-  subscriptions: SubscriptionCreateManyInput
+  user: UserCreateOneWithoutOrdersInput!
+  items: OrderItemCreateManyInput
   billingAddress: AddressCreateOneInput!
   shippingAddress: AddressCreateOneInput!
   deliveryTime: String!
   deliveryDayOfWeek: String!
   paymentDate: DateTime!
+  total: Int!
+  charge: String!
+}
+
+input OrderCreateManyWithoutUserInput {
+  create: [OrderCreateWithoutUserInput!]
+  connect: [OrderWhereUniqueInput!]
+}
+
+input OrderCreateWithoutUserInput {
+  items: OrderItemCreateManyInput
+  billingAddress: AddressCreateOneInput!
+  shippingAddress: AddressCreateOneInput!
+  deliveryTime: String!
+  deliveryDayOfWeek: String!
+  paymentDate: DateTime!
+  total: Int!
+  charge: String!
 }
 
 type OrderEdge {
@@ -560,151 +602,7 @@ type OrderEdge {
   cursor: String!
 }
 
-enum OrderOrderByInput {
-  id_ASC
-  id_DESC
-  deliveryTime_ASC
-  deliveryTime_DESC
-  deliveryDayOfWeek_ASC
-  deliveryDayOfWeek_DESC
-  paymentDate_ASC
-  paymentDate_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-input OrderUpdateInput {
-  user: UserUpdateOneRequiredInput
-  subscriptions: SubscriptionUpdateManyInput
-  billingAddress: AddressUpdateOneRequiredInput
-  shippingAddress: AddressUpdateOneRequiredInput
-  deliveryTime: String
-  deliveryDayOfWeek: String
-  paymentDate: DateTime
-}
-
-input OrderUpdateManyMutationInput {
-  deliveryTime: String
-  deliveryDayOfWeek: String
-  paymentDate: DateTime
-}
-
-input OrderWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  user: UserWhereInput
-  subscriptions_every: SubscriptionWhereInput
-  subscriptions_some: SubscriptionWhereInput
-  subscriptions_none: SubscriptionWhereInput
-  billingAddress: AddressWhereInput
-  shippingAddress: AddressWhereInput
-  deliveryTime: String
-  deliveryTime_not: String
-  deliveryTime_in: [String!]
-  deliveryTime_not_in: [String!]
-  deliveryTime_lt: String
-  deliveryTime_lte: String
-  deliveryTime_gt: String
-  deliveryTime_gte: String
-  deliveryTime_contains: String
-  deliveryTime_not_contains: String
-  deliveryTime_starts_with: String
-  deliveryTime_not_starts_with: String
-  deliveryTime_ends_with: String
-  deliveryTime_not_ends_with: String
-  deliveryDayOfWeek: String
-  deliveryDayOfWeek_not: String
-  deliveryDayOfWeek_in: [String!]
-  deliveryDayOfWeek_not_in: [String!]
-  deliveryDayOfWeek_lt: String
-  deliveryDayOfWeek_lte: String
-  deliveryDayOfWeek_gt: String
-  deliveryDayOfWeek_gte: String
-  deliveryDayOfWeek_contains: String
-  deliveryDayOfWeek_not_contains: String
-  deliveryDayOfWeek_starts_with: String
-  deliveryDayOfWeek_not_starts_with: String
-  deliveryDayOfWeek_ends_with: String
-  deliveryDayOfWeek_not_ends_with: String
-  paymentDate: DateTime
-  paymentDate_not: DateTime
-  paymentDate_in: [DateTime!]
-  paymentDate_not_in: [DateTime!]
-  paymentDate_lt: DateTime
-  paymentDate_lte: DateTime
-  paymentDate_gt: DateTime
-  paymentDate_gte: DateTime
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [OrderWhereInput!]
-  OR: [OrderWhereInput!]
-  NOT: [OrderWhereInput!]
-}
-
-input OrderWhereUniqueInput {
-  id: ID
-}
-
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
-}
-
-enum Permission {
-  ADMIN
-  USER
-}
-
-type Query {
-  address(where: AddressWhereUniqueInput!): Address
-  addresses(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address]!
-  addressesConnection(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AddressConnection!
-  cartItem(where: CartItemWhereUniqueInput!): CartItem
-  cartItems(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartItem]!
-  cartItemsConnection(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartItemConnection!
-  order(where: OrderWhereUniqueInput!): Order
-  orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order]!
-  ordersConnection(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrderConnection!
-  subscription(where: SubscriptionWhereUniqueInput!): Subscription
-  subscriptions(where: SubscriptionWhereInput, orderBy: SubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Subscription]!
-  subscriptionsConnection(where: SubscriptionWhereInput, orderBy: SubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SubscriptionConnection!
-  user(where: UserWhereUniqueInput!): User
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  node(id: ID!): Node
-}
-
-type Subscription {
+type OrderItem {
   id: ID!
   title: String!
   shortDescription: String!
@@ -713,17 +611,17 @@ type Subscription {
   mealPrice: Int!
   thumbnailImage: String
   largeImage: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  quantity: Int!
+  user: User
 }
 
-type SubscriptionConnection {
+type OrderItemConnection {
   pageInfo: PageInfo!
-  edges: [SubscriptionEdge]!
-  aggregate: AggregateSubscription!
+  edges: [OrderItemEdge]!
+  aggregate: AggregateOrderItem!
 }
 
-input SubscriptionCreateInput {
+input OrderItemCreateInput {
   title: String!
   shortDescription: String!
   longDescription: String!
@@ -731,24 +629,21 @@ input SubscriptionCreateInput {
   mealPrice: Int!
   thumbnailImage: String
   largeImage: String
+  quantity: Int
+  user: UserCreateOneInput
 }
 
-input SubscriptionCreateManyInput {
-  create: [SubscriptionCreateInput!]
-  connect: [SubscriptionWhereUniqueInput!]
+input OrderItemCreateManyInput {
+  create: [OrderItemCreateInput!]
+  connect: [OrderItemWhereUniqueInput!]
 }
 
-input SubscriptionCreateOneInput {
-  create: SubscriptionCreateInput
-  connect: SubscriptionWhereUniqueInput
-}
-
-type SubscriptionEdge {
-  node: Subscription!
+type OrderItemEdge {
+  node: OrderItem!
   cursor: String!
 }
 
-enum SubscriptionOrderByInput {
+enum OrderItemOrderByInput {
   id_ASC
   id_DESC
   title_ASC
@@ -765,13 +660,15 @@ enum SubscriptionOrderByInput {
   thumbnailImage_DESC
   largeImage_ASC
   largeImage_DESC
+  quantity_ASC
+  quantity_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
-input SubscriptionScalarWhereInput {
+input OrderItemScalarWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -872,6 +769,303 @@ input SubscriptionScalarWhereInput {
   largeImage_not_starts_with: String
   largeImage_ends_with: String
   largeImage_not_ends_with: String
+  quantity: Int
+  quantity_not: Int
+  quantity_in: [Int!]
+  quantity_not_in: [Int!]
+  quantity_lt: Int
+  quantity_lte: Int
+  quantity_gt: Int
+  quantity_gte: Int
+  AND: [OrderItemScalarWhereInput!]
+  OR: [OrderItemScalarWhereInput!]
+  NOT: [OrderItemScalarWhereInput!]
+}
+
+input OrderItemUpdateDataInput {
+  title: String
+  shortDescription: String
+  longDescription: String
+  totalPrice: Int
+  mealPrice: Int
+  thumbnailImage: String
+  largeImage: String
+  quantity: Int
+  user: UserUpdateOneInput
+}
+
+input OrderItemUpdateInput {
+  title: String
+  shortDescription: String
+  longDescription: String
+  totalPrice: Int
+  mealPrice: Int
+  thumbnailImage: String
+  largeImage: String
+  quantity: Int
+  user: UserUpdateOneInput
+}
+
+input OrderItemUpdateManyDataInput {
+  title: String
+  shortDescription: String
+  longDescription: String
+  totalPrice: Int
+  mealPrice: Int
+  thumbnailImage: String
+  largeImage: String
+  quantity: Int
+}
+
+input OrderItemUpdateManyInput {
+  create: [OrderItemCreateInput!]
+  update: [OrderItemUpdateWithWhereUniqueNestedInput!]
+  upsert: [OrderItemUpsertWithWhereUniqueNestedInput!]
+  delete: [OrderItemWhereUniqueInput!]
+  connect: [OrderItemWhereUniqueInput!]
+  disconnect: [OrderItemWhereUniqueInput!]
+  deleteMany: [OrderItemScalarWhereInput!]
+  updateMany: [OrderItemUpdateManyWithWhereNestedInput!]
+}
+
+input OrderItemUpdateManyMutationInput {
+  title: String
+  shortDescription: String
+  longDescription: String
+  totalPrice: Int
+  mealPrice: Int
+  thumbnailImage: String
+  largeImage: String
+  quantity: Int
+}
+
+input OrderItemUpdateManyWithWhereNestedInput {
+  where: OrderItemScalarWhereInput!
+  data: OrderItemUpdateManyDataInput!
+}
+
+input OrderItemUpdateWithWhereUniqueNestedInput {
+  where: OrderItemWhereUniqueInput!
+  data: OrderItemUpdateDataInput!
+}
+
+input OrderItemUpsertWithWhereUniqueNestedInput {
+  where: OrderItemWhereUniqueInput!
+  update: OrderItemUpdateDataInput!
+  create: OrderItemCreateInput!
+}
+
+input OrderItemWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  shortDescription: String
+  shortDescription_not: String
+  shortDescription_in: [String!]
+  shortDescription_not_in: [String!]
+  shortDescription_lt: String
+  shortDescription_lte: String
+  shortDescription_gt: String
+  shortDescription_gte: String
+  shortDescription_contains: String
+  shortDescription_not_contains: String
+  shortDescription_starts_with: String
+  shortDescription_not_starts_with: String
+  shortDescription_ends_with: String
+  shortDescription_not_ends_with: String
+  longDescription: String
+  longDescription_not: String
+  longDescription_in: [String!]
+  longDescription_not_in: [String!]
+  longDescription_lt: String
+  longDescription_lte: String
+  longDescription_gt: String
+  longDescription_gte: String
+  longDescription_contains: String
+  longDescription_not_contains: String
+  longDescription_starts_with: String
+  longDescription_not_starts_with: String
+  longDescription_ends_with: String
+  longDescription_not_ends_with: String
+  totalPrice: Int
+  totalPrice_not: Int
+  totalPrice_in: [Int!]
+  totalPrice_not_in: [Int!]
+  totalPrice_lt: Int
+  totalPrice_lte: Int
+  totalPrice_gt: Int
+  totalPrice_gte: Int
+  mealPrice: Int
+  mealPrice_not: Int
+  mealPrice_in: [Int!]
+  mealPrice_not_in: [Int!]
+  mealPrice_lt: Int
+  mealPrice_lte: Int
+  mealPrice_gt: Int
+  mealPrice_gte: Int
+  thumbnailImage: String
+  thumbnailImage_not: String
+  thumbnailImage_in: [String!]
+  thumbnailImage_not_in: [String!]
+  thumbnailImage_lt: String
+  thumbnailImage_lte: String
+  thumbnailImage_gt: String
+  thumbnailImage_gte: String
+  thumbnailImage_contains: String
+  thumbnailImage_not_contains: String
+  thumbnailImage_starts_with: String
+  thumbnailImage_not_starts_with: String
+  thumbnailImage_ends_with: String
+  thumbnailImage_not_ends_with: String
+  largeImage: String
+  largeImage_not: String
+  largeImage_in: [String!]
+  largeImage_not_in: [String!]
+  largeImage_lt: String
+  largeImage_lte: String
+  largeImage_gt: String
+  largeImage_gte: String
+  largeImage_contains: String
+  largeImage_not_contains: String
+  largeImage_starts_with: String
+  largeImage_not_starts_with: String
+  largeImage_ends_with: String
+  largeImage_not_ends_with: String
+  quantity: Int
+  quantity_not: Int
+  quantity_in: [Int!]
+  quantity_not_in: [Int!]
+  quantity_lt: Int
+  quantity_lte: Int
+  quantity_gt: Int
+  quantity_gte: Int
+  user: UserWhereInput
+  AND: [OrderItemWhereInput!]
+  OR: [OrderItemWhereInput!]
+  NOT: [OrderItemWhereInput!]
+}
+
+input OrderItemWhereUniqueInput {
+  id: ID
+}
+
+enum OrderOrderByInput {
+  id_ASC
+  id_DESC
+  deliveryTime_ASC
+  deliveryTime_DESC
+  deliveryDayOfWeek_ASC
+  deliveryDayOfWeek_DESC
+  paymentDate_ASC
+  paymentDate_DESC
+  total_ASC
+  total_DESC
+  charge_ASC
+  charge_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+input OrderScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  deliveryTime: String
+  deliveryTime_not: String
+  deliveryTime_in: [String!]
+  deliveryTime_not_in: [String!]
+  deliveryTime_lt: String
+  deliveryTime_lte: String
+  deliveryTime_gt: String
+  deliveryTime_gte: String
+  deliveryTime_contains: String
+  deliveryTime_not_contains: String
+  deliveryTime_starts_with: String
+  deliveryTime_not_starts_with: String
+  deliveryTime_ends_with: String
+  deliveryTime_not_ends_with: String
+  deliveryDayOfWeek: String
+  deliveryDayOfWeek_not: String
+  deliveryDayOfWeek_in: [String!]
+  deliveryDayOfWeek_not_in: [String!]
+  deliveryDayOfWeek_lt: String
+  deliveryDayOfWeek_lte: String
+  deliveryDayOfWeek_gt: String
+  deliveryDayOfWeek_gte: String
+  deliveryDayOfWeek_contains: String
+  deliveryDayOfWeek_not_contains: String
+  deliveryDayOfWeek_starts_with: String
+  deliveryDayOfWeek_not_starts_with: String
+  deliveryDayOfWeek_ends_with: String
+  deliveryDayOfWeek_not_ends_with: String
+  paymentDate: DateTime
+  paymentDate_not: DateTime
+  paymentDate_in: [DateTime!]
+  paymentDate_not_in: [DateTime!]
+  paymentDate_lt: DateTime
+  paymentDate_lte: DateTime
+  paymentDate_gt: DateTime
+  paymentDate_gte: DateTime
+  total: Int
+  total_not: Int
+  total_in: [Int!]
+  total_not_in: [Int!]
+  total_lt: Int
+  total_lte: Int
+  total_gt: Int
+  total_gte: Int
+  charge: String
+  charge_not: String
+  charge_in: [String!]
+  charge_not_in: [String!]
+  charge_lt: String
+  charge_lte: String
+  charge_gt: String
+  charge_gte: String
+  charge_contains: String
+  charge_not_contains: String
+  charge_starts_with: String
+  charge_not_starts_with: String
+  charge_ends_with: String
+  charge_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -888,9 +1082,275 @@ input SubscriptionScalarWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  AND: [SubscriptionScalarWhereInput!]
-  OR: [SubscriptionScalarWhereInput!]
-  NOT: [SubscriptionScalarWhereInput!]
+  AND: [OrderScalarWhereInput!]
+  OR: [OrderScalarWhereInput!]
+  NOT: [OrderScalarWhereInput!]
+}
+
+input OrderUpdateInput {
+  user: UserUpdateOneRequiredWithoutOrdersInput
+  items: OrderItemUpdateManyInput
+  billingAddress: AddressUpdateOneRequiredInput
+  shippingAddress: AddressUpdateOneRequiredInput
+  deliveryTime: String
+  deliveryDayOfWeek: String
+  paymentDate: DateTime
+  total: Int
+  charge: String
+}
+
+input OrderUpdateManyDataInput {
+  deliveryTime: String
+  deliveryDayOfWeek: String
+  paymentDate: DateTime
+  total: Int
+  charge: String
+}
+
+input OrderUpdateManyMutationInput {
+  deliveryTime: String
+  deliveryDayOfWeek: String
+  paymentDate: DateTime
+  total: Int
+  charge: String
+}
+
+input OrderUpdateManyWithoutUserInput {
+  create: [OrderCreateWithoutUserInput!]
+  delete: [OrderWhereUniqueInput!]
+  connect: [OrderWhereUniqueInput!]
+  disconnect: [OrderWhereUniqueInput!]
+  update: [OrderUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [OrderUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [OrderScalarWhereInput!]
+  updateMany: [OrderUpdateManyWithWhereNestedInput!]
+}
+
+input OrderUpdateManyWithWhereNestedInput {
+  where: OrderScalarWhereInput!
+  data: OrderUpdateManyDataInput!
+}
+
+input OrderUpdateWithoutUserDataInput {
+  items: OrderItemUpdateManyInput
+  billingAddress: AddressUpdateOneRequiredInput
+  shippingAddress: AddressUpdateOneRequiredInput
+  deliveryTime: String
+  deliveryDayOfWeek: String
+  paymentDate: DateTime
+  total: Int
+  charge: String
+}
+
+input OrderUpdateWithWhereUniqueWithoutUserInput {
+  where: OrderWhereUniqueInput!
+  data: OrderUpdateWithoutUserDataInput!
+}
+
+input OrderUpsertWithWhereUniqueWithoutUserInput {
+  where: OrderWhereUniqueInput!
+  update: OrderUpdateWithoutUserDataInput!
+  create: OrderCreateWithoutUserInput!
+}
+
+input OrderWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user: UserWhereInput
+  items_every: OrderItemWhereInput
+  items_some: OrderItemWhereInput
+  items_none: OrderItemWhereInput
+  billingAddress: AddressWhereInput
+  shippingAddress: AddressWhereInput
+  deliveryTime: String
+  deliveryTime_not: String
+  deliveryTime_in: [String!]
+  deliveryTime_not_in: [String!]
+  deliveryTime_lt: String
+  deliveryTime_lte: String
+  deliveryTime_gt: String
+  deliveryTime_gte: String
+  deliveryTime_contains: String
+  deliveryTime_not_contains: String
+  deliveryTime_starts_with: String
+  deliveryTime_not_starts_with: String
+  deliveryTime_ends_with: String
+  deliveryTime_not_ends_with: String
+  deliveryDayOfWeek: String
+  deliveryDayOfWeek_not: String
+  deliveryDayOfWeek_in: [String!]
+  deliveryDayOfWeek_not_in: [String!]
+  deliveryDayOfWeek_lt: String
+  deliveryDayOfWeek_lte: String
+  deliveryDayOfWeek_gt: String
+  deliveryDayOfWeek_gte: String
+  deliveryDayOfWeek_contains: String
+  deliveryDayOfWeek_not_contains: String
+  deliveryDayOfWeek_starts_with: String
+  deliveryDayOfWeek_not_starts_with: String
+  deliveryDayOfWeek_ends_with: String
+  deliveryDayOfWeek_not_ends_with: String
+  paymentDate: DateTime
+  paymentDate_not: DateTime
+  paymentDate_in: [DateTime!]
+  paymentDate_not_in: [DateTime!]
+  paymentDate_lt: DateTime
+  paymentDate_lte: DateTime
+  paymentDate_gt: DateTime
+  paymentDate_gte: DateTime
+  total: Int
+  total_not: Int
+  total_in: [Int!]
+  total_not_in: [Int!]
+  total_lt: Int
+  total_lte: Int
+  total_gt: Int
+  total_gte: Int
+  charge: String
+  charge_not: String
+  charge_in: [String!]
+  charge_not_in: [String!]
+  charge_lt: String
+  charge_lte: String
+  charge_gt: String
+  charge_gte: String
+  charge_contains: String
+  charge_not_contains: String
+  charge_starts_with: String
+  charge_not_starts_with: String
+  charge_ends_with: String
+  charge_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [OrderWhereInput!]
+  OR: [OrderWhereInput!]
+  NOT: [OrderWhereInput!]
+}
+
+input OrderWhereUniqueInput {
+  id: ID
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+enum Permission {
+  ADMIN
+  USER
+}
+
+type Query {
+  address(where: AddressWhereUniqueInput!): Address
+  addresses(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address]!
+  addressesConnection(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AddressConnection!
+  cartItem(where: CartItemWhereUniqueInput!): CartItem
+  cartItems(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartItem]!
+  cartItemsConnection(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartItemConnection!
+  order(where: OrderWhereUniqueInput!): Order
+  orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order]!
+  ordersConnection(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrderConnection!
+  orderItem(where: OrderItemWhereUniqueInput!): OrderItem
+  orderItems(where: OrderItemWhereInput, orderBy: OrderItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OrderItem]!
+  orderItemsConnection(where: OrderItemWhereInput, orderBy: OrderItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrderItemConnection!
+  subscription(where: SubscriptionWhereUniqueInput!): Subscription
+  subscriptions(where: SubscriptionWhereInput, orderBy: SubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Subscription]!
+  subscriptionsConnection(where: SubscriptionWhereInput, orderBy: SubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SubscriptionConnection!
+  user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  node(id: ID!): Node
+}
+
+type Subscription {
+  id: ID!
+  title: String!
+  shortDescription: String!
+  longDescription: String!
+  totalPrice: Int!
+  mealPrice: Int!
+  thumbnailImage: String
+  largeImage: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SubscriptionConnection {
+  pageInfo: PageInfo!
+  edges: [SubscriptionEdge]!
+  aggregate: AggregateSubscription!
+}
+
+input SubscriptionCreateInput {
+  title: String!
+  shortDescription: String!
+  longDescription: String!
+  totalPrice: Int!
+  mealPrice: Int!
+  thumbnailImage: String
+  largeImage: String
+}
+
+input SubscriptionCreateOneInput {
+  create: SubscriptionCreateInput
+  connect: SubscriptionWhereUniqueInput
+}
+
+type SubscriptionEdge {
+  node: Subscription!
+  cursor: String!
+}
+
+enum SubscriptionOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  shortDescription_ASC
+  shortDescription_DESC
+  longDescription_ASC
+  longDescription_DESC
+  totalPrice_ASC
+  totalPrice_DESC
+  mealPrice_ASC
+  mealPrice_DESC
+  thumbnailImage_ASC
+  thumbnailImage_DESC
+  largeImage_ASC
+  largeImage_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 input SubscriptionUpdateDataInput {
@@ -913,27 +1373,6 @@ input SubscriptionUpdateInput {
   largeImage: String
 }
 
-input SubscriptionUpdateManyDataInput {
-  title: String
-  shortDescription: String
-  longDescription: String
-  totalPrice: Int
-  mealPrice: Int
-  thumbnailImage: String
-  largeImage: String
-}
-
-input SubscriptionUpdateManyInput {
-  create: [SubscriptionCreateInput!]
-  update: [SubscriptionUpdateWithWhereUniqueNestedInput!]
-  upsert: [SubscriptionUpsertWithWhereUniqueNestedInput!]
-  delete: [SubscriptionWhereUniqueInput!]
-  connect: [SubscriptionWhereUniqueInput!]
-  disconnect: [SubscriptionWhereUniqueInput!]
-  deleteMany: [SubscriptionScalarWhereInput!]
-  updateMany: [SubscriptionUpdateManyWithWhereNestedInput!]
-}
-
 input SubscriptionUpdateManyMutationInput {
   title: String
   shortDescription: String
@@ -942,11 +1381,6 @@ input SubscriptionUpdateManyMutationInput {
   mealPrice: Int
   thumbnailImage: String
   largeImage: String
-}
-
-input SubscriptionUpdateManyWithWhereNestedInput {
-  where: SubscriptionScalarWhereInput!
-  data: SubscriptionUpdateManyDataInput!
 }
 
 input SubscriptionUpdateOneInput {
@@ -958,18 +1392,7 @@ input SubscriptionUpdateOneInput {
   connect: SubscriptionWhereUniqueInput
 }
 
-input SubscriptionUpdateWithWhereUniqueNestedInput {
-  where: SubscriptionWhereUniqueInput!
-  data: SubscriptionUpdateDataInput!
-}
-
 input SubscriptionUpsertNestedInput {
-  update: SubscriptionUpdateDataInput!
-  create: SubscriptionCreateInput!
-}
-
-input SubscriptionUpsertWithWhereUniqueNestedInput {
-  where: SubscriptionWhereUniqueInput!
   update: SubscriptionUpdateDataInput!
   create: SubscriptionCreateInput!
 }
@@ -1114,6 +1537,7 @@ type User {
   paymentId: String
   avatar: String
   cart(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartItem!]
+  orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1137,6 +1561,7 @@ input UserCreateInput {
   paymentId: String
   avatar: String
   cart: CartItemCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
 }
 
 input UserCreateOneInput {
@@ -1146,6 +1571,11 @@ input UserCreateOneInput {
 
 input UserCreateOneWithoutCartInput {
   create: UserCreateWithoutCartInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutOrdersInput {
+  create: UserCreateWithoutOrdersInput
   connect: UserWhereUniqueInput
 }
 
@@ -1165,6 +1595,22 @@ input UserCreateWithoutCartInput {
   shippingAddress: AddressCreateManyInput
   paymentId: String
   avatar: String
+  orders: OrderCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutOrdersInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  phone: String
+  billingAddress: AddressCreateOneInput
+  shippingAddress: AddressCreateManyInput
+  paymentId: String
+  avatar: String
+  cart: CartItemCreateManyWithoutUserInput
 }
 
 type UserEdge {
@@ -1210,6 +1656,7 @@ input UserUpdateDataInput {
   paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -1225,6 +1672,7 @@ input UserUpdateInput {
   paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -1239,10 +1687,12 @@ input UserUpdateManyMutationInput {
   avatar: String
 }
 
-input UserUpdateOneRequiredInput {
+input UserUpdateOneInput {
   create: UserCreateInput
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 
@@ -1250,6 +1700,13 @@ input UserUpdateOneRequiredWithoutCartInput {
   create: UserCreateWithoutCartInput
   update: UserUpdateWithoutCartDataInput
   upsert: UserUpsertWithoutCartInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutOrdersInput {
+  create: UserCreateWithoutOrdersInput
+  update: UserUpdateWithoutOrdersDataInput
+  upsert: UserUpsertWithoutOrdersInput
   connect: UserWhereUniqueInput
 }
 
@@ -1269,6 +1726,22 @@ input UserUpdateWithoutCartDataInput {
   shippingAddress: AddressUpdateManyInput
   paymentId: String
   avatar: String
+  orders: OrderUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutOrdersDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  phone: String
+  billingAddress: AddressUpdateOneInput
+  shippingAddress: AddressUpdateManyInput
+  paymentId: String
+  avatar: String
+  cart: CartItemUpdateManyWithoutUserInput
 }
 
 input UserUpsertNestedInput {
@@ -1279,6 +1752,11 @@ input UserUpsertNestedInput {
 input UserUpsertWithoutCartInput {
   update: UserUpdateWithoutCartDataInput!
   create: UserCreateWithoutCartInput!
+}
+
+input UserUpsertWithoutOrdersInput {
+  update: UserUpdateWithoutOrdersDataInput!
+  create: UserCreateWithoutOrdersInput!
 }
 
 input UserWhereInput {
@@ -1409,6 +1887,9 @@ input UserWhereInput {
   cart_every: CartItemWhereInput
   cart_some: CartItemWhereInput
   cart_none: CartItemWhereInput
+  orders_every: OrderWhereInput
+  orders_some: OrderWhereInput
+  orders_none: OrderWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
