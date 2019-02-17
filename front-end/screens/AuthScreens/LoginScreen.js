@@ -8,10 +8,11 @@ import {
   Text,
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
+
 import Colors from '../../constants/Colors';
 import commonStyles from '../../constants/commonStyles';
 
-export default function LoginScreen({ onPressLogin, onPressSignup }) {
+export default function LoginScreen({ onPressLogin, saveInput }) {
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -26,6 +27,7 @@ export default function LoginScreen({ onPressLogin, onPressSignup }) {
           <View style={styles.credContainer}>
             <TextField
               label={'Email'}
+              autoCapitalize="none"
               textColor={Colors.black}
               fontSize={12}
               labelFontSize={10}
@@ -36,12 +38,15 @@ export default function LoginScreen({ onPressLogin, onPressSignup }) {
               errorColor={Colors.mediumCarmine}
               inputContainerStyle={styles.inputContainer}
               labelTextStyle={styles.inputLabel}
+              onChangeText={value => saveInput({ email: value })}
             />
             <TextField
               label={'Password'}
+              autoCapitalize="none"
               textColor={Colors.black}
               fontSize={12}
               labelFontSize={10}
+              secureTextEntry={true}
               lineWidth={0.5}
               activeLineWidth={1}
               tintColor={Colors.mediumCarmine}
@@ -49,6 +54,7 @@ export default function LoginScreen({ onPressLogin, onPressSignup }) {
               errorColor={Colors.mediumCarmine}
               inputContainerStyle={styles.inputContainer}
               labelTextStyle={styles.inputLabel}
+              onChangeText={value => saveInput({ password: value })}
             />
           </View>
 
