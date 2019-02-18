@@ -50,6 +50,7 @@ type Subscription {
   largeImage: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  tag: String!
 }
 
 type Order {
