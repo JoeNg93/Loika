@@ -7,23 +7,24 @@ import { baseURL } from '../utils/envConfig';
 export const signIn = (email, password) => async dispatch => {
   dispatch({ type: actionTypes.SIGN_IN_PENDING });
 
-  const res = await axios.post(baseURL, {
-    query: `
+  try {
+    const res = await axios.post(baseURL, {
+      query: `
         mutation {
           signin(email: "${email}", password: "${password}")
         }
       `,
-  });
+    });
 
-  if ('errors' in res.data) {
+    const accessToken = res.data.data.signin;
+    dispatch({ type: actionTypes.SIGN_IN_SUCCESS, payload: accessToken });
+
+    return accessToken;
+  } catch (err) {
+    console.log('ERROR signIn: ', err.response.data);
     dispatch({ type: actionTypes.SIGN_IN_FAIL });
     return null;
   }
-
-  const accessToken = res.data.data.signin;
-  dispatch({ type: actionTypes.SIGN_IN_SUCCESS, payload: accessToken });
-
-  return accessToken;
 };
 
 export const fetchTokenFromStorage = () => async dispatch => {
