@@ -14,44 +14,14 @@ import {
 } from 'react-native';
 import SideSwipe from 'react-native-sideswipe';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import Carousel from './Carousel';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
+import { getAllSubscriptions } from '../../../../actions/subscription';
 
-const boxes = [
-  {
-    title: 'Mixed Box',
-    price: 199,
-    size: '5 kg/box',
-    divprice: '3-4€/meal',
-    description:
-      'Best of both worl. Can include beef, pork , chicken, milk, eggs, potatoes, brocoli, cabbage... Check to see more details.',
-    tag: 'Best seller',
-    image: require('../../../../assets/images/mixed.png'),
-  },
-  {
-    title: 'Vegan Box',
-    price: 299,
-    size: '5 kg/box',
-    divprice: '3-4€/meal',
-    description:
-      'Best of both worl. Can include beef, pork , chicken, milk, eggs, potatoes, brocoli, cabbage... Check to see more details.',
-    tag: 'Vegan',
-    image: require('../../../../assets/images/vegan.png'),
-  },
-  {
-    title: 'Meat Box',
-    price: 499,
-    size: '5 kg/box',
-    divprice: '3-4€/meal',
-    description:
-      'Best of both worl. Can include beef, pork , chicken, milk, eggs, potatoes, brocoli, cabbage... Check to see more details.',
-    tag: 'Meat',
-    image: require('../../../../assets/images/meat.png'),
-  },
-];
-
-export default class SubscriptionSelectionScreen extends React.Component {
+class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: 'Choose your subscription',
@@ -110,8 +80,8 @@ export default class SubscriptionSelectionScreen extends React.Component {
         fontSize: 18,
       },
       headerStyle: {
-        marginTop: 10
-      }
+        marginTop: 10,
+      },
     };
   };
 
@@ -119,6 +89,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
     this.props.navigation.setParams({ setCartVisible: this._setCartVisible });
     this.props.navigation.setParams({ items: this.state.indexInCart.length });
     this.props.navigation.setParams({ opacity: 0 });
+    this.props.getAllSubscriptions();
   }
 
   state = {
@@ -139,17 +110,20 @@ export default class SubscriptionSelectionScreen extends React.Component {
 
   onPressPlus = () => {
     var indexInCart = this.state.indexInCart;
+    const { allSubscriptions } = this.props;
 
     if (indexInCart.indexOf(this.state.currentIndex) == -1) {
+      // Item not in cart, add item to cart
       let total = this.state.totalPrice;
-      total += boxes[this.state.currentIndex].price;
+      total += allSubscriptions[this.state.currentIndex].totalPrice;
       this.setState(() => ({ totalPrice: total }));
       indexArray = this.state.indexInCart;
       indexArray.push(this.state.currentIndex);
       this.setState(() => ({ indexInCart: indexInCart }));
     } else {
+      // Item already in cart, remove item from cart
       let total = this.state.totalPrice;
-      total -= boxes[this.state.currentIndex].price;
+      total -= allSubscriptions[this.state.currentIndex].totalPrice;
       this.setState(() => ({ totalPrice: total }));
       indexArray = this.state.indexInCart;
       let i = indexArray.indexOf(this.state.currentIndex);
@@ -181,6 +155,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
   };
 
   displayCartItems = () => {
+    const { allSubscriptions } = this.props;
     let indexArray = this.state.indexInCart;
     let i;
     let items = [];
@@ -199,10 +174,10 @@ export default class SubscriptionSelectionScreen extends React.Component {
         items.push(
           <View key={i}>
             <View style={styles.cartItem}>
-              <Text style={styles.textInCart}>{boxes[i].title}</Text>
-              <Text style={styles.cartSize}>{boxes[i].size}</Text>
+              <Text style={styles.textInCart}>{allSubscriptions[i].title}</Text>
+              <Text style={styles.cartSize}>{allSubscriptions[i].size}</Text>
               <Text style={[styles.cartPrice, { top: -45 }]}>
-                {boxes[i].price} €
+                {allSubscriptions[i].totalPrice} €
               </Text>
             </View>
             <View
@@ -236,7 +211,12 @@ export default class SubscriptionSelectionScreen extends React.Component {
 
   render() {
     const { width } = Dimensions.get('window');
+    const { allSubscriptions } = this.props;
     const contentOffset = (width - Carousel.WIDTH) / 2;
+
+    if (allSubscriptions.length === 0) {
+      return null;
+    }
 
     return (
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
@@ -245,7 +225,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
 
           <View style={styles.priceTag}>
             <Text style={styles.priceText}>
-              {boxes[this.state.currentIndex].price} €
+              {allSubscriptions[this.state.currentIndex].totalPrice} €
             </Text>
           </View>
         </View>
@@ -261,7 +241,7 @@ export default class SubscriptionSelectionScreen extends React.Component {
               overflow: 'visible',
               marginBottom: 10,
             }}
-            data={boxes}
+            data={allSubscriptions}
             contentOffset={contentOffset}
             onIndexChange={index =>
               this.setState(() => ({ currentIndex: index }))
@@ -279,23 +259,23 @@ export default class SubscriptionSelectionScreen extends React.Component {
         <Animated.View style={styles.textContainer}>
           <View style={styles.textTag}>
             <Text style={styles.textTagText}>
-              {boxes[this.state.currentIndex].tag}
+              {allSubscriptions[this.state.currentIndex].tag}
             </Text>
           </View>
           <Text style={styles.title}>
-            {boxes[this.state.currentIndex].title}
+            {allSubscriptions[this.state.currentIndex].title}
           </Text>
           <View style={styles.valueContainer}>
             <Text style={styles.valueText}>
-              {boxes[this.state.currentIndex].size}
+              {allSubscriptions[this.state.currentIndex].size}kg/box
             </Text>
             <View style={styles.circle} />
             <Text style={styles.valueText}>
-              {boxes[this.state.currentIndex].divprice}
+              {allSubscriptions[this.state.currentIndex].mealPrice}€/meal
             </Text>
           </View>
           <Text style={styles.description}>
-            {boxes[this.state.currentIndex].description}
+            {allSubscriptions[this.state.currentIndex].shortDescription}
           </Text>
         </Animated.View>
         <View style={styles.totalContainer}>
@@ -619,3 +599,12 @@ const styles = StyleSheet.create({
     width: 280,
   },
 });
+
+const mapStateToProps = state => ({
+  allSubscriptions: state.subscription.allSubscriptions,
+});
+
+export default connect(
+  mapStateToProps,
+  { getAllSubscriptions }
+)(SubscriptionSelectionScreen);
