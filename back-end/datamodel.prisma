@@ -51,6 +51,7 @@ type Subscription {
   createdAt: DateTime!
   updatedAt: DateTime!
   tag: String!
+  size: Float!
 }
 
 type Order {

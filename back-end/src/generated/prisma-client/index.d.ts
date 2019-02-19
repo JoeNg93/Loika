@@ -311,6 +311,7 @@ export interface Subscription {
   createdAt: (args?: {}) => () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: (args?: {}) => () => Promise<AsyncIterator<DateTimeOutput>>;
   tag: (args?: {}) => () => Promise<AsyncIterator<String>>;
+  size: (args?: {}) => () => Promise<AsyncIterator<Float>>;
 }
 
 export interface ClientConstructor<T> {
@@ -417,7 +418,9 @@ export type SubscriptionOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "tag_ASC"
-  | "tag_DESC";
+  | "tag_DESC"
+  | "size_ASC"
+  | "size_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -698,6 +701,14 @@ export interface SubscriptionWhereInput {
   tag_not_starts_with?: String;
   tag_ends_with?: String;
   tag_not_ends_with?: String;
+  size?: Float;
+  size_not?: Float;
+  size_in?: Float[] | Float;
+  size_not_in?: Float[] | Float;
+  size_lt?: Float;
+  size_lte?: Float;
+  size_gt?: Float;
+  size_gte?: Float;
   AND?: SubscriptionWhereInput[] | SubscriptionWhereInput;
   OR?: SubscriptionWhereInput[] | SubscriptionWhereInput;
   NOT?: SubscriptionWhereInput[] | SubscriptionWhereInput;
@@ -1134,6 +1145,7 @@ export interface SubscriptionCreateInput {
   thumbnailImage?: String;
   largeImage?: String;
   tag: String;
+  size: Float;
 }
 
 export interface UserCreateOneWithoutCartInput {
@@ -1258,6 +1270,7 @@ export interface SubscriptionUpdateDataInput {
   thumbnailImage?: String;
   largeImage?: String;
   tag?: String;
+  size?: Float;
 }
 
 export interface SubscriptionUpsertNestedInput {
@@ -1985,6 +1998,7 @@ export interface SubscriptionUpdateInput {
   thumbnailImage?: String;
   largeImage?: String;
   tag?: String;
+  size?: Float;
 }
 
 export interface SubscriptionUpdateManyMutationInput {
@@ -1996,6 +2010,7 @@ export interface SubscriptionUpdateManyMutationInput {
   thumbnailImage?: String;
   largeImage?: String;
   tag?: String;
+  size?: Float;
 }
 
 export interface UserUpdateInput {

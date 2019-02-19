@@ -1303,6 +1303,7 @@ type Subscription {
   createdAt: DateTime!
   updatedAt: DateTime!
   tag: String!
+  size: Float!
 }
 
 type SubscriptionConnection {
@@ -1320,6 +1321,7 @@ input SubscriptionCreateInput {
   thumbnailImage: String
   largeImage: String
   tag: String!
+  size: Float!
 }
 
 input SubscriptionCreateOneInput {
@@ -1355,6 +1357,8 @@ enum SubscriptionOrderByInput {
   updatedAt_DESC
   tag_ASC
   tag_DESC
+  size_ASC
+  size_DESC
 }
 
 input SubscriptionUpdateDataInput {
@@ -1366,6 +1370,7 @@ input SubscriptionUpdateDataInput {
   thumbnailImage: String
   largeImage: String
   tag: String
+  size: Float
 }
 
 input SubscriptionUpdateInput {
@@ -1377,6 +1382,7 @@ input SubscriptionUpdateInput {
   thumbnailImage: String
   largeImage: String
   tag: String
+  size: Float
 }
 
 input SubscriptionUpdateManyMutationInput {
@@ -1388,6 +1394,7 @@ input SubscriptionUpdateManyMutationInput {
   thumbnailImage: String
   largeImage: String
   tag: String
+  size: Float
 }
 
 input SubscriptionUpdateOneInput {
@@ -1535,6 +1542,14 @@ input SubscriptionWhereInput {
   tag_not_starts_with: String
   tag_ends_with: String
   tag_not_ends_with: String
+  size: Float
+  size_not: Float
+  size_in: [Float!]
+  size_not_in: [Float!]
+  size_lt: Float
+  size_lte: Float
+  size_gt: Float
+  size_gte: Float
   AND: [SubscriptionWhereInput!]
   OR: [SubscriptionWhereInput!]
   NOT: [SubscriptionWhereInput!]
