@@ -38,3 +38,7 @@ export const getAllSubscriptions = () => async dispatch => {
     return null;
   }
 };
+
+export const setSelectedSubscription = subscription => {
+  return { type: actionTypes.SET_SELECTED_SUBSCRIPTION, payload: subscription };
+};

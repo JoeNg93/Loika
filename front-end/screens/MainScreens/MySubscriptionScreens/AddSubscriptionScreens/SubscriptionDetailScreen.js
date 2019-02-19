@@ -5,26 +5,13 @@ import {
   Image,
   TouchableHighlight,
   Text,
-  ScrollView,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
 
-const box = {
-  title: 'Mixed Box',
-  price: 199,
-  size: '5 kg/box',
-  divprice: '3-4€/meal',
-  description:
-    'Best of both worl. Can include beef, pork , chicken, milk, eggs, potatoes, brocoli, cabbage... Check to see more details.',
-  tag: 'Best seller',
-  image: require('../../../../assets/images/mixed.png'),
-  content:
-    'Ground beef - 2x1lb NY strip - 2x10oz Top sirloin - 4x6oz Whole pork tenderloin - 1lb Boneless skinless chicken breast - 3x1lb *Exact cuts are subject to change',
-};
-
-export default class SubscriptionDetailScreen extends React.Component {
+class SubscriptionDetailScreen extends React.Component {
   static navigationOptions = {
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
@@ -38,38 +25,57 @@ export default class SubscriptionDetailScreen extends React.Component {
       fontSize: 18,
     },
     headerStyle: {
-      marginTop: 10
-    }
+      marginTop: 10,
+    },
   };
 
   render() {
+    const { selectedSubscription } = this.props;
+
+    if (Object.entries(selectedSubscription).length === 0) {
+      // selectedSubscription has not been set
+      return null;
+    }
+
     return (
       <View>
         <View style={styles.topContainer}>
-          <Image style={styles.image} source={box.image} />
+          <Image
+            style={styles.image}
+            source={require('../../../../assets/images/mixed.png')}
+          />
           <View style={styles.priceTag} />
           <Text style={styles.price}>
-            {box.price} {'\u20AC'}
+            {selectedSubscription.totalPrice} {'\u20AC'}
           </Text>
         </View>
         <View>
           <View style={styles.titleContainer} />
-          <Text style={styles.title}>{box.title}</Text>
+          <Text style={styles.title}>{selectedSubscription.title}</Text>
           <View style={styles.tagBox} />
-          <Text style={styles.tag}>{box.tag}</Text>
+          <Text style={styles.tag}>{selectedSubscription.tag}</Text>
         </View>
         <View>
-          <Text style={styles.size}>{box.size}</Text>
+          <Text style={styles.size}>{selectedSubscription.size}kg/box</Text>
           <View style={styles.dot} />
-          <Text style={styles.divprice}>{box.divprice}</Text>
+          <Text style={styles.divprice}>
+            {selectedSubscription.mealPrice}
+            {'\u20AC'}/meal
+          </Text>
         </View>
         <View>
           <Text style={styles.about}>ABOUT</Text>
-          <Text style={styles.description}>{box.description}</Text>
+          <Text style={styles.description}>
+            {selectedSubscription.longDescription}
+          </Text>
         </View>
         <View>
           <Text style={styles.sampleTitle}>SAMPLE CONTENT</Text>
-          <Text style={styles.content}>{box.content}</Text>
+          <Text style={styles.content}>
+            Ground beef - 2x1lb NY strip - 2x10oz Top sirloin - 4x6oz Whole pork
+            tenderloin - 1lb Boneless skinless chicken breast - 3x1lb *Exact
+            cuts are subject to change
+          </Text>
         </View>
       </View>
     );
@@ -230,3 +236,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.macaroniCheese,
   },
 });
+
+const mapStateToProps = state => ({
+  selectedSubscription: state.subscription.selectedSubscription,
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(SubscriptionDetailScreen);

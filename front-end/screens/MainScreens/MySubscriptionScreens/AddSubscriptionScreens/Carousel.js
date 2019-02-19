@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -15,7 +16,7 @@ export default class SweetCarousel extends React.Component {
   static WIDTH = width;
 
   render() {
-    const { animatedValue, box, index } = this.props;
+    const { animatedValue, box, index, onPressBoxImage } = this.props;
 
     return (
       <Animated.View
@@ -34,12 +35,17 @@ export default class SweetCarousel extends React.Component {
           },
         ]}
       >
-        <View>
-          <Image
-            style={styles.image}
-            source={require('../../../../assets/images/meat.png')}
-          />
-        </View>
+        <TouchableOpacity
+          onPress={() => onPressBoxImage(index)}
+          activeOpacity={1}
+        >
+          <View>
+            <Image
+              style={styles.image}
+              source={require('../../../../assets/images/meat.png')}
+            />
+          </View>
+        </TouchableOpacity>
       </Animated.View>
     );
   }

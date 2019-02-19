@@ -19,7 +19,10 @@ import { connect } from 'react-redux';
 import Carousel from './Carousel';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
-import { getAllSubscriptions } from '../../../../actions/subscription';
+import {
+  getAllSubscriptions,
+  setSelectedSubscription,
+} from '../../../../actions/subscription';
 
 class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -243,15 +246,19 @@ class SubscriptionSelectionScreen extends React.Component {
             }}
             data={allSubscriptions}
             contentOffset={contentOffset}
-            onIndexChange={index =>
-              this.setState(() => ({ currentIndex: index }))
-            }
+            onIndexChange={index => {
+              this.props.setSelectedSubscription(allSubscriptions[index]);
+              this.setState(() => ({ currentIndex: index }));
+            }}
             renderItem={({ itemIndex, currentIndex, item, animatedValue }) => (
               <Carousel
                 box={item}
                 index={itemIndex}
                 currentIndex={currentIndex}
                 animatedValue={animatedValue}
+                onPressBoxImage={index =>
+                  this.props.navigation.navigate('SubscriptionDetail')
+                }
               />
             )}
           />
@@ -606,5 +613,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getAllSubscriptions }
+  { getAllSubscriptions, setSelectedSubscription }
 )(SubscriptionSelectionScreen);
