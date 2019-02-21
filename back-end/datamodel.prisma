@@ -5,12 +5,14 @@ enum Permission {
 
 type Address {
   id: ID! @unique
+  name: String!
   street1: String!
   street2: String
   city: String!
   postcode: Int!
   country: String!
   isBillingAddress: Boolean!
+  phoneNumber: String!
 }
 
 type User {

@@ -1,12 +1,14 @@
 module.exports = {
         typeDefs: /* GraphQL */ `type Address {
   id: ID!
+  name: String!
   street1: String!
   street2: String
   city: String!
   postcode: Int!
   country: String!
   isBillingAddress: Boolean!
+  phoneNumber: String!
 }
 
 type AddressConnection {
@@ -16,12 +18,14 @@ type AddressConnection {
 }
 
 input AddressCreateInput {
+  name: String!
   street1: String!
   street2: String
   city: String!
   postcode: Int!
   country: String!
   isBillingAddress: Boolean!
+  phoneNumber: String!
 }
 
 input AddressCreateManyInput {
@@ -42,6 +46,8 @@ type AddressEdge {
 enum AddressOrderByInput {
   id_ASC
   id_DESC
+  name_ASC
+  name_DESC
   street1_ASC
   street1_DESC
   street2_ASC
@@ -54,6 +60,8 @@ enum AddressOrderByInput {
   country_DESC
   isBillingAddress_ASC
   isBillingAddress_DESC
+  phoneNumber_ASC
+  phoneNumber_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -75,6 +83,20 @@ input AddressScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   street1: String
   street1_not: String
   street1_in: [String!]
@@ -141,36 +163,56 @@ input AddressScalarWhereInput {
   country_not_ends_with: String
   isBillingAddress: Boolean
   isBillingAddress_not: Boolean
+  phoneNumber: String
+  phoneNumber_not: String
+  phoneNumber_in: [String!]
+  phoneNumber_not_in: [String!]
+  phoneNumber_lt: String
+  phoneNumber_lte: String
+  phoneNumber_gt: String
+  phoneNumber_gte: String
+  phoneNumber_contains: String
+  phoneNumber_not_contains: String
+  phoneNumber_starts_with: String
+  phoneNumber_not_starts_with: String
+  phoneNumber_ends_with: String
+  phoneNumber_not_ends_with: String
   AND: [AddressScalarWhereInput!]
   OR: [AddressScalarWhereInput!]
   NOT: [AddressScalarWhereInput!]
 }
 
 input AddressUpdateDataInput {
+  name: String
   street1: String
   street2: String
   city: String
   postcode: Int
   country: String
   isBillingAddress: Boolean
+  phoneNumber: String
 }
 
 input AddressUpdateInput {
+  name: String
   street1: String
   street2: String
   city: String
   postcode: Int
   country: String
   isBillingAddress: Boolean
+  phoneNumber: String
 }
 
 input AddressUpdateManyDataInput {
+  name: String
   street1: String
   street2: String
   city: String
   postcode: Int
   country: String
   isBillingAddress: Boolean
+  phoneNumber: String
 }
 
 input AddressUpdateManyInput {
@@ -185,12 +227,14 @@ input AddressUpdateManyInput {
 }
 
 input AddressUpdateManyMutationInput {
+  name: String
   street1: String
   street2: String
   city: String
   postcode: Int
   country: String
   isBillingAddress: Boolean
+  phoneNumber: String
 }
 
 input AddressUpdateManyWithWhereNestedInput {
@@ -245,6 +289,20 @@ input AddressWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   street1: String
   street1_not: String
   street1_in: [String!]
@@ -311,6 +369,20 @@ input AddressWhereInput {
   country_not_ends_with: String
   isBillingAddress: Boolean
   isBillingAddress_not: Boolean
+  phoneNumber: String
+  phoneNumber_not: String
+  phoneNumber_in: [String!]
+  phoneNumber_not_in: [String!]
+  phoneNumber_lt: String
+  phoneNumber_lte: String
+  phoneNumber_gt: String
+  phoneNumber_gte: String
+  phoneNumber_contains: String
+  phoneNumber_not_contains: String
+  phoneNumber_starts_with: String
+  phoneNumber_not_starts_with: String
+  phoneNumber_ends_with: String
+  phoneNumber_not_ends_with: String
   AND: [AddressWhereInput!]
   OR: [AddressWhereInput!]
   NOT: [AddressWhereInput!]

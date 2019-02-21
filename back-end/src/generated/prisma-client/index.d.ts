@@ -325,6 +325,8 @@ export interface ClientConstructor<T> {
 export type AddressOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
   | "street1_ASC"
   | "street1_DESC"
   | "street2_ASC"
@@ -337,6 +339,8 @@ export type AddressOrderByInput =
   | "country_DESC"
   | "isBillingAddress_ASC"
   | "isBillingAddress_DESC"
+  | "phoneNumber_ASC"
+  | "phoneNumber_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -465,6 +469,20 @@ export interface AddressWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
   street1?: String;
   street1_not?: String;
   street1_in?: String[] | String;
@@ -531,6 +549,20 @@ export interface AddressWhereInput {
   country_not_ends_with?: String;
   isBillingAddress?: Boolean;
   isBillingAddress_not?: Boolean;
+  phoneNumber?: String;
+  phoneNumber_not?: String;
+  phoneNumber_in?: String[] | String;
+  phoneNumber_not_in?: String[] | String;
+  phoneNumber_lt?: String;
+  phoneNumber_lte?: String;
+  phoneNumber_gt?: String;
+  phoneNumber_gte?: String;
+  phoneNumber_contains?: String;
+  phoneNumber_not_contains?: String;
+  phoneNumber_starts_with?: String;
+  phoneNumber_not_starts_with?: String;
+  phoneNumber_ends_with?: String;
+  phoneNumber_not_ends_with?: String;
   AND?: AddressWhereInput[] | AddressWhereInput;
   OR?: AddressWhereInput[] | AddressWhereInput;
   NOT?: AddressWhereInput[] | AddressWhereInput;
@@ -1099,30 +1131,36 @@ export type UserWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface AddressCreateInput {
+  name: String;
   street1: String;
   street2?: String;
   city: String;
   postcode: Int;
   country: String;
   isBillingAddress: Boolean;
+  phoneNumber: String;
 }
 
 export interface AddressUpdateInput {
+  name?: String;
   street1?: String;
   street2?: String;
   city?: String;
   postcode?: Int;
   country?: String;
   isBillingAddress?: Boolean;
+  phoneNumber?: String;
 }
 
 export interface AddressUpdateManyMutationInput {
+  name?: String;
   street1?: String;
   street2?: String;
   city?: String;
   postcode?: Int;
   country?: String;
   isBillingAddress?: Boolean;
+  phoneNumber?: String;
 }
 
 export interface CartItemCreateInput {
@@ -1314,12 +1352,14 @@ export interface AddressUpdateOneInput {
 }
 
 export interface AddressUpdateDataInput {
+  name?: String;
   street1?: String;
   street2?: String;
   city?: String;
   postcode?: Int;
   country?: String;
   isBillingAddress?: Boolean;
+  phoneNumber?: String;
 }
 
 export interface AddressUpsertNestedInput {
@@ -1370,6 +1410,20 @@ export interface AddressScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
   street1?: String;
   street1_not?: String;
   street1_in?: String[] | String;
@@ -1436,6 +1490,20 @@ export interface AddressScalarWhereInput {
   country_not_ends_with?: String;
   isBillingAddress?: Boolean;
   isBillingAddress_not?: Boolean;
+  phoneNumber?: String;
+  phoneNumber_not?: String;
+  phoneNumber_in?: String[] | String;
+  phoneNumber_not_in?: String[] | String;
+  phoneNumber_lt?: String;
+  phoneNumber_lte?: String;
+  phoneNumber_gt?: String;
+  phoneNumber_gte?: String;
+  phoneNumber_contains?: String;
+  phoneNumber_not_contains?: String;
+  phoneNumber_starts_with?: String;
+  phoneNumber_not_starts_with?: String;
+  phoneNumber_ends_with?: String;
+  phoneNumber_not_ends_with?: String;
   AND?: AddressScalarWhereInput[] | AddressScalarWhereInput;
   OR?: AddressScalarWhereInput[] | AddressScalarWhereInput;
   NOT?: AddressScalarWhereInput[] | AddressScalarWhereInput;
@@ -1447,12 +1515,14 @@ export interface AddressUpdateManyWithWhereNestedInput {
 }
 
 export interface AddressUpdateManyDataInput {
+  name?: String;
   street1?: String;
   street2?: String;
   city?: String;
   postcode?: Int;
   country?: String;
   isBillingAddress?: Boolean;
+  phoneNumber?: String;
 }
 
 export interface OrderUpdateManyWithoutUserInput {
@@ -2047,34 +2117,40 @@ export interface NodeNode {
 
 export interface Address {
   id: ID_Output;
+  name: String;
   street1: String;
   street2?: String;
   city: String;
   postcode: Int;
   country: String;
   isBillingAddress: Boolean;
+  phoneNumber: String;
 }
 
 export interface AddressPromise extends Promise<Address>, Fragmentable {
   id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
   street1: () => Promise<String>;
   street2: () => Promise<String>;
   city: () => Promise<String>;
   postcode: () => Promise<Int>;
   country: () => Promise<String>;
   isBillingAddress: () => Promise<Boolean>;
+  phoneNumber: () => Promise<String>;
 }
 
 export interface AddressSubscription
   extends Promise<AsyncIterator<Address>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
   street1: () => Promise<AsyncIterator<String>>;
   street2: () => Promise<AsyncIterator<String>>;
   city: () => Promise<AsyncIterator<String>>;
   postcode: () => Promise<AsyncIterator<Int>>;
   country: () => Promise<AsyncIterator<String>>;
   isBillingAddress: () => Promise<AsyncIterator<Boolean>>;
+  phoneNumber: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AddressConnection {
