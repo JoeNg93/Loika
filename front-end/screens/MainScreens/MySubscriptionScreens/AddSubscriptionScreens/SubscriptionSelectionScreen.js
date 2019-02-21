@@ -19,10 +19,13 @@ import { connect } from 'react-redux';
 import Carousel from './Carousel';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
+import { getAllSubscriptions } from '../../../../actions/subscription';
 import {
-  getAllSubscriptions,
   setSelectedSubscription,
-} from '../../../../actions/subscription';
+  addSubscriptionToCart,
+  removeSubscriptionFromCart,
+  cleanCart,
+} from '../../../../actions/checkout';
 
 class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -90,7 +93,7 @@ class SubscriptionSelectionScreen extends React.Component {
 
   componentDidMount() {
     this.props.navigation.setParams({ setCartVisible: this._setCartVisible });
-    this.props.navigation.setParams({ items: this.state.indexInCart.length });
+    this.props.navigation.setParams({ items: this.props.shoppingCart.length });
     this.props.navigation.setParams({ opacity: 0 });
     this.props.getAllSubscriptions();
   }
@@ -112,37 +115,35 @@ class SubscriptionSelectionScreen extends React.Component {
   };
 
   onPressPlus = () => {
-    var indexInCart = this.state.indexInCart;
-    const { allSubscriptions } = this.props;
+    const { allSubscriptions, selectedSubscription, shoppingCart } = this.props;
 
-    if (indexInCart.indexOf(this.state.currentIndex) == -1) {
+    if (!this.isAlreadyInCart(selectedSubscription)) {
       // Item not in cart, add item to cart
-      let total = this.state.totalPrice;
-      total += allSubscriptions[this.state.currentIndex].totalPrice;
-      this.setState(() => ({ totalPrice: total }));
-      indexArray = this.state.indexInCart;
-      indexArray.push(this.state.currentIndex);
-      this.setState(() => ({ indexInCart: indexInCart }));
+      this.props.addSubscriptionToCart(
+        allSubscriptions[this.state.currentIndex]
+      );
+      this.props.navigation.setParams({ items: shoppingCart.length + 1 });
     } else {
       // Item already in cart, remove item from cart
-      let total = this.state.totalPrice;
-      total -= allSubscriptions[this.state.currentIndex].totalPrice;
-      this.setState(() => ({ totalPrice: total }));
-      indexArray = this.state.indexInCart;
-      let i = indexArray.indexOf(this.state.currentIndex);
-      indexArray.splice(i, 1);
-      this.setState(() => ({ indexInCart: indexInCart }));
+      this.props.removeSubscriptionFromCart(
+        allSubscriptions[this.state.currentIndex].id
+      );
+      this.props.navigation.setParams({ items: shoppingCart.length - 1 });
     }
-    this.props.navigation.setParams({ items: this.state.indexInCart.length });
-    if (this.state.indexInCart.length != 0) {
+    if (shoppingCart.length != 0) {
       this.props.navigation.setParams({ opacity: 1 });
     } else {
       this.props.navigation.setParams({ opacity: 0 });
     }
   };
 
+  onPressConfirmOrder = () => {
+    this.props.navigation.navigate('ShippingAddressCheckout');
+  };
+
   displayAddToCartButton = () => {
-    if (this.state.indexInCart.indexOf(this.state.currentIndex) == -1) {
+    const { selectedSubscription } = this.props;
+    if (!this.isAlreadyInCart(selectedSubscription)) {
       return (
         <View style={styles.plusCircle}>
           <Icon color={Colors.mediumCarmine} size={23} name={'add'} />
@@ -158,11 +159,9 @@ class SubscriptionSelectionScreen extends React.Component {
   };
 
   displayCartItems = () => {
-    const { allSubscriptions } = this.props;
-    let indexArray = this.state.indexInCart;
-    let i;
+    const { shoppingCart } = this.props;
     let items = [];
-    if (indexArray.length != 0) {
+    if (shoppingCart.length != 0) {
       items.push(
         <View
           key="hr"
@@ -173,14 +172,14 @@ class SubscriptionSelectionScreen extends React.Component {
           }}
         />
       );
-      for (i = 0; i < indexArray.length; ++i) {
+      shoppingCart.forEach(subscription => {
         items.push(
-          <View key={i}>
+          <View key={subscription.id}>
             <View style={styles.cartItem}>
-              <Text style={styles.textInCart}>{allSubscriptions[i].title}</Text>
-              <Text style={styles.cartSize}>{allSubscriptions[i].size}</Text>
+              <Text style={styles.textInCart}>{subscription.title}</Text>
+              <Text style={styles.cartSize}>{subscription.size}kg/box</Text>
               <Text style={[styles.cartPrice, { top: -45 }]}>
-                {allSubscriptions[i].totalPrice} €
+                {subscription.totalPrice} €
               </Text>
             </View>
             <View
@@ -192,11 +191,11 @@ class SubscriptionSelectionScreen extends React.Component {
             />
           </View>
         );
-      }
+      });
       items.push(
         <View key="total" style={{ marginTop: 24, marginBottom: 24 }}>
           <Text style={styles.textInCart}>Total</Text>
-          <Text style={styles.cartPrice}>{this.state.totalPrice} €</Text>
+          <Text style={styles.cartPrice}>{this.getTotalPrice()} €</Text>
           <Text style={styles.cartTax}>*Total included VAT</Text>
         </View>
       );
@@ -206,9 +205,21 @@ class SubscriptionSelectionScreen extends React.Component {
     }
   };
 
+  getTotalPrice = () => {
+    return this.props.shoppingCart.reduce(
+      (prev, curr) => prev + curr.totalPrice,
+      0
+    );
+  };
+
+  isAlreadyInCart = subscription => {
+    const { shoppingCart } = this.props;
+    return shoppingCart.map(s => s.id).includes(subscription.id);
+  };
+
   clearCart = () => {
-    this.setState(() => ({ indexInCart: [] }));
-    this.props.navigation.setParams({ items: this.state.indexInCart.length });
+    this.props.cleanCart();
+    this.props.navigation.setParams({ items: 0 });
     this.props.navigation.setParams({ opacity: 0 });
   };
 
@@ -292,10 +303,14 @@ class SubscriptionSelectionScreen extends React.Component {
           >
             {this.displayAddToCartButton()}
           </TouchableOpacity>
-          <Text style={styles.total}>TOTAL: {this.state.totalPrice}€</Text>
+          <Text style={styles.total}>TOTAL: {this.getTotalPrice()} €</Text>
         </View>
         <View style={styles.bottom}>
-          <TouchableOpacity style={styles.orderButton}>
+          <TouchableOpacity
+            style={styles.orderButton}
+            onPress={this.onPressConfirmOrder}
+            disabled={this.props.shoppingCart.length === 0}
+          >
             <Text style={styles.orderText}>Confirm order</Text>
           </TouchableOpacity>
         </View>
@@ -337,7 +352,11 @@ class SubscriptionSelectionScreen extends React.Component {
                 <View>{this.displayCartItems()}</View>
               </ScrollView>
               <View style={styles.bottom}>
-                <TouchableOpacity style={styles.orderButton}>
+                <TouchableOpacity
+                  style={styles.orderButton}
+                  onPress={this.onPressConfirmOrder}
+                  disabled={this.props.shoppingCart.length === 0}
+                >
                   <Text style={styles.orderText}>Confirm order</Text>
                 </TouchableOpacity>
               </View>
@@ -609,9 +628,17 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   allSubscriptions: state.subscription.allSubscriptions,
+  shoppingCart: state.checkout.shoppingCart,
+  selectedSubscription: state.checkout.selectedSubscription,
 });
 
 export default connect(
   mapStateToProps,
-  { getAllSubscriptions, setSelectedSubscription }
+  {
+    getAllSubscriptions,
+    setSelectedSubscription,
+    addSubscriptionToCart,
+    removeSubscriptionFromCart,
+    cleanCart,
+  }
 )(SubscriptionSelectionScreen);

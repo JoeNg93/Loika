@@ -1,11 +1,17 @@
 import React from 'react';
 import { StyleSheet, View, TouchableHighlight, Image } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import Colors from '../../../../constants/Colors';
 import CheckoutStepProgress from '../../../../components/CheckoutStepProgress';
 import DeliverySchedule from '../../../../components/DeliverySchedule';
 import commonStyles from '../../../../constants/commonStyles';
 import Layout from '../../../../constants/Layout';
+import {
+  setDeliveryDayOfWeek,
+  setDeliveryTime,
+} from '../../../../actions/checkout';
 
 const width = Layout.window.width;
 
@@ -46,7 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class DeliveryScheduleCheckoutScreen extends React.Component {
+class DeliveryScheduleCheckoutScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Choose delivery schedule',
     headerTransparent: true,
@@ -66,8 +72,25 @@ export default class DeliveryScheduleCheckoutScreen extends React.Component {
       fontSize: 18,
     },
     headerStyle: {
-      marginTop: 10
-    }
+      marginTop: 10,
+    },
+  };
+
+  componentDidMount() {
+    this.props.setDeliveryDayOfWeek('MON');
+    this.props.setDeliveryTime('10:00 - 12:00');
+  }
+
+  onPressConfirmDeliverySchedule = () => {
+    this.props.navigation.navigate('OrderSummary');
+  };
+
+  onPressChangeDeliveryDayOfWeek = dayOfWeek => {
+    this.props.setDeliveryDayOfWeek(dayOfWeek);
+  };
+
+  onPressChangeDeliveryTime = time => {
+    this.props.setDeliveryTime(time);
   };
 
   render() {
@@ -77,7 +100,15 @@ export default class DeliveryScheduleCheckoutScreen extends React.Component {
 
         <View style={styles.contentContainer}>
           <View style={styles.deliverySchedule}>
-            <DeliverySchedule instructionText="*Delivery is scheduled every week during month" />
+            <DeliverySchedule
+              deliveryDayOfWeek={this.props.deliveryDayOfWeek}
+              deliveryTime={this.props.deliveryTime}
+              onPressChangeDeliveryDayOfWeek={
+                this.onPressChangeDeliveryDayOfWeek
+              }
+              onPressChangeDeliveryTime={this.onPressChangeDeliveryTime}
+              instructionText="*Delivery is scheduled every week during month"
+            />
           </View>
 
           <View style={styles.imageContainer}>
@@ -93,10 +124,20 @@ export default class DeliveryScheduleCheckoutScreen extends React.Component {
             title={'Confirm delivery schedule'}
             titleStyle={styles.mainButtonTitle}
             buttonStyle={styles.mainButtonStyle}
-            onPress={() => {}}
+            onPress={this.onPressConfirmDeliverySchedule}
           />
         </View>
       </View>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  deliveryDayOfWeek: state.checkout.deliveryDayOfWeek,
+  deliveryTime: state.checkout.deliveryTime,
+});
+
+export default connect(
+  mapStateToProps,
+  { setDeliveryDayOfWeek, setDeliveryTime }
+)(DeliveryScheduleCheckoutScreen);

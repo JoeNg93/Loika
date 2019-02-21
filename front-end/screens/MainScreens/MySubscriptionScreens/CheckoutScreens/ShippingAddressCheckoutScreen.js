@@ -7,6 +7,8 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import { Icon, Button, CheckBox } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import AddressForm from '../../../../components/AddressForm';
 import AddressSummary from '../../../../components/AddressSummary';
 import AddNewAddressModal from '../../../../components/AddNewAddressModal';
@@ -14,11 +16,15 @@ import CheckoutStepProgress from '../../../../components/CheckoutStepProgress';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
 import Layout from '../../../../constants/Layout';
+import {
+  setSelectedBillingAddress,
+  setSelectedShippingAddress,
+} from '../../../../actions/checkout';
 import _ from 'lodash';
 
 const width = Layout.window.width;
 
-export default class ShippingAddressCheckoutScreen extends React.Component {
+class ShippingAddressCheckoutScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Your address and contact',
     headerTransparent: true,
@@ -38,46 +44,24 @@ export default class ShippingAddressCheckoutScreen extends React.Component {
       fontSize: 18,
     },
     headerStyle: {
-      marginTop: 10
-    }
+      marginTop: 10,
+    },
   };
 
   state = {
-    fetchShippingAddresses: [
-      {
-        name: 'Thanh Dang',
-        shippingAddress: {
-          address: 'Kotkantie 1',
-          postCode: 90100,
-          city: 'Oulu',
-        },
-        phoneNumber: '+3581233453232',
-        isSelected: true,
-      },
-      {
-        name: 'Robert Barker',
-        shippingAddress: {
-          address: 'Kajaanintie 38A',
-          postCode: 90130,
-          city: 'Oulu',
-        },
-        phoneNumber: '+3581233453232',
-      },
-    ],
-    fetchBillingAddress: {
-      name: 'Thanh Dang',
-      shippingAddress: {
-        address: 'Isokatu 32B',
-        postCode: 90100,
-        city: 'Oulu',
-      },
-      phoneNumber: '+3581233453232',
-      sameAsShipping: false,
-    },
     addressModalVisible: false,
     sameAsShippingChecked:
       this.fetchBillingAddress && this.fetchBillingAddress.sameAsShipping,
   };
+
+  componentDidMount() {
+    if (_.isEmpty(this.props.billingAddress)) {
+      this.props.setSelectedBillingAddress(this.props.user.billingAddress);
+    }
+    if (_.isEmpty(this.props.shippingAddress)) {
+      this.props.setSelectedShippingAddress(this.props.user.shippingAddress[0]);
+    }
+  }
 
   addressIndex = 0;
 
@@ -88,13 +72,25 @@ export default class ShippingAddressCheckoutScreen extends React.Component {
 
   renderAddressSummaryList = (addressList, hasSelectedButton = true) => {
     return addressList.map(addressDetails => (
-      <View key={this.addressIndex++} style={styles.addressSummaryContainer}>
+      <View key={addressDetails.id} style={styles.addressSummaryContainer}>
         <AddressSummary
-          {...addressDetails}
+          id={addressDetails.id}
+          name={addressDetails.name}
+          phoneNumber={addressDetails.phoneNumber}
+          shippingAddress={{
+            address: addressDetails.street1,
+            postCode: addressDetails.postCode,
+            city: addressDetails.city,
+          }}
           hasSelectedButton={hasSelectedButton}
           canEditAddress={true}
-          isButtonSelected={addressDetails.isSelected}
-          onPressSelectedButton={() => {}}
+          isButtonSelected={addressDetails.id === this.props.shippingAddress.id}
+          onPressSelectedButton={id => {
+            const shippingAddress = this.props.user.shippingAddress.find(
+              addr => addr.id === id
+            );
+            this.props.setSelectedShippingAddress(shippingAddress);
+          }}
           onPressSaveAddressForm={() => {}}
         />
       </View>
@@ -102,9 +98,7 @@ export default class ShippingAddressCheckoutScreen extends React.Component {
   };
 
   getSelectedShippingAddress = () => {
-    return this.state.fetchShippingAddresses.filter(addressDetails => {
-      return addressDetails.isSelected;
-    });
+    return this.props.user.shippingAddress[0];
   };
 
   openAddressModal = () => {
@@ -116,29 +110,28 @@ export default class ShippingAddressCheckoutScreen extends React.Component {
   };
 
   toggleSameAsShippingChecked = () => {
-    this.setState({ sameAsShippingChecked: !this.state.sameAsShippingChecked });
+    this.setState(
+      { sameAsShippingChecked: !this.state.sameAsShippingChecked },
+      () => {
+        let billingAddress;
+        if (this.state.sameAsShippingChecked) {
+          billingAddress = this.props.shippingAddress;
+        } else {
+          billingAddress = this.props.user.billingAddress || {};
+        }
+        this.props.setSelectedBillingAddress(billingAddress);
+      }
+    );
+  };
+
+  onPressConfirmAddress = () => {
+    this.props.navigation.navigate('DeliveryScheduleCheckout');
   };
 
   renderBillingAddress = () => {
     // First scenario : When user has saved addresses
-    if (!_.isEmpty(this.state.fetchBillingAddress)) {
-      // Render saved billing address if checkbox is unchecked
-      // Initial state for checkbox is decided if saved billing address is the same as saved shipping or not
-      if (!this.state.sameAsShippingChecked) {
-        return this.renderAddressSummaryList(
-          [this.state.fetchBillingAddress],
-          false
-        );
-      }
-      // If checkbox is checked, always render the current selected shipping address
-      else {
-        if (!_.isEmpty(this.state.fetchShippingAddresses)) {
-          return this.renderAddressSummaryList(
-            this.getSelectedShippingAddress(),
-            false
-          );
-        }
-      }
+    if (!_.isEmpty(this.props.billingAddress)) {
+      return this.renderAddressSummaryList([this.props.billingAddress], false);
     }
     // Second scenario: when user first make order and hasn't entered any address
     else {
@@ -156,6 +149,7 @@ export default class ShippingAddressCheckoutScreen extends React.Component {
   };
 
   render() {
+    console.log(this.props.user);
     return (
       <View style={styles.mainContainer}>
         <ScrollView>
@@ -163,11 +157,9 @@ export default class ShippingAddressCheckoutScreen extends React.Component {
 
           <View style={{ marginTop: 34 }}>
             <Text style={styles.titleText}>Shipping address</Text>
-            {!_.isEmpty(this.state.fetchShippingAddresses) ? (
+            {!_.isEmpty(this.props.user.shippingAddress) ? (
               <View>
-                {this.renderAddressSummaryList(
-                  this.state.fetchShippingAddresses
-                )}
+                {this.renderAddressSummaryList(this.props.user.shippingAddress)}
                 <Button
                   type={'clear'}
                   title={'Add new address'}
@@ -211,7 +203,7 @@ export default class ShippingAddressCheckoutScreen extends React.Component {
             title={'Confirm address'}
             titleStyle={styles.mainButtonTitle}
             buttonStyle={styles.mainButtonStyle}
-            onPress={() => {}}
+            onPress={this.onPressConfirmAddress}
           />
         </View>
       </View>
@@ -267,3 +259,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  shippingAddress: state.checkout.shippingAddress,
+  billingAddress: state.checkout.billingAddress,
+});
+
+export default connect(
+  mapStateToProps,
+  { setSelectedBillingAddress, setSelectedShippingAddress }
+)(ShippingAddressCheckoutScreen);

@@ -104,7 +104,9 @@ export default class AddressSummary extends React.Component {
                         ? styles.activeButton
                         : styles.nonActiveButton,
                     ]}
-                    onPress={this.props.onPressSelectedButton}
+                    onPress={() =>
+                      this.props.onPressSelectedButton(this.props.id)
+                    }
                   />
                 </View>
               )}
@@ -117,6 +119,7 @@ export default class AddressSummary extends React.Component {
 }
 
 AddressSummary.propTypes = {
+  id: PropTypes.string,
   name: PropTypes.string,
   shippingAddress: PropTypes.shape({
     address: PropTypes.string,
@@ -133,6 +136,7 @@ AddressSummary.propTypes = {
 };
 
 AddressSummary.defaultProps = {
+  id: '',
   name: '',
   shippingAddress: {},
   phoneNumber: '',

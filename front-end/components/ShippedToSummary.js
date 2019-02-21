@@ -8,6 +8,15 @@ import Colors from '../constants/Colors';
 
 const ICON_SIZE = 14;
 
+const dayOfWeekAbbrMapper = {
+  MON: 'Monday',
+  TUE: 'Tuesday',
+  WED: 'Wednesday',
+  THU: 'Thursday',
+  FRI: 'Friday',
+  SAT: 'Saturday',
+};
+
 export default function ShippedToSummary({
   name,
   shippingAddress,
@@ -46,11 +55,21 @@ export default function ShippedToSummary({
         <Text style={styles.personalInfoText}>{phoneNumber}</Text>
       </View>
       <Divider style={styles.thinLine} />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 17 }}>
-        <View style={{ flexDirection: 'row'}}>
-          <Icon name="date-range" color={Colors.mediumCarmine} size={ICON_SIZE} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: 17,
+        }}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          <Icon
+            name="date-range"
+            color={Colors.mediumCarmine}
+            size={ICON_SIZE}
+          />
           <Text style={styles.personalInfoText}>
-            {deliveryDayOfWeek}, around {deliveryTime}
+            {dayOfWeekAbbrMapper[deliveryDayOfWeek]}, around {deliveryTime}
           </Text>
         </View>
         {hasChangeButton && (

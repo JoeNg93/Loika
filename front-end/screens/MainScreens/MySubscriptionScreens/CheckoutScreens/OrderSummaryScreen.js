@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import commonStyles from '../../../../constants/commonStyles';
 import Colors from '../../../../constants/Colors';
@@ -15,10 +16,11 @@ import ShippedToSummary from '../../../../components/ShippedToSummary';
 import SubscriptionSummary from '../../../../components/SubscriptionSummary';
 import TotalComponent from '../../../../components/TotalComponent';
 import Layout from '../../../../constants/Layout';
+import { removeSubscriptionFromCart } from '../../../../actions/checkout';
 
 const width = Layout.window.width;
 
-export default class OrderSummaryScreen extends React.Component {
+class OrderSummaryScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Order summary',
     headerTransparent: true,
@@ -38,46 +40,44 @@ export default class OrderSummaryScreen extends React.Component {
       fontSize: 18,
     },
     headerStyle: {
-      marginTop: 10
-    }
+      marginTop: 10,
+    },
   };
 
   state = {
-    orderedSubscriptions: [
-      {
-        name: 'Vegan',
-        weight: 5,
-        price: 199,
-        pricePerMeal: 3.4,
-      },
-      {
-        name: 'Mixed',
-        weight: 5,
-        price: 199,
-        pricePerMeal: 3.4,
-      },
-    ],
-    name: 'Joe Nguyen',
-    phoneNumber: '+358469512914',
-    shippingAddress: {
-      address: 'Ylioppilaantie 10 B 25',
-      postCode: 90130,
-      city: 'Oulu',
-    },
-    deliveryDayOfWeek: 'Monday',
-    deliveryTime: '10:00-12:00',
+    displayStripeCheckout: false,
+  };
+
+  getTotalPrice = () => {
+    return this.props.shoppingCart.reduce(
+      (prev, curr) => prev + curr.totalPrice,
+      0
+    );
+  };
+
+  onPressChangeDeliverySchedule = () => {
+    this.props.navigation.navigate('DeliveryScheduleCheckout');
+  };
+
+  onPressPayNow = () => {
+    this.setState({ displayStripeCheckout: true });
+  };
+
+  onPressRemoveSubscription = subscriptionId => {
+    this.props.removeSubscriptionFromCart(subscriptionId);
   };
 
   renderOrderedSubscriptionsList() {
-    return this.state.orderedSubscriptions.map((subscription, idx) => (
-      <View key={idx} style={styles.subscriptionSummaryContainer}>
+    return this.props.shoppingCart.map((subscription, idx) => (
+      <View key={subscription.id} style={styles.subscriptionSummaryContainer}>
         <SubscriptionSummary
-          boxName={subscription.name}
-          boxWeight={subscription.weight}
-          boxPrice={subscription.price}
-          pricePerMeal={subscription.pricePerMeal}
+          id={subscription.id}
+          boxName={subscription.title}
+          boxWeight={subscription.size}
+          boxPrice={subscription.totalPrice}
+          pricePerMeal={subscription.mealPrice}
           hasRemoveButton
-          onPressRemoveSubscription={() => console.log('Remove subscription')}
+          onPressRemoveSubscription={this.onPressRemoveSubscription}
           modalTitle={'Remove subscription?'}
           modalTextContent={
             'Are you sure that you want to remove this subscription from cart?'
@@ -90,21 +90,23 @@ export default class OrderSummaryScreen extends React.Component {
   renderShippedToAddress() {
     const {
       name,
-      shippingAddress,
+      postcode,
+      city,
+      street1,
       phoneNumber,
-      deliveryTime,
-      deliveryDayOfWeek,
-    } = this.state;
+    } = this.props.shippingAddress;
+    const { deliveryTime, deliveryDayOfWeek } = this.props;
+
     return (
       <View style={styles.shippedToContainer}>
         <ShippedToSummary
           name={name}
-          shippingAddress={shippingAddress}
+          shippingAddress={{ city, postCode: postcode, address: street1 }}
           phoneNumber={phoneNumber}
           deliveryDayOfWeek={deliveryDayOfWeek}
           deliveryTime={deliveryTime}
           hasChangeButton
-          onPressChangeButton={() => console.log('Change address')}
+          onPressChangeButton={this.onPressChangeDeliverySchedule}
         />
       </View>
     );
@@ -124,7 +126,7 @@ export default class OrderSummaryScreen extends React.Component {
             {this.renderShippedToAddress()}
           </View>
           <View style={styles.totalPriceContainer}>
-            <TotalComponent price={388} />
+            <TotalComponent price={this.getTotalPrice()} />
           </View>
           <View style={styles.spaceHolderContainer} />
         </ScrollView>
@@ -133,7 +135,7 @@ export default class OrderSummaryScreen extends React.Component {
             title="Pay now"
             titleStyle={styles.mainButtonTitle}
             buttonStyle={styles.mainButtonStyle}
-            onPress={() => console.log('Pay Now')}
+            onPress={this.onPressPayNow}
           />
         </View>
       </View>
@@ -188,3 +190,17 @@ const styles = StyleSheet.create({
     marginTop: 112,
   },
 });
+
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  shoppingCart: state.checkout.shoppingCart,
+  shippingAddress: state.checkout.shippingAddress,
+  billingAddress: state.checkout.billingAddress,
+  deliveryDayOfWeek: state.checkout.deliveryDayOfWeek,
+  deliveryTime: state.checkout.deliveryTime,
+});
+
+export default connect(
+  mapStateToProps,
+  { removeSubscriptionFromCart }
+)(OrderSummaryScreen);

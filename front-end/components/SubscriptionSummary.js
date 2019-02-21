@@ -8,9 +8,9 @@ import commonStyles from '../constants/commonStyles';
 import Colors from '../constants/Colors';
 
 const boxNameToImageMapper = {
-  vegan: require('../assets/images/vegan.png'),
-  mixed: require('../assets/images/mixed.png'),
-  meat: require('../assets/images/meat.png'),
+  'vegan box': require('../assets/images/vegan.png'),
+  'mixed box': require('../assets/images/mixed.png'),
+  'meat box': require('../assets/images/meat.png'),
 };
 
 export default class SubscriptionSummary extends React.Component {
@@ -31,9 +31,7 @@ export default class SubscriptionSummary extends React.Component {
       <View style={{ width: this.props.containerWidth }}>
         {this.props.hasRemoveButton && (
           <View style={{ zIndex: 100 }}>
-            <TouchableOpacity
-              onPress={this.onPressOpenCancelDialogModal}
-            >
+            <TouchableOpacity onPress={this.onPressOpenCancelDialogModal}>
               <Icon
                 name="close"
                 size={10}
@@ -43,7 +41,9 @@ export default class SubscriptionSummary extends React.Component {
             </TouchableOpacity>
             <CancelConfirmModal
               visible={this.state.cancelDialogVisible}
-              onPressCancelSubscription={this.props.onPressRemoveSubscription}
+              onPressCancelSubscription={() =>
+                this.props.onPressRemoveSubscription(this.props.id)
+              }
               onPressCloseModal={this.onPressCloseCancelDialogModal}
               modalTitle={this.props.modalTitle}
               modalTextContent={this.props.modalTextContent}
@@ -64,7 +64,7 @@ export default class SubscriptionSummary extends React.Component {
           </View>
           <View style={styles.boxInfoContainer}>
             <Text style={styles.boxNameText}>
-              {this.props.boxName.toUpperCase()} BOX
+              {this.props.boxName.toUpperCase()}
             </Text>
             <Text style={styles.boxWeightText}>
               {this.props.boxWeight}kg/box
@@ -86,6 +86,7 @@ export default class SubscriptionSummary extends React.Component {
 }
 
 SubscriptionSummary.propTypes = {
+  id: PropTypes.string,
   boxName: PropTypes.string,
   boxWeight: PropTypes.number,
   boxPrice: PropTypes.number,
@@ -98,6 +99,7 @@ SubscriptionSummary.propTypes = {
 };
 
 SubscriptionSummary.defaultProps = {
+  id: '',
   boxName: '',
   boxWeight: 0,
   boxPrice: 0,

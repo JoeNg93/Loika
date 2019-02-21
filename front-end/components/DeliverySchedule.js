@@ -91,12 +91,8 @@ export default class DeliverySchedule extends React.Component {
 
   // a cancer of a solution, but it's straightforward and it works, hopefully it doesn't need to be changed
 
-  _changeDayPick = dayName => {
-    this.setState({ dayPicked: dayName });
-  };
-
   _checkDayClick = (dayName, elem) => {
-    if (dayName == this.state.dayPicked) {
+    if (dayName == this.props.deliveryDayOfWeek) {
       switch (elem) {
         case 'btn':
           return styles.dayButtonPicked;
@@ -106,12 +102,8 @@ export default class DeliverySchedule extends React.Component {
     }
   };
 
-  _changeTimePick = timeSlot => {
-    this.setState({ timePicked: timeSlot });
-  };
-
   _checkTimeClick = (timeSlot, elem) => {
-    if (timeSlot == this.state.timePicked) {
+    if (timeSlot == this.props.deliveryTime) {
       switch (elem) {
         case 'btn':
           return styles.timeButtonPicked;
@@ -127,7 +119,7 @@ export default class DeliverySchedule extends React.Component {
         <View style={styles.dayPickerContainer}>
           <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('MON', 'btn')]}
-            onPress={() => this._changeDayPick('MON')}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('MON')}
           >
             <Text
               style={[styles.dayButtonText, this._checkDayClick('MON', 'text')]}
@@ -138,7 +130,7 @@ export default class DeliverySchedule extends React.Component {
 
           <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('TUE', 'btn')]}
-            onPress={() => this._changeDayPick('TUE')}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('TUE')}
           >
             <Text
               style={[styles.dayButtonText, this._checkDayClick('TUE', 'text')]}
@@ -149,7 +141,7 @@ export default class DeliverySchedule extends React.Component {
 
           <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('WED', 'btn')]}
-            onPress={() => this._changeDayPick('WED')}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('WED')}
           >
             <Text
               style={[styles.dayButtonText, this._checkDayClick('WED', 'text')]}
@@ -160,7 +152,7 @@ export default class DeliverySchedule extends React.Component {
 
           <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('THU', 'btn')]}
-            onPress={() => this._changeDayPick('THU')}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('THU')}
           >
             <Text
               style={[styles.dayButtonText, this._checkDayClick('THU', 'text')]}
@@ -171,7 +163,7 @@ export default class DeliverySchedule extends React.Component {
 
           <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('FRI', 'btn')]}
-            onPress={() => this._changeDayPick('FRI')}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('FRI')}
           >
             <Text
               style={[styles.dayButtonText, this._checkDayClick('FRI', 'text')]}
@@ -182,7 +174,7 @@ export default class DeliverySchedule extends React.Component {
 
           <TouchableOpacity
             style={[styles.dayButton, this._checkDayClick('SAT', 'btn')]}
-            onPress={() => this._changeDayPick('SAT')}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('SAT')}
           >
             <Text
               style={[styles.dayButtonText, this._checkDayClick('SAT', 'text')]}
@@ -202,7 +194,9 @@ export default class DeliverySchedule extends React.Component {
                   styles.timeButton,
                   this._checkTimeClick('10:00 - 12:00', 'btn'),
                 ]}
-                onPress={() => this._changeTimePick('10:00 - 12:00')}
+                onPress={() =>
+                  this.props.onPressChangeDeliveryTime('10:00 - 12:00')
+                }
               >
                 <Text
                   style={[
@@ -219,7 +213,9 @@ export default class DeliverySchedule extends React.Component {
                   styles.timeButton,
                   this._checkTimeClick('14:00 - 16:00', 'btn'),
                 ]}
-                onPress={() => this._changeTimePick('14:00 - 16:00')}
+                onPress={() =>
+                  this.props.onPressChangeDeliveryTime('14:00 - 16:00')
+                }
               >
                 <Text
                   style={[
@@ -238,7 +234,9 @@ export default class DeliverySchedule extends React.Component {
                   styles.timeButton,
                   this._checkTimeClick('12:00 - 14:00', 'btn'),
                 ]}
-                onPress={() => this._changeTimePick('12:00 - 14:00')}
+                onPress={() =>
+                  this.props.onPressChangeDeliveryTime('12:00 - 14:00')
+                }
               >
                 <Text
                   style={[
@@ -255,7 +253,9 @@ export default class DeliverySchedule extends React.Component {
                   styles.timeButton,
                   this._checkTimeClick('16:00 - 18:00', 'btn'),
                 ]}
-                onPress={() => this._changeTimePick('16:00 - 18:00')}
+                onPress={() =>
+                  this.props.onPressChangeDeliveryTime('16:00 - 18:00')
+                }
               >
                 <Text
                   style={[
@@ -278,8 +278,16 @@ export default class DeliverySchedule extends React.Component {
 
 DeliverySchedule.propTypes = {
   instructionText: PropTypes.string,
+  deliveryDayOfWeek: PropTypes.string,
+  deliveryTime: PropTypes.string,
+  onPressChangeDeliveryDayOfWeek: PropTypes.func,
+  onPressChangeDeliveryTime: PropTypes.func,
 };
 
 DeliverySchedule.defaultProps = {
   instructionText: '',
+  deliveryDayOfWeek: 'Mon',
+  deliveryTime: '10:00 - 12:00',
+  onPressChangeDeliveryDayOfWeek: () => {},
+  onPressChangeDeliveryTime: () => {},
 };

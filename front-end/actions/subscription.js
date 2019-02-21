@@ -11,6 +11,7 @@ export const getAllSubscriptions = () => async dispatch => {
       query: `
         query {
           readAllSubscriptions {
+            id,
             title,
             shortDescription,
             longDescription,
@@ -37,8 +38,4 @@ export const getAllSubscriptions = () => async dispatch => {
     dispatch({ type: actionTypes.GET_SUBSCRIPTIONS_FAIL });
     return null;
   }
-};
-
-export const setSelectedSubscription = subscription => {
-  return { type: actionTypes.SET_SELECTED_SUBSCRIPTION, payload: subscription };
 };
