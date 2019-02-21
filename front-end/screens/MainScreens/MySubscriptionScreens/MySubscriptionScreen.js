@@ -9,6 +9,8 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import SubscriptionBox from '../../../components/SubscriptionBox';
 import commonStyles from '../../../constants/commonStyles';
 import {
@@ -19,10 +21,11 @@ import {
 } from '../../../utils/dateTime';
 import Colors from '../../../constants/Colors';
 import Layout from '../../../constants/Layout';
+import { getUserProfile } from '../../../actions/auth';
 
 const width = Layout.window.width;
 
-export default class MySubscriptionScreen extends React.Component {
+class MySubscriptionScreen extends React.Component {
   static navigationOptions = {
     headerTitle: '',
     headerBackTitle: null,
@@ -74,6 +77,10 @@ export default class MySubscriptionScreen extends React.Component {
       },
     ],
   };
+
+  componentDidMount() {
+    this.props.getUserProfile();
+  }
 
   getOrderNextDeliveryDate = order => {
     let nextDeliveryDate = getNextDeliveryDate(order.deliveryDayOfWeek),
@@ -289,3 +296,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default connect(
+  null,
+  { getUserProfile }
+)(MySubscriptionScreen);

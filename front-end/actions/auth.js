@@ -17,6 +17,7 @@ export const signIn = (email, password) => async dispatch => {
     });
 
     const accessToken = res.data.data.signin;
+    await AsyncStorage.setItem('accessToken', accessToken);
     dispatch({ type: actionTypes.SIGN_IN_SUCCESS, payload: accessToken });
 
     return accessToken;
@@ -34,4 +35,80 @@ export const fetchTokenFromStorage = () => async dispatch => {
     payload: accessToken,
   });
   return accessToken;
+};
+
+export const getUserProfile = () => async dispatch => {
+  dispatch({ type: actionTypes.GET_USER_PROFILE_PENDING });
+  const accessToken = await AsyncStorage.getItem('accessToken');
+  console.log('TCL: accessToken', accessToken);
+
+  try {
+    const res = await axios.post(
+      baseURL,
+      {
+        query: `
+        query {
+          me {
+            id,
+            billingAddress {
+              id,
+              name,
+              phoneNumber,
+              city,
+              country,
+              postcode,
+              street1
+            },
+            email,
+            name,
+            orders {
+              billingAddress {
+                id,
+                name,
+                phoneNumber,
+                city,
+                country,
+                postcode,
+                street1
+              },
+              deliveryDayOfWeek,
+              deliveryTime,
+              paymentDate,
+              shippingAddress {
+                id,
+                name,
+                phoneNumber,
+                city,
+                country,
+                postcode,
+                street1
+              },
+              total
+            },
+            shippingAddress {
+              id,
+              name,
+              phoneNumber,
+              city,
+              country,
+              postcode,
+              street1
+            }
+          }
+        }
+      `,
+      },
+      { headers: { Authorization: accessToken } }
+    );
+
+    const userInfo = res.data.data.me;
+    console.log('TCL: userInfo', userInfo);
+    dispatch({ type: actionTypes.GET_USER_PROFILE_SUCCESS, payload: userInfo });
+
+    return userInfo;
+  } catch (err) {
+    console.log('ERROR - getUserProfile', err.response.data);
+    dispatch({ type: actionTypes.GET_USER_PROFILE_FAIL });
+    return null;
+  }
 };
