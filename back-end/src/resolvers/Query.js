@@ -1,4 +1,4 @@
-const { prisma } = require("../generated/prisma-client");
+const { prisma } = require('../generated/prisma-client');
 
 const Query = {
   // This is for getting the current user logged in
@@ -8,11 +8,17 @@ const Query = {
       return null;
     }
     let user = await prisma.user({
-      id: ctx.request.userId
+      id: ctx.request.userId,
     });
 
-    user.cart = await prisma.user({id: ctx.request.userId}).cart();
-    user.orders = await prisma.user({id: ctx.request.userId}).orders();
+    user.cart = await prisma.user({ id: ctx.request.userId }).cart();
+    user.orders = await prisma.user({ id: ctx.request.userId }).orders();
+    user.shippingAddress = await prisma
+      .user({ id: ctx.request.userId })
+      .shippingAddress();
+    user.billingAddress = await prisma
+      .user({ id: ctx.request.userId })
+      .billingAddress();
 
     return user;
   },
@@ -24,7 +30,7 @@ const Query = {
       return null;
     }
     return prisma.address({
-      id: args.id
+      id: args.id,
     });
   },
 
@@ -42,7 +48,7 @@ const Query = {
    */
   readOneSubscription(parent, args, ctx, info) {
     return prisma.subscription({
-      id: args.id
+      id: args.id,
     });
   },
 
@@ -55,7 +61,7 @@ const Query = {
    */
   readAllSubscriptions(parent, args, ctx, info) {
     return prisma.subscriptions({});
-  }
+  },
 };
 
 module.exports = Query;
