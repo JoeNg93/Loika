@@ -29,6 +29,16 @@ export default (state = INITIAL_STATE, { type, payload }) => {
           orders: [...state.user.orders, payload],
         },
       };
+    case userActionTypes.UPDATE_SHIPPING_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          shippingAddress: state.user.shippingAddress.map(addr =>
+            addr.id === payload.id ? payload : addr
+          ),
+        },
+      };
     default:
       return state;
   }

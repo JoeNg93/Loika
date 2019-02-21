@@ -31,7 +31,7 @@ class AddNewAddressModal extends React.Component {
 
   validateForm = () => {
     // Check if all form input is filled (not empty)
-    return false;
+    return true;
   };
 
   onPressSaveAddressForm = () => {

@@ -1,15 +1,23 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import Colors from '../constants/Colors';
 import commonStyles from '../constants/commonStyles';
 import PropTypes from 'prop-types';
 import AddressForm from './AddressForm';
+import { updateShippingAddress } from '../actions/user';
 
-export default class AddressSummary extends React.Component {
+class AddressSummary extends React.Component {
   state = {
     isEditing: false,
     saveButtonEnabled: false,
+    name: '',
+    address: '',
+    postCode: '',
+    city: '',
+    phoneNumber: '',
   };
 
   toggleEditMode = () => {
@@ -19,15 +27,45 @@ export default class AddressSummary extends React.Component {
   onAddressInputEndEditing = ({ type, value }) => {
     //Validate input here, then return error message to AddressForm
     console.log(`${type}: ${value}`);
+    this.setState({ [type]: value });
     //Validate form to see if save button should be enabled
     if (this.validateForm()) {
       this.setState({ saveButtonEnabled: true });
     }
   };
 
+  componentDidMount() {
+    const {
+      name,
+      phoneNumber,
+      shippingAddress: { address, postCode, city },
+    } = this.props;
+    this.setState({ name, phoneNumber, address, postCode, city });
+  }
+
   validateForm = () => {
     // Check if all form input is filled (not empty)
-    return false;
+    return true;
+  };
+
+  onPressSaveAddressForm = () => {
+    const {
+      name,
+      address: street1,
+      postCode: postcode,
+      city,
+      phoneNumber,
+    } = this.state;
+    const address = {
+      name,
+      street1,
+      city,
+      phoneNumber,
+      postcode: Number(postcode),
+    };
+    console.log('Updated addr: ', address);
+    this.props.updateShippingAddress(this.props.id, address);
+    this.toggleEditMode();
   };
 
   render() {
@@ -75,7 +113,7 @@ export default class AddressSummary extends React.Component {
                     : styles.disabledButton,
                 ]}
                 containerStyle={styles.formSaveButtonContainer}
-                onPress={this.props.onPressSaveAddressForm}
+                onPress={this.onPressSaveAddressForm}
               />
             </View>
           ) : (
@@ -217,3 +255,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
+
+export default connect(
+  null,
+  { updateShippingAddress }
+)(AddressSummary);

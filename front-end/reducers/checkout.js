@@ -1,5 +1,6 @@
 import actionTypes from '../constants/actionTypes/checkout';
 import subscriptionActionTypes from '../constants/actionTypes/subscription';
+import userActionTypes from '../constants/actionTypes/user';
 
 const INITIAL_STATE = {
   selectedSubscription: {},
@@ -52,6 +53,18 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return {
         ...state,
         deliveryTime: payload,
+      };
+    case userActionTypes.UPDATE_SHIPPING_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        shippingAddress:
+          state.shippingAddress.id === payload.id
+            ? payload
+            : state.shippingAddress,
+        billingAddress:
+          state.billingAddress.id === payload.id
+            ? payload
+            : state.billingAddress,
       };
     default:
       return state;

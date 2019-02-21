@@ -68,6 +68,7 @@ class ShippingAddressCheckoutScreen extends React.Component {
   onAddressInputEndEditing = ({ type, value }) => {
     //Validate input here, then return error message to AddressForm
     console.log(`${type}: ${value}`);
+    this.setState({ [type]: value });
   };
 
   renderAddressSummaryList = (addressList, hasSelectedButton = true) => {
