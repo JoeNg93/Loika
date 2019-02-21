@@ -1,19 +1,28 @@
 import React from 'react';
 import { StyleSheet, Modal, View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import AddressForm from './AddressForm';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import commonStyles from '../constants/commonStyles';
+import { addShippingAddress } from '../actions/user';
 
-export default class AddNewAddressModal extends React.Component {
+class AddNewAddressModal extends React.Component {
   state = {
     saveButtonEnabled: false,
+    name: '',
+    address: '',
+    postCode: '',
+    city: '',
+    phoneNumber: '',
   };
 
   onAddressInputEndEditing = ({ type, value }) => {
     //Validate input here, then return error message to AddressForm
     console.log(`${type}: ${value}`);
+    this.setState({ [type]: value });
     //Validate form to see if save button should be enabled
     if (this.validateForm()) {
       this.setState({ saveButtonEnabled: true });
@@ -23,6 +32,26 @@ export default class AddNewAddressModal extends React.Component {
   validateForm = () => {
     // Check if all form input is filled (not empty)
     return false;
+  };
+
+  onPressSaveAddressForm = () => {
+    const {
+      name,
+      address: street1,
+      postCode: postcode,
+      city,
+      phoneNumber,
+    } = this.state;
+    const address = {
+      name,
+      street1,
+      city,
+      phoneNumber,
+      postcode: Number(postcode),
+      id: Math.random().toString(36),
+    };
+    this.props.addShippingAddress(address);
+    this.props.onPressCloseModal();
   };
 
   render() {
@@ -57,7 +86,7 @@ export default class AddNewAddressModal extends React.Component {
                     ? styles.activeButton
                     : styles.disabledButton,
                 ]}
-                onPress={this.props.onPressSaveAddressForm}
+                onPress={this.onPressSaveAddressForm}
               />
             </View>
           </View>
@@ -133,3 +162,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
+
+export default connect(
+  null,
+  { addShippingAddress }
+)(AddNewAddressModal);
