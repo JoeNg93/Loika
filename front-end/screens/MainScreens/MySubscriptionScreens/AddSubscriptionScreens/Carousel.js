@@ -12,6 +12,12 @@ import {
 const { width: screenWidth } = Dimensions.get('window');
 const width = 200;
 
+const boxNameToImageMapper = {
+  'vegan box': require('../../../../assets/images/vegan.png'),
+  'mixed box': require('../../../../assets/images/mixed.png'),
+  'meat box': require('../../../../assets/images/meat.png'),
+};
+
 export default class SweetCarousel extends React.Component {
   static WIDTH = width;
 
@@ -42,7 +48,7 @@ export default class SweetCarousel extends React.Component {
           <View>
             <Image
               style={styles.image}
-              source={require('../../../../assets/images/meat.png')}
+              source={boxNameToImageMapper[box.title.toLowerCase()]}
             />
           </View>
         </TouchableOpacity>

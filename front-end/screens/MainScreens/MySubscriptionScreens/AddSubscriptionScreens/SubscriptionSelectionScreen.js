@@ -100,9 +100,6 @@ class SubscriptionSelectionScreen extends React.Component {
 
   state = {
     currentIndex: 0,
-    shoppingCart: [],
-    indexInCart: [],
-    totalPrice: 0,
     cartVisible: false,
   };
 

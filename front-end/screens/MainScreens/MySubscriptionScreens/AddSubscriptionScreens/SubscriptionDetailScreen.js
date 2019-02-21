@@ -11,6 +11,12 @@ import { connect } from 'react-redux';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
 
+const boxNameToImageMapper = {
+  'vegan box': require('../../../../assets/images/vegan.png'),
+  'mixed box': require('../../../../assets/images/mixed.png'),
+  'meat box': require('../../../../assets/images/meat.png'),
+};
+
 class SubscriptionDetailScreen extends React.Component {
   static navigationOptions = {
     headerTransparent: true,
@@ -42,7 +48,9 @@ class SubscriptionDetailScreen extends React.Component {
         <View style={styles.topContainer}>
           <Image
             style={styles.image}
-            source={require('../../../../assets/images/mixed.png')}
+            source={
+              boxNameToImageMapper[selectedSubscription.title.toLowerCase()]
+            }
           />
           <View style={styles.priceTag} />
           <Text style={styles.price}>
@@ -238,7 +246,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  selectedSubscription: state.subscription.selectedSubscription,
+  selectedSubscription: state.checkout.selectedSubscription,
 });
 
 export default connect(
