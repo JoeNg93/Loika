@@ -90,6 +90,9 @@ class ShippingAddressCheckoutScreen extends React.Component {
               addr => addr.id === id
             );
             this.props.setSelectedShippingAddress(shippingAddress);
+            if (this.state.sameAsShippingChecked) {
+              this.props.setSelectedBillingAddress(shippingAddress);
+            }
           }}
           onPressSaveAddressForm={() => {}}
         />
