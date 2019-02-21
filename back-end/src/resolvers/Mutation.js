@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { prisma } = require("../generated/prisma-client");
-const stripe = require("../stripe");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { prisma } = require('../generated/prisma-client');
+const stripe = require('../stripe');
 
 const Mutations = {
   /////////////////////////////////////////////////////////////////
@@ -26,11 +26,11 @@ const Mutations = {
       email,
       password,
       name: args.name,
-      permissions: { set: ["USER"] }
+      permissions: { set: ['USER'] },
     });
     // create JWT
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
-      expiresIn: 1000 * 60 * 60 * 24 * 30
+      expiresIn: 1000 * 60 * 60 * 24 * 30,
     });
 
     // Return token only
@@ -53,12 +53,10 @@ const Mutations = {
     // 2. Check if their password is correct
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
-      throw new Error("Invalid Password!");
+      throw new Error('Invalid Password!');
     }
     // 3. generate the JWT Token
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
-      expiresIn: 1000 * 60 * 60 * 24 * 30
-    });
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // 4. return token only
     return token;
   },
@@ -78,41 +76,41 @@ const Mutations = {
   async createAddress(parent, args, ctx) {
     // 1. Check if user logged in
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     // 2. Create a new address
     const address = await prisma.createAddress({
-      ...args
+      ...args,
     });
 
     // 3. Updated user data address
     if (args.isBillingAddress) {
       await prisma.updateUser({
         where: {
-          id: ctx.request.userId
+          id: ctx.request.userId,
         },
         data: {
           billingAddress: {
             connect: {
-              id: address.id
-            }
-          }
-        }
+              id: address.id,
+            },
+          },
+        },
       });
     } else {
       await prisma.updateUser({
         where: {
-          id: ctx.request.userId
+          id: ctx.request.userId,
         },
         data: {
           shippingAddress: {
             connect: {
-              id: address.id
-            }
-          }
-        }
-      })
+              id: address.id,
+            },
+          },
+        },
+      });
     }
 
     return address;
@@ -134,8 +132,8 @@ const Mutations = {
     return prisma.updateAddress({
       data: updates,
       where: {
-        id: args.id
-      }
+        id: args.id,
+      },
     });
   },
 
@@ -176,23 +174,23 @@ const Mutations = {
   async createSubscription(parent, args, ctx) {
     // 1. Check if user logged in
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     // 2. Check if user is ADMIN
     const user = await prisma.user({
-      id: ctx.request.userId
+      id: ctx.request.userId,
     });
 
     const hasPermissions = user.permissions.some(permission =>
-      ["ADMIN"].includes(permission)
+      ['ADMIN'].includes(permission)
     );
     if (!hasPermissions) {
       throw new Error("You don't have permission to do that!");
     }
     // 3. Create a new subscription
     const subscription = await prisma.createSubscription({
-      ...args
+      ...args,
     });
 
     return subscription;
@@ -208,15 +206,15 @@ const Mutations = {
   async updateSubscription(parent, args, ctx) {
     // 1. Check if user logged in
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     // 2. Check if user is ADMIN
     const user = await prisma.user({
-      id: ctx.request.userId
+      id: ctx.request.userId,
     });
     const hasPermissions = user.permissions.some(permission =>
-      ["ADMIN"].includes(permission)
+      ['ADMIN'].includes(permission)
     );
 
     if (!hasPermissions) {
@@ -232,8 +230,8 @@ const Mutations = {
     return prisma.updateSubscription({
       data: updates,
       where: {
-        id: args.id
-      }
+        id: args.id,
+      },
     });
   },
 
@@ -247,15 +245,15 @@ const Mutations = {
   async deleteSubscription(parent, args, ctx) {
     // 1. Check if user logged in
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
 
     // 2. Check if user is ADMIN
     const user = await prisma.user({
-      id: ctx.request.userId
+      id: ctx.request.userId,
     });
     const hasPermissions = user.permissions.some(permission =>
-      ["ADMIN"].includes(permission)
+      ['ADMIN'].includes(permission)
     );
 
     if (!hasPermissions) {
@@ -289,15 +287,15 @@ const Mutations = {
     // 1. Check if user logged in
     const userId = ctx.request.userId;
     if (!userId) {
-      throw new Error("You must be logged in to do that!");
+      throw new Error('You must be logged in to do that!');
     }
     // 2. Query the users current cart
 
     const [existingCartItem] = await prisma.cartItems({
       where: {
         user: { id: userId },
-        item: { id: args.id }
-      }
+        item: { id: args.id },
+      },
     });
 
     // 3. Check if that item is already in their cart and increment by 1 if it is
@@ -305,18 +303,18 @@ const Mutations = {
       // It means the item is already in cart
       return prisma.updateCartItem({
         where: { id: existingCartItem.id },
-        data: { quantity: existingCartItem.quantity + 1 }
+        data: { quantity: existingCartItem.quantity + 1 },
       });
     }
 
     // 4. If its not, create a new CartItem for that user!
     return prisma.createCartItem({
       user: {
-        connect: { id: userId }
+        connect: { id: userId },
       },
       item: {
-        connect: { id: args.id }
-      }
+        connect: { id: args.id },
+      },
     });
   },
 
@@ -330,19 +328,19 @@ const Mutations = {
   async removeFromCart(parent, args, ctx) {
     // 1. Find the cart item
     const cartItem = await prisma.cartItem({
-      id: args.id
+      id: args.id,
     });
 
     const user = await prisma.cartItem({ id: cartItem.id }).user();
     // 2. Make sure we found an item
-    if (!cartItem) throw new Error("No cart item found!");
+    if (!cartItem) throw new Error('No cart item found!');
     // 3. Make sure they own that cart item
     if (user.id !== ctx.request.userId) {
-      throw new Error("That cart item is not yours.");
+      throw new Error('That cart item is not yours.');
     }
     // 4. Delete that cart item
     return prisma.deleteCartItem({
-      id: args.id
+      id: args.id,
     });
   },
 
@@ -360,7 +358,7 @@ const Mutations = {
     // 1. Query the current user and make sure they are signed in
     const { userId } = ctx.request;
     if (!userId) {
-      throw new Error("You must be signed in to complete this order.");
+      throw new Error('You must be signed in to complete this order.');
     }
 
     const userFragment = `
@@ -408,7 +406,10 @@ const Mutations = {
       }
     `;
 
-    let cartItems = await prisma.user({ id: userId }).cart().$fragment(userWithCartItems);
+    let cartItems = await prisma
+      .user({ id: userId })
+      .cart()
+      .$fragment(userWithCartItems);
     const amount = cartItems.reduce(
       (tally, cartItem) => tally + cartItem.item.totalPrice * cartItem.quantity,
       0
@@ -417,8 +418,8 @@ const Mutations = {
     // 3. Create the stripe charge (turn token into $$$)
     const charge = await stripe.charges.create({
       amount,
-      currency: "EUR",
-      source: args.token
+      currency: 'EUR',
+      source: args.token,
     });
 
     // 4. Convert the CartItems to OrderItems
@@ -426,12 +427,11 @@ const Mutations = {
       const orderItem = {
         ...cartItem.item,
         quantity: cartItem.quantity,
-        user: { connect: { id: userId } }
+        user: { connect: { id: userId } },
       };
       delete orderItem.id;
       return orderItem;
     });
-
 
     // 5. create the Order
     const order = await prisma.createOrder({
@@ -444,8 +444,8 @@ const Mutations = {
           street2: user.billingAddress.street2,
           city: user.billingAddress.city,
           postcode: user.billingAddress.postcode,
-          country: user.billingAddress.country
-        }
+          country: user.billingAddress.country,
+        },
       },
       shippingAddress: {
         create: {
@@ -454,8 +454,8 @@ const Mutations = {
           street2: user.shippingAddress.street2,
           city: user.shippingAddress.city,
           postcode: user.shippingAddress.postcode,
-          country: user.shippingAddress.country
-        }
+          country: user.shippingAddress.country,
+        },
       },
       deliveryTime: args.deliveryTime,
       deliveryDayOfWeek: args.deliveryDayOfWeek,
@@ -467,12 +467,12 @@ const Mutations = {
     // 6. Clean up - clear the users cart, delete cartItems
     const cartItemIds = user.cart.map(cartItem => cartItem.id);
     await prisma.deleteManyCartItems({
-      id_in: cartItemIds
+      id_in: cartItemIds,
     });
 
     // 7. Return the Order to the client
     return order;
-  }
+  },
 };
 
 module.exports = Mutations;
