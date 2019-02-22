@@ -19,29 +19,27 @@ const styles = StyleSheet.create({
   container: {
     width: width,
     flex: 1,
-    marginTop: 70,
     justifyContent: 'center',
     alignItems: 'center',
   },
   contentContainer: {
-    flexBasis: '70%',
     flex: 1,
   },
   mainButtonStyle: {
     backgroundColor: Colors.mediumCarmine,
     width: width,
     height: 56,
+    alignSelf: 'flex-end',
   },
   mainButtonTitle: {
     ...commonStyles.fontRalewayBold,
     ...commonStyles.textWhite,
     fontSize: 20,
   },
-  deliverySchedule: {
-    flex: 2,
+  buttonBackdrop: {
+    backgroundColor: Colors.mediumCarmine,
   },
   imageContainer: {
-    flex: 1,
     alignItems: 'center',
     marginTop: 25,
   },
@@ -96,30 +94,32 @@ class DeliveryScheduleCheckoutScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <CheckoutStepProgress currentStep="2" />
-
         <View style={styles.contentContainer}>
-          <View style={styles.deliverySchedule}>
-            <DeliverySchedule
-              deliveryDayOfWeek={this.props.deliveryDayOfWeek}
-              deliveryTime={this.props.deliveryTime}
-              onPressChangeDeliveryDayOfWeek={
-                this.onPressChangeDeliveryDayOfWeek
-              }
-              onPressChangeDeliveryTime={this.onPressChangeDeliveryTime}
-              instructionText="*Delivery is scheduled every week during month"
-            />
-          </View>
+          <CheckoutStepProgress currentStep="2" />
 
-          <View style={styles.imageContainer}>
-            <Image
-              style={styles.image}
-              source={require('../../../../assets/images/slide3.png')}
-            />
+          <View style={styles.shedulingContainer}>
+            <View style={styles.deliverySchedule}>
+              <DeliverySchedule
+                deliveryDayOfWeek={this.props.deliveryDayOfWeek}
+                deliveryTime={this.props.deliveryTime}
+                onPressChangeDeliveryDayOfWeek={
+                  this.onPressChangeDeliveryDayOfWeek
+                }
+                onPressChangeDeliveryTime={this.onPressChangeDeliveryTime}
+                instructionText="*Delivery is scheduled every week during month"
+              />
+            </View>
+
+            <View style={styles.imageContainer}>
+              <Image
+                style={styles.image}
+                source={require('../../../../assets/images/slide3.png')}
+              />
+            </View>
           </View>
         </View>
 
-        <View>
+        <View style={styles.buttonBackdrop}>
           <Button
             title={'Confirm delivery schedule'}
             titleStyle={styles.mainButtonTitle}
