@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
 class DeliveryScheduleCheckoutScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Choose delivery schedule',
+    headerBackTitle: null,
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (

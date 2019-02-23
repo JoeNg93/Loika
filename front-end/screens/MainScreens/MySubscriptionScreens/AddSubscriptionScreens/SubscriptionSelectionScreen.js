@@ -31,6 +31,7 @@ class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: 'Choose your subscription',
+      headerBackTitle: null,
       headerTransparent: true,
       headerTintColor: Colors.mediumCarmine,
       headerBackImage: (
@@ -175,9 +176,7 @@ class SubscriptionSelectionScreen extends React.Component {
             <View style={styles.cartItem}>
               <Text style={styles.textInCart}>{subscription.title}</Text>
               <Text style={styles.cartSize}>{subscription.size}kg/box</Text>
-              <Text style={styles.cartPrice}>
-                {subscription.totalPrice} €
-              </Text>
+              <Text style={styles.cartPrice}>{subscription.totalPrice} €</Text>
             </View>
             <View
               style={{

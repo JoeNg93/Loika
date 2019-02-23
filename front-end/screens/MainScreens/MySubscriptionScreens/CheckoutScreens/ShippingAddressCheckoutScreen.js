@@ -27,6 +27,7 @@ const width = Layout.window.width;
 class ShippingAddressCheckoutScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Your address and contact',
+    headerBackTitle: null,
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
