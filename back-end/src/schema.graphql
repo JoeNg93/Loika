@@ -20,7 +20,8 @@ type Mutation {
     city: String
     postcode: Int
     country: String,
-    name: String
+    name: String,
+    phoneNumber: String
   ): Address!
 
   deleteAddress(id: ID!): Address!

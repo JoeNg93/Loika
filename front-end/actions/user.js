@@ -155,73 +155,39 @@ export const addOrder = order => async dispatch => {
 export const updateShippingAddress = (id, addressInfo) => async dispatch => {
   dispatch({ type: actionTypes.UPDATE_SHIPPING_ADDRESS_PENDING });
   const accessToken = await AsyncStorage.getItem('accessToken');
-  console.log('TCL: accessToken', accessToken);
 
   try {
-    // const res = await axios.post(
-    //   baseURL,
-    //   {
-    //     query: `
-    //     query {
-    //       me {
-    //         id,
-    //         billingAddress {
-    //           id,
-    //           name,
-    //           phoneNumber,
-    //           city,
-    //           country,
-    //           postcode,
-    //           address
-    //         },
-    //         email,
-    //         name,
-    //         orders {
-    //           billingAddress {
-    //             id,
-    //             name,
-    //             phoneNumber,
-    //             city,
-    //             country,
-    //             postcode,
-    //             address
-    //           },
-    //           deliveryDayOfWeek,
-    //           deliveryTime,
-    //           paymentDate,
-    //           shippingAddress {
-    //             id,
-    //             name,
-    //             phoneNumber,
-    //             city,
-    //             country,
-    //             postcode,
-    //             address
-    //           },
-    //           total
-    //         },
-    //         shippingAddress {
-    //           id,
-    //           name,
-    //           phoneNumber,
-    //           city,
-    //           country,
-    //           postcode,
-    //           address
-    //         }
-    //       }
-    //     }
-    //   `,
-    //   },
-    //   { headers: { Authorization: accessToken } }
-    // );
+    const res = await axios.post(
+      baseURL,
+      {
+        query: `
+        mutation {
+          updateAddress(id: "${id}", name: "${addressInfo.name}", address: "${
+          addressInfo.address
+        }"
+        , city: "${addressInfo.city}", phoneNumber: "${
+          addressInfo.phoneNumber
+        }", postcode: ${addressInfo.postcode}) {
+            id,
+            name,
+            address,
+            country,
+            city,
+            phoneNumber,
+            postcode
+          }
+        }
+      `,
+      },
+      { headers: { Authorization: accessToken } }
+    );
 
     dispatch({
       type: actionTypes.UPDATE_SHIPPING_ADDRESS_SUCCESS,
-      payload: { ...addressInfo, id },
+      payload: res.data.data.updateAddress,
     });
   } catch (err) {
-    console.log('ERROR - addOrder', err.response.data);
+    console.log('ERROR - updateShippingAddress', err.response.data);
     dispatch({ type: actionTypes.UPDATE_SHIPPING_ADDRESS_FAIL });
   }
 };
