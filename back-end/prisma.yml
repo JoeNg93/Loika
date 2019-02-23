@@ -1,6 +1,6 @@
-#endpoint: ${env:PRISMA_ENDPOINT}
+endpoint: ${env:PRISMA_ENDPOINT}
 #endpoint: http://localhost:4466
-endpoint: https://loika-production-f803aa759c.herokuapp.com/loika-prod/prod
+# endpoint: https://loika-production-f803aa759c.herokuapp.com/loika-prod/prod
 
 datamodel: datamodel.prisma
 secret: ${env:PRISMA_SECRET}
