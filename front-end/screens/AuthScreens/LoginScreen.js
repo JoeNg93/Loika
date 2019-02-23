@@ -7,10 +7,14 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
+import { Button } from 'react-native-elements';
 import { TextField } from 'react-native-material-textfield';
 
 import Colors from '../../constants/Colors';
 import commonStyles from '../../constants/commonStyles';
+import Layout from "../../constants/Layout";
+
+const width = Layout.window.width;
 
 export default function LoginScreen({ onPressLogin, saveInput }) {
   return (
@@ -84,11 +88,14 @@ export default function LoginScreen({ onPressLogin, saveInput }) {
             </View>
           </View>
         </View>
-        <TouchableOpacity onPress={onPressLogin} style={styles.loginButton}>
-          <Text style={{ color: '#ffffff', fontSize: 20, fontWeight: 'bold' }}>
-            Login
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <Button
+            title={'Login'}
+            titleStyle={styles.mainButtonTitle}
+            buttonStyle={styles.mainButtonStyle}
+            onPress={onPressLogin}
+          />
+        </View>
       </ImageBackground>
 
       {/* <Button onPress={onPressSignup} title="Signup" /> */}
@@ -123,7 +130,7 @@ const styles = StyleSheet.create({
     shadowColor: 'rgb(135, 135, 135)',
     shadowOpacity: 0.25,
     borderRadius: 16,
-    backgroundColor: '#FCFAF6',
+    backgroundColor: Colors.white,
     marginTop: 155,
   },
   socialButton: {
@@ -145,15 +152,6 @@ const styles = StyleSheet.create({
   loginText: {
     width: 242,
   },
-  loginButton: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    marginTop: 105,
-    height: 56,
-    backgroundColor: Colors.mediumCarmine,
-  },
   inputContainer: {
     marginTop: -8,
     paddingTop: 36,
@@ -167,5 +165,20 @@ const styles = StyleSheet.create({
     width: 242,
     height: 70,
     marginBottom: 85,
+  },
+  buttonContainer:{
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+  },
+  mainButtonStyle: {
+    backgroundColor: Colors.mediumCarmine,
+    width: width,
+    height: 56,
+  },
+  mainButtonTitle: {
+    ...commonStyles.fontRalewayBold,
+    ...commonStyles.textWhite,
+    fontSize: 20,
   },
 });

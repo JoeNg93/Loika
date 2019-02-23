@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
 
   popupContainer: {
-    backgroundColor: Colors.mainBackground,
+    backgroundColor: Colors.white,
     height: 'auto',
     width: '80%',
     borderRadius: 16,

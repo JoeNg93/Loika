@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Dimensions,
-  Image,
   Text,
   TouchableOpacity,
   TouchableHighlight,
@@ -13,7 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 import SideSwipe from 'react-native-sideswipe';
-import { Icon } from 'react-native-elements';
+import { Icon, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import Carousel from './Carousel';
@@ -26,6 +25,9 @@ import {
   removeSubscriptionFromCart,
   cleanCart,
 } from '../../../../actions/checkout';
+import Layout from '../../../../constants/Layout';
+
+const width = Layout.window.width;
 
 class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -40,7 +42,7 @@ class SubscriptionSelectionScreen extends React.Component {
         </TouchableHighlight>
       ),
       headerRight: (
-        <TouchableHighlight
+        <TouchableOpacity
           style={{ marginRight: 20 }}
           onPress={navigation.getParam('setCartVisible')}
         >
@@ -49,14 +51,15 @@ class SubscriptionSelectionScreen extends React.Component {
               name={'shopping-basket'}
               size={22}
               color={Colors.mediumCarmine}
+              containerStyle={{marginTop: 2}}
             />
             <View
               style={[
                 {
                   width: 11,
                   height: 11,
-                  left: 10,
-                  top: -18,
+                  left: 14,
+                  top: -22,
                   backgroundColor: '#FFFFFF',
                   borderRadius: 5.5,
                 },
@@ -69,8 +72,7 @@ class SubscriptionSelectionScreen extends React.Component {
             >
               <Text
                 style={{
-                  ...commonStyles.fontRalewayBold,
-                  fontWeight: '600',
+                  ...commonStyles.fontRalewaySemiBold,
                   fontSize: 9,
                   textAlign: 'center',
                   ...commonStyles.textMediumCarmine,
@@ -80,7 +82,7 @@ class SubscriptionSelectionScreen extends React.Component {
               </Text>
             </View>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       ),
       headerTitleStyle: {
         ...commonStyles.fontRalewayBold,
@@ -105,7 +107,7 @@ class SubscriptionSelectionScreen extends React.Component {
   };
 
   _setCartVisible = () => {
-    if (this.state.cartVisible == false) {
+    if (this.state.cartVisible === false) {
       this.setState({ cartVisible: true });
     } else {
       this.setState({ cartVisible: false });
@@ -159,14 +161,13 @@ class SubscriptionSelectionScreen extends React.Component {
   displayCartItems = () => {
     const { shoppingCart } = this.props;
     let items = [];
-    if (shoppingCart.length != 0) {
+    if (shoppingCart.length !== 0) {
       items.push(
         <View
           key="hr"
           style={{
             borderBottomColor: '#E1E1E1',
             borderBottomWidth: 1,
-            marginBottom: 14,
           }}
         />
       );
@@ -174,30 +175,37 @@ class SubscriptionSelectionScreen extends React.Component {
         items.push(
           <View key={subscription.id}>
             <View style={styles.cartItem}>
-              <Text style={styles.textInCart}>{subscription.title}</Text>
-              <Text style={styles.cartSize}>{subscription.size}kg/box</Text>
+              <View>
+                <Text style={styles.subscriptionName}>
+                  {subscription.title}
+                </Text>
+                <Text style={styles.subscriptionWeight}>
+                  {subscription.size}kg/box
+                </Text>
+              </View>
               <Text style={styles.cartPrice}>{subscription.totalPrice} €</Text>
             </View>
             <View
               style={{
                 borderBottomColor: '#E1E1E1',
                 borderBottomWidth: 1,
-                marginBottom: 15,
               }}
             />
           </View>
         );
       });
       items.push(
-        <View key="total" style={{ marginTop: 24, marginBottom: 24 }}>
-          <Text style={styles.textInCart}>Total</Text>
-          <Text style={styles.cartPrice}>{this.getTotalPrice()} €</Text>
-          <Text style={styles.cartTax}>*Total included VAT</Text>
+        <View key="total" style={styles.cartTotalContainer}>
+          <Text style={styles.totalText}>Total</Text>
+          <View>
+            <Text style={styles.cartPrice}>{this.getTotalPrice()} €</Text>
+            <Text style={styles.cartTax}>*Total included VAT</Text>
+          </View>
         </View>
       );
       return items;
     } else {
-      return <Text style={styles.textInCart}>No items in cart</Text>;
+      return <Text style={styles.noItemText}>Your cart is currently empty.</Text>;
     }
   };
 
@@ -329,21 +337,24 @@ class SubscriptionSelectionScreen extends React.Component {
             <View style={{ bottom: 0 }}>
               <ScrollView style={styles.cart}>
                 <View>
-                  <View style={{ flexDirection: 'row', marginBottom: 15 }}>
-                    <Icon
-                      style={{ width: 29, height: 26, marginRight: 13 }}
-                      source={require('../../../../assets/images/cart.png')}
+                  <View style={styles.cartTitleContainer}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Icon
+                        name={'shopping-basket'}
+                        size={30}
+                        containerStyle={{ marginRight: 12 }}
+                        color={Colors.mediumCarmine}
+                      />
+                      <Text style={styles.cartTitle}>My cart</Text>
+                    </View>
+                    <Button
+                      type={'outline'}
+                      title={'Clear'}
+                      titleStyle={styles.clearText}
+                      buttonStyle={styles.clearButton}
+                      onPress={this.clearCart}
                     />
-                    <Text style={styles.textInCart}>My cart</Text>
                   </View>
-                  <TouchableOpacity
-                    style={styles.clearButton}
-                    onPress={() => {
-                      this.clearCart();
-                    }}
-                  >
-                    <Text style={styles.clearText}>Clear</Text>
-                  </TouchableOpacity>
                 </View>
                 <View>{this.displayCartItems()}</View>
               </ScrollView>
@@ -366,86 +377,100 @@ class SubscriptionSelectionScreen extends React.Component {
 const styles = StyleSheet.create({
   cart: {
     backgroundColor: Colors.white,
-    padding: 20,
+    shadowOffset: { width: 4, height: 4 },
+    shadowColor: '#878787',
+    shadowOpacity: 0.25,
+
     height: 369,
-    borderTopLeftRadius: 29,
-    borderTopRightRadius: 29,
-    paddingLeft: 25,
-    paddingRight: 27,
-    paddingTop: 25,
-    overflow: 'visible',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 26,
+    paddingVertical: 24,
   },
   cartModal: {
     position: 'absolute',
-    width: 414,
-    height: 680,
-    left: 0,
-    top: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    width: width,
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
-  cartItem: {
-    justifyContent: 'center',
+  cartTitleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  cartPrice: {
-    top: -55,
+  cartTitle: {
     ...commonStyles.fontRalewayBold,
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'right',
-    color: Colors.macaroniCheese,
-  },
-  cartTax: {
-    top: -20,
-    ...commonStyles.fontRalewayBold,
-    fontWeight: '500',
-    fontSize: 10,
+    fontSize: 20,
     color: Colors.black,
-    textAlign: 'right',
-  },
-  cartSize: {
-    ...commonStyles.fontRalewayBold,
-    fontWeight: '600',
-    fontSize: 12,
-    color: Colors.darkGrey,
+    marginTop: 2,
   },
   clearButton: {
-    width: 62,
-    height: 22,
-    left: 316,
-    top: -35,
+    paddingHorizontal: 18,
+    paddingVertical: 2,
     borderWidth: 1,
     borderColor: Colors.macaroniCheese,
-    borderRadius: 13.5,
-    marginBottom: 16,
+    borderRadius: 50,
   },
   clearText: {
-    ...commonStyles.fontRalewayBold,
-    fontWeight: '600',
+    ...commonStyles.fontRalewaySemiBold,
     fontSize: 12,
-    textAlign: 'center',
     color: Colors.macaroniCheese,
   },
-  textInCart: {
+  cartItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 14,
+  },
+  subscriptionName: {
     ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontSize: 16,
+    textTransform: 'uppercase',
+  },
+  cartPrice: {
+    ...commonStyles.fontRalewayBold,
+    color: Colors.mediumCarmine,
+    fontSize: 16,
+    textAlign: 'right',
+  },
+  subscriptionWeight: {
+    ...commonStyles.fontRalewaySemiBold,
+    fontSize: 12,
+    color: Colors.darkGrey,
+    marginTop: 8,
+  },
+  totalText: {
+    ...commonStyles.fontRalewayBold,
     fontSize: 20,
   },
-  textInCart: {
-    ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 20,
+  cartTax: {
+    ...commonStyles.fontRalewayMedium,
+    color: Colors.black,
+    marginTop: 10,
+    fontSize: 10,
+    textAlign: 'right',
+  },
+  cartTotalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 24,
+    marginBottom: 32,
+  },
+  noItemText: {
+    ...commonStyles.fontRalewayMedium,
+    color: Colors.black,
+    fontSize: 16,
+    marginTop: 24,
   },
   orderButton: {
-    width: this.width,
+    width: width,
     height: 56,
     backgroundColor: Colors.mediumCarmine,
     justifyContent: 'center',
     alignItems: 'center',
   },
   bottom: {
-    top: 0,
+    bottom: 0,
     height: 56,
   },
   bigCircle: {
@@ -468,8 +493,6 @@ const styles = StyleSheet.create({
   },
   topText: {
     ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
     color: Colors.mediumCarmine,
@@ -495,8 +518,6 @@ const styles = StyleSheet.create({
   },
   total: {
     ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
     color: Colors.mediumCarmine,
@@ -507,19 +528,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 25,
   },
-  orderButton: {
-    width: this.width,
-    height: 56,
-    backgroundColor: Colors.mediumCarmine,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   orderText: {
     ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 20,
     ...commonStyles.textWhite,
+    fontSize: 20,
   },
   priceTag: Platform.select({
     ios: {
@@ -550,8 +562,6 @@ const styles = StyleSheet.create({
       paddingTop: 22,
       paddingLeft: 10,
       ...commonStyles.fontRalewayBold,
-      fontStyle: 'normal',
-      fontWeight: 'bold',
       fontSize: 20,
       color: '#FFFFFF',
     },
@@ -559,14 +569,13 @@ const styles = StyleSheet.create({
       paddingTop: 22,
       paddingLeft: 10,
       ...commonStyles.fontRalewayBold,
-      fontStyle: 'normal',
-      fontWeight: 'bold',
       fontSize: 22,
       color: '#FFFFFF',
     },
   }),
   textTag: {
-    width: 127,
+    paddingHorizontal: 24,
+    paddingVertical: 4,
     height: 27,
     justifyContent: 'center',
     alignItems: 'center',
@@ -580,8 +589,6 @@ const styles = StyleSheet.create({
   },
   textTagText: {
     ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',
     color: '#FFFFFF',
@@ -593,8 +600,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: 30,
     textAlign: 'center',
     color: Colors.black,
@@ -615,16 +620,12 @@ const styles = StyleSheet.create({
   },
   valueText: {
     ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
     color: Colors.darkGrey,
   },
   description: {
-    ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    ...commonStyles.fontRalewayMedium,
     fontSize: 14,
     textAlign: 'center',
     color: Colors.black,
@@ -638,13 +639,10 @@ const mapStateToProps = state => ({
   selectedSubscription: state.checkout.selectedSubscription,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    getAllSubscriptions,
-    setSelectedSubscription,
-    addSubscriptionToCart,
-    removeSubscriptionFromCart,
-    cleanCart,
-  }
-)(SubscriptionSelectionScreen);
+export default connect(mapStateToProps, {
+  getAllSubscriptions,
+  setSelectedSubscription,
+  addSubscriptionToCart,
+  removeSubscriptionFromCart,
+  cleanCart,
+})(SubscriptionSelectionScreen);

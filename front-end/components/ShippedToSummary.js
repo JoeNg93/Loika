@@ -62,7 +62,7 @@ export default function ShippedToSummary({
           marginTop: 17,
         }}
       >
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Icon
             name="date-range"
             color={Colors.mediumCarmine}
@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewayMedium,
   },
   changeText: {
-    ...commonStyles.fontRalewaySemiBold,
+    ...commonStyles.fontRalewayMedium,
     ...commonStyles.textMacaroniCheese,
+    fontSize: 12,
   },
 });
