@@ -499,7 +499,7 @@ const Mutations = {
         cancelDate: new Date().toISOString()
       }, 
       where: {
-        id: order.id
+        id: oldOrder.id
       }
     });
 
