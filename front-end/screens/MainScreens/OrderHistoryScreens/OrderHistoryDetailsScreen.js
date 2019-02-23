@@ -67,7 +67,7 @@ export default class OrderHistoryDetailsScreen extends React.Component {
       name: 'Joe Nguyen',
       shippingAddress: {
         address: 'Ylioppilaantie 10 B 25',
-        postCode: 90130,
+        postcode: 90130,
         city: 'Oulu',
       },
       phoneNumber: '+358469512914',

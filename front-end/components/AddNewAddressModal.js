@@ -14,7 +14,7 @@ class AddNewAddressModal extends React.Component {
     saveButtonEnabled: false,
     name: '',
     address: '',
-    postCode: '',
+    postcode: '',
     city: '',
     phoneNumber: '',
   };
@@ -35,7 +35,7 @@ class AddNewAddressModal extends React.Component {
   };
 
   onPressSaveAddressForm = () => {
-    const { name, address, postCode: postcode, city, phoneNumber } = this.state;
+    const { name, address, postcode, city, phoneNumber } = this.state;
     const newAddress = {
       name,
       address,

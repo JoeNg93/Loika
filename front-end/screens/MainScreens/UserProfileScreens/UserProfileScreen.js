@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     marginRight: 18,
   },
   editIconContainer: {
-    // check if this part works on iphone 6 
+    // check if this part works on iphone 6
     position: 'absolute',
     backgroundColor: Colors.mediumCarmine,
     borderRadius: 50,
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   editContactsIconContainer: {
-    // also check this part 
+    // also check this part
     position: 'absolute',
     backgroundColor: Colors.mediumCarmine,
     borderRadius: 50,
@@ -115,21 +115,18 @@ const styles = StyleSheet.create({
 export default function UserProfileScreen(props) {
   return (
     <View style={styles.container}>
-      
       <ScrollView
         style={styles.scrollContainer}
         contentContainerStyle={styles.scrollContainerContent}
       >
-        <View style={styles.bigCircle}/>
+        <View style={styles.bigCircle} />
         <View style={styles.namePictureContainer}>
           <Image
             style={styles.picture}
             source={require('../../../assets/images/profilePic.png')}
           />
 
-          <TouchableOpacity
-            style={{ zIndex: 100 }}
-          >
+          <TouchableOpacity style={{ zIndex: 100 }}>
             <Icon
               name={'edit'}
               size={17}
@@ -144,21 +141,18 @@ export default function UserProfileScreen(props) {
         <View style={styles.addressesContainer}>
           <View>
             <Text style={styles.sectionText}>CONTACT DETAILS</Text>
-            
-            <View style={styles.contactDetailsContainer}>
-              
-              <TouchableOpacity
-              style={{ zIndex: 100 }}
-             >
-              <Icon
-                name={'edit'}
-                size={12}
-                color={Colors.white}
-                containerStyle={styles.editContactsIconContainer}
-              />
-             </TouchableOpacity>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <View style={styles.contactDetailsContainer}>
+              <TouchableOpacity style={{ zIndex: 100 }}>
+                <Icon
+                  name={'edit'}
+                  size={12}
+                  color={Colors.white}
+                  containerStyle={styles.editContactsIconContainer}
+                />
+              </TouchableOpacity>
+
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Icon
                   name="mail-outline"
                   color={Colors.mediumCarmine}
@@ -167,7 +161,7 @@ export default function UserProfileScreen(props) {
                 <Text style={styles.contactDetailsText}>roberto@gmail.com</Text>
               </View>
 
-              <View style={{ flexDirection: 'row', marginTop: 10}}>
+              <View style={{ flexDirection: 'row', marginTop: 10 }}>
                 <Icon
                   name="phone-iphone"
                   color={Colors.mediumCarmine}
@@ -185,45 +179,40 @@ export default function UserProfileScreen(props) {
                 name={'Thanh Dang'}
                 shippingAddress={{
                   address: 'Kotkantie 1',
-                  postCode: 90130,
+                  postcode: 90130,
                   city: 'Oulu',
                 }}
                 phoneNumber={'+358469430446'}
                 hasSelectedButton={false}
                 canEditAddress={true}
               />
-              <View style={{ marginBottom: 25 }}/>
+              <View style={{ marginBottom: 25 }} />
               <AddressSummary
                 name={'Thanh Dang'}
                 shippingAddress={{
                   address: 'Kotkantie 1',
-                  postCode: 90130,
+                  postcode: 90130,
                   city: 'Oulu',
                 }}
                 phoneNumber={'+358469430446'}
                 hasSelectedButton={false}
                 canEditAddress={true}
               />
-              
+
               <TouchableOpacity style={styles.addAddressButton}>
-                <Icon
-                  name={'add'}
-                  size={13}
-                  color={Colors.darkGrey}
-                />
+                <Icon name={'add'} size={13} color={Colors.darkGrey} />
                 <Text style={styles.addAdressText}>ADD NEW ADDRESS</Text>
               </TouchableOpacity>
-              
             </View>
           </View>
-          
+
           <View>
             <Text style={styles.sectionText}>BILLING ADDRESS</Text>
             <AddressSummary
               name={'Thanh Dang'}
               shippingAddress={{
                 address: 'Kotkantie 1',
-                postCode: 90130,
+                postcode: 90130,
                 city: 'Oulu',
               }}
               phoneNumber={'+358469430446'}

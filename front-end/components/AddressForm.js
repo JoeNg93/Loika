@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const addressFormType = {
   name: 'name',
   address: 'address',
-  postCode: 'postCode',
+  postcode: 'postcode',
   city: 'city',
   phoneNumber: 'phoneNumber',
 };
@@ -16,7 +16,7 @@ const addressFormType = {
 export default function AddressForm({
   name,
   address,
-  postCode,
+  postcode,
   city,
   phoneNumber,
   onAddressInputEndEditing,
@@ -77,10 +77,10 @@ export default function AddressForm({
           inputContainerStyle={styles.inputContainer}
           labelTextStyle={styles.inputLabel}
           containerStyle={styles.smallInputContainer}
-          defaultValue={postCode && postCode.toString()}
+          defaultValue={postcode && postcode.toString()}
           onEndEditing={event =>
             onAddressInputEndEditing({
-              type: addressFormType.postCode,
+              type: addressFormType.postcode,
               value: event.nativeEvent.text,
             })
           }
@@ -134,7 +134,7 @@ export default function AddressForm({
 AddressForm.propTypes = {
   name: PropTypes.string,
   address: PropTypes.string,
-  postCode: PropTypes.number,
+  postcode: PropTypes.number,
   city: PropTypes.string,
   phoneNumber: PropTypes.string,
   onAddressInputEndEditing: PropTypes.func,

@@ -40,7 +40,7 @@ export default class ChangeShippingAddressScreen extends React.Component {
         name: 'Thanh Dang',
         shippingAddress: {
           address: 'Kotkantie 1',
-          postCode: 90100,
+          postcode: 90100,
           city: 'Oulu',
         },
         phoneNumber: '+3581233453232',
@@ -50,7 +50,7 @@ export default class ChangeShippingAddressScreen extends React.Component {
         name: 'Robert Barker',
         shippingAddress: {
           address: 'Kajaanintie 38A',
-          postCode: 90130,
+          postcode: 90130,
           city: 'Oulu',
         },
         phoneNumber: '+3581233453232',

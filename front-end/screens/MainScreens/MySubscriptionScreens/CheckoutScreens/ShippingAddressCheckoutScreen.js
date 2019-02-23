@@ -81,7 +81,7 @@ class ShippingAddressCheckoutScreen extends React.Component {
           phoneNumber={addressDetails.phoneNumber}
           shippingAddress={{
             address: addressDetails.address,
-            postCode: addressDetails.postcode,
+            postcode: addressDetails.postcode,
             city: addressDetails.city,
           }}
           hasSelectedButton={hasSelectedButton}

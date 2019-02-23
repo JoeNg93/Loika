@@ -15,7 +15,7 @@ class AddressSummary extends React.Component {
     saveButtonEnabled: false,
     name: '',
     address: '',
-    postCode: '',
+    postcode: '',
     city: '',
     phoneNumber: '',
   };
@@ -38,9 +38,9 @@ class AddressSummary extends React.Component {
     const {
       name,
       phoneNumber,
-      shippingAddress: { address, postCode, city },
+      shippingAddress: { address, postcode, city },
     } = this.props;
-    this.setState({ name, phoneNumber, address, postCode, city });
+    this.setState({ name, phoneNumber, address, postcode, city });
   }
 
   validateForm = () => {
@@ -49,7 +49,7 @@ class AddressSummary extends React.Component {
   };
 
   onPressSaveAddressForm = () => {
-    const { name, address, postCode: postcode, city, phoneNumber } = this.state;
+    const { name, address, postcode, city, phoneNumber } = this.state;
     const newAddress = {
       name,
       address,
@@ -155,7 +155,7 @@ AddressSummary.propTypes = {
   name: PropTypes.string,
   shippingAddress: PropTypes.shape({
     address: PropTypes.string,
-    postCode: PropTypes.number,
+    postcode: PropTypes.number,
     city: PropTypes.string,
   }),
   phoneNumber: PropTypes.string,

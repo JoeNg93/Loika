@@ -86,7 +86,7 @@ ShippedToSummary.propTypes = {
   name: PropTypes.string,
   shippingAddress: PropTypes.shape({
     address: PropTypes.string,
-    postCode: PropTypes.number,
+    postcode: PropTypes.number,
     city: PropTypes.string,
   }),
   phoneNumber: PropTypes.string,

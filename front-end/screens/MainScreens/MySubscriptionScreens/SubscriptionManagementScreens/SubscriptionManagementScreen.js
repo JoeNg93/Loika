@@ -73,7 +73,7 @@ export default class SubscriptionManagementScreen extends React.Component {
       phoneNumber: '+358469512914',
       shippingAddress: {
         address: 'Ylioppilaantie 10 B 25',
-        postCode: 90130,
+        postcode: 90130,
         city: 'Oulu',
       },
       deliveryDayOfWeek: 'Tuesday',
@@ -241,8 +241,9 @@ export default class SubscriptionManagementScreen extends React.Component {
                   }
                   onPressCloseModal={this.onPressCloseCancelDialogModal}
                   modalTitle={'Hold on!'}
-                  modalTextContent={`Are you sure that you want to cancel all subscriptions? Your subscriptions will end on ${
-                    this.getOrderEndSubscriptionDate(this.state.fetchedOrder.orderDate)} and you will lose your favourite boxes!`}
+                  modalTextContent={`Are you sure that you want to cancel all subscriptions? Your subscriptions will end on ${this.getOrderEndSubscriptionDate(
+                    this.state.fetchedOrder.orderDate
+                  )} and you will lose your favourite boxes!`}
                 />
               </View>
               <View>

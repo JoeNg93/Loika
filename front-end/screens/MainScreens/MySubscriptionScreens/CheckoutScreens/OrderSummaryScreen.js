@@ -111,7 +111,7 @@ class OrderSummaryScreen extends React.Component {
       <View style={styles.shippedToContainer}>
         <ShippedToSummary
           name={name}
-          shippingAddress={{ city, postCode: postcode, address }}
+          shippingAddress={{ city, postcode: postcode, address }}
           phoneNumber={phoneNumber}
           deliveryDayOfWeek={deliveryDayOfWeek}
           deliveryTime={deliveryTime}
