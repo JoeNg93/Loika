@@ -1,14 +1,23 @@
 import React from 'react';
 import { ImageBackground, AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
 
-export default class EntryScreen extends React.Component {
+import { fetchTokenFromStorage } from '../../actions/auth';
+
+class EntryScreen extends React.Component {
   async componentDidMount() {
     const skipOnboarding = await AsyncStorage.getItem('skipOnboarding');
+    const { navigation, fetchTokenFromStorage } = this.props;
 
     if (skipOnboarding === 'true') {
-      this.props.navigation.navigate('Auth');
+      const accessToken = await fetchTokenFromStorage();
+      if (accessToken) {
+        navigation.navigate('Main');
+      } else {
+        navigation.navigate('Auth');
+      }
     } else {
-      this.props.navigation.navigate('Onboarding');
+      navigation.navigate('Onboarding');
     }
   }
 
@@ -21,3 +30,8 @@ export default class EntryScreen extends React.Component {
     );
   }
 }
+
+export default connect(
+  null,
+  { fetchTokenFromStorage }
+)(EntryScreen);

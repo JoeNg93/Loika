@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, AsyncStorage } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 const styles = StyleSheet.create({
@@ -120,11 +120,13 @@ class OnboardingScreen extends Component {
     </View>
   );
 
-  onDone = () => {
+  onDone = async () => {
+    await AsyncStorage.setItem('skipOnboarding', 'true');
     this.props.navigation.navigate('Auth');
   };
 
-  onSkip = () => {
+  onSkip = async () => {
+    await AsyncStorage.setItem('skipOnboarding', 'true');
     this.props.navigation.navigate('Auth');
   };
 
