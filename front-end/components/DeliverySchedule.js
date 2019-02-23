@@ -1,15 +1,17 @@
 import React from 'react';
 import colors from '../constants/Colors';
+import commonStyles from '../constants/commonStyles';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    justifyContent: 'space-around',
+    marginTop: 40,
+    // height: '100%',
+    // justifyContent: 'space-around',
   },
   dayPickerContainer: {
-    flex: 0.4,
+    // flex: 0.4,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -26,39 +28,40 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mediumCarmine,
   },
   dayButtonText: {
-    // fontFamily: 'Raleway',
-    color: '#979797',
+    ...commonStyles.fontRalewayBold,
+    ...commonStyles.textGrey,
   },
   dayButtonPickedText: {
-    color: '#FFFFFF',
+    ...commonStyles.textWhite,
   },
   bigText: {
-    // fontFamily: 'Raleway',
-    fontWeight: '600',
+    ...commonStyles.fontRalewaySemiBold,
+    ...commonStyles.textGrey,
     fontSize: 14,
-    fontStyle: 'normal',
-    color: '#979797',
+    marginBottom: 20,
   },
   smallText: {
-    // fontFamily: 'Raleway',
+    ...commonStyles.fontRalewayRegular,
+    ...commonStyles.textBlack,
     fontSize: 10,
-    fontStyle: 'normal',
-    color: '#282828',
+    marginTop: 26,
   },
   timeAndTextContainer: {
-    justifyContent: 'space-around',
-    flex: 1,
+    // justifyContent: 'space-around',
+    // flex: 1,
+    marginTop: 33,
     alignItems: 'center',
   },
   timePickerContainer: {
     width: '80%',
-    flex: 2,
+    // flex: 2,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'stretch',
   },
   timeSideContainer: {
-    justifyContent: 'space-around',
+    height: 110,
+    // justifyContent: 'space-around',
     flexDirection: 'column',
   },
   timeButton: {
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
     height: 38,
     borderRadius: 18,
     borderWidth: 2,
-    borderColor: '#FCB79A',
+    borderColor: colors.macaroniCheese,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -75,11 +78,11 @@ const styles = StyleSheet.create({
     borderColor: colors.mediumCarmine,
   },
   timeButtonText: {
-    // fontFamily: 'Raleway',
-    color: '#FCB79A',
+    ...commonStyles.fontMontserratBold,
+    ...commonStyles.textMacaroniCheese,
   },
   timeButtonPickedText: {
-    color: '#FFFFFF',
+    ...commonStyles.textWhite,
   },
 });
 
@@ -192,6 +195,7 @@ export default class DeliverySchedule extends React.Component {
               <TouchableOpacity
                 style={[
                   styles.timeButton,
+                  { marginBottom: 34 },
                   this._checkTimeClick('10:00 - 12:00', 'btn'),
                 ]}
                 onPress={() =>
@@ -232,6 +236,7 @@ export default class DeliverySchedule extends React.Component {
               <TouchableOpacity
                 style={[
                   styles.timeButton,
+                  { marginBottom: 34 },
                   this._checkTimeClick('12:00 - 14:00', 'btn'),
                 ]}
                 onPress={() =>

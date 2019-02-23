@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   greyCircle: {
-    backgroundColor: '#979797',
+    backgroundColor: colors.darkGrey,
   },
   icon: {
     height: '50%',
@@ -113,17 +113,17 @@ const styles = StyleSheet.create({
     color: colors.mediumCarmine,
   },
   greyProgressText: {
-    color: '#979797',
+    color: colors.darkGrey,
   },
   divider: {
     marginRight: 14,
     marginLeft: 14,
     flex: 1,
-    borderColor: '#282828',
+    borderColor: colors.black,
     borderWidth: 0.5,
     margin: 5,
   },
   greyDivider: {
-    borderColor: '#979797',
+    borderColor: colors.darkGrey,
   },
 });
