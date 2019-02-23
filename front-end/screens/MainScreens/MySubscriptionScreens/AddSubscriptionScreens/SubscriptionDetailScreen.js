@@ -20,6 +20,7 @@ const boxNameToImageMapper = {
 class SubscriptionDetailScreen extends React.Component {
   static navigationOptions = {
     headerTransparent: true,
+    headerBackTitle: null,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
       <TouchableHighlight style={{ marginLeft: 20 }}>

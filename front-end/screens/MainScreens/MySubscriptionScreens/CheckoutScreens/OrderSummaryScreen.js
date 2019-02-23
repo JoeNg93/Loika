@@ -24,6 +24,7 @@ const width = Layout.window.width;
 class OrderSummaryScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Order summary',
+    headerBackTitle: null,
     headerTransparent: true,
     headerTintColor: Colors.mediumCarmine,
     headerBackImage: (
