@@ -1,0 +1,130 @@
+@font-face {
+    font-family: Raleway-Regular;
+    src: url(./Raleway-Regular.ttf);
+}
+
+@font-face {
+    font-family: Raleway-Bold;
+    src: url(./Raleway-Bold.ttf);
+    font-weight: bold;
+}
+
+.logo-area {
+    width: 744px;
+    height: 744px;
+    position: absolute;
+    left: -320px;
+    top: -538px;
+    border-radius: 372px;
+    background-color: #E8DFCA 
+} 
+
+#logo {
+    width: 167px;
+    height: 122px;
+    position: absolute;
+    top: 25px;
+    left: 43px;
+}
+
+.panel-body {
+    margin-top: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.left-side {
+    margin: 50px;
+    width: 40vw;
+}
+
+.text-area {
+    margin-top: 70px;
+}
+
+h1 {
+    font-size: 48px;
+    font-family: Raleway-Bold;
+}
+
+p {
+    font-size: 22px;
+    line-height: 22px;
+    font-family: Raleway-Regular;
+}
+
+.red {
+    color: #AA3C3B;
+}
+
+.image-area {
+    width: 35vw;
+    margin-top: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.google-img {
+    width: 223px;
+    height: 86px;
+}
+
+.apple-img {
+    width: 182px;
+    height: 61px;
+    margin-top: 12.5px;
+}
+
+.big-img {
+    margin: 40px;
+    width: 45vw/*760px*/;
+    height: auto/*579px*/;
+}
+
+@media only screen and (max-width: 992px) {
+    .panel-body {
+        flex-direction: column-reverse;
+        margin-top: 150px;
+    }
+
+    .text-area {
+        margin-top: 0px;
+    }
+
+    .big-img {
+        width: 80vw;
+        margin-bottom: 0px;
+    }
+
+    .left-side {
+        width: 80vw;
+        margin-top: 0px;
+    }
+
+    .image-area {
+        width: 60vw;
+    }
+
+    h1 {
+        margin-top: 0px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .image-area {
+        width: 70vw;
+    }
+
+    .google-img {
+        width: 165px;
+        height: 80px;
+    }
+    
+    .apple-img {
+        width: 145px;
+        height: 55px;
+        margin-top: 12.5px;
+    }
+} 
