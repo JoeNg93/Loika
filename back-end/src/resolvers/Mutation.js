@@ -494,7 +494,7 @@ const Mutations = {
     }
 
     // 3. Set the cancel date to today.
-    const order = await updateOrder({ 
+    const order = await prisma.updateOrder({ 
       data: {
         cancelDate: new Date().toISOString()
       }, 
