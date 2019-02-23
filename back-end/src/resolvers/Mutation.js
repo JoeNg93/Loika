@@ -473,6 +473,39 @@ const Mutations = {
     // 7. Return the Order to the client
     return order;
   },
+
+  /**
+   * Cancel order
+   * @param {*} parent 
+   * @param {*} args 
+   * @param {*} ctx 
+   */
+  async cancelOrder(parent, args, ctx) {
+    // 1. Query the current user and make sure they are signed in
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error('You must be signed in to cancel orders.');
+    }
+
+    // 2. Check if the selected subscription is available
+    const oldOrder = await prisma.user({ id: userId }).orders({id: args.id})
+    if (!oldOrder) {
+      throw new Error('Could not find this order.');
+    }
+
+    // 3. Set the cancel date to today.
+    const order = await updateOrder({ 
+      data: {
+        cancelDate: new Date().toISOString()
+      }, 
+      where: {
+        id: order.id
+      }
+    });
+
+    // 4. Return the order
+    return order;
+  },
 };
 
 module.exports = Mutations;
