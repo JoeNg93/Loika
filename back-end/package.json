@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nodemon -e js,graphql -x node src/index.js",
     "dev": "nodemon -e js,graphql -x node --inspect src/index.js",
-    "deploy": "prisma deploy --env-file variables.env"
+    "deploy:db": "prisma deploy --env-file variables.env",
+    "deploy:server": "git subtree push --prefix back-end heroku-backend master"
   },
   "keywords": [
     "loika"
