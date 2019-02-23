@@ -17,7 +17,6 @@ import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import Carousel from './Carousel';
-import CartView from './CartView';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
 import { getAllSubscriptions } from '../../../../actions/subscription';
