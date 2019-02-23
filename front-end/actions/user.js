@@ -162,12 +162,13 @@ export const updateShippingAddress = (id, addressInfo) => async dispatch => {
       {
         query: `
         mutation {
-          updateAddress(id: "${id}", name: "${addressInfo.name}", address: "${
-          addressInfo.address
-        }"
-        , city: "${addressInfo.city}", phoneNumber: "${
-          addressInfo.phoneNumber
-        }", postcode: ${addressInfo.postcode}) {
+          updateAddress(
+            id: "${id}",
+            name: "${addressInfo.name}",
+            address: "${addressInfo.address}",
+            city: "${addressInfo.city}",
+            phoneNumber: "${addressInfo.phoneNumber}",
+            postcode: ${addressInfo.postcode}) {
             id,
             name,
             address,
