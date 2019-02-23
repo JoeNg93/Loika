@@ -27,7 +27,7 @@ class OrderErrorScreen extends React.Component {
       <View style={styles.container}>
         <Image
           source={require('../../../../assets/images/orderError.png')}
-          style={{ height: 186, width: 167 }}
+          style={{ height: 167, width: 186 }}
         />
         <Text style={styles.orderStatusTitle}>
           Something wrong happens.
@@ -48,8 +48,10 @@ class OrderErrorScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingHorizontal: 60
   },
   orderStatusTitle: {
     ...commonStyles.fontRalewaySemiBold,
