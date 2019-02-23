@@ -3,8 +3,22 @@ import { connect } from 'react-redux';
 
 import LoginScreen from './LoginScreen';
 import { signIn } from '../../actions/auth';
+import commonStyles from "../../constants/commonStyles";
 
 class LoginScreenContainer extends React.Component {
+  static navigationOptions = {
+    headerTitle: '',
+    headerBackTitle: null,
+    headerTransparent: true,
+    headerTitleStyle: {
+      ...commonStyles.fontRalewayBold,
+      fontSize: 18,
+    },
+    headerStyle: {
+      marginTop: 10,
+    },
+  };
+
   state = {
     email: '',
     password: '',
