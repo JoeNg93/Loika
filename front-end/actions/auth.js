@@ -57,7 +57,7 @@ export const getUserProfile = () => async dispatch => {
               city,
               country,
               postcode,
-              street1
+              address
             },
             email,
             name,
@@ -81,7 +81,7 @@ export const getUserProfile = () => async dispatch => {
                 city,
                 country,
                 postcode,
-                street1
+                address
               },
               total
             },
@@ -92,7 +92,7 @@ export const getUserProfile = () => async dispatch => {
               city,
               country,
               postcode,
-              street1
+              address
             }
           }
         }

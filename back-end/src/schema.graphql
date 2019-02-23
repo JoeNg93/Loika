@@ -8,8 +8,7 @@ type Mutation {
   # address with CRUD
   createAddress(
     isBillingAddress: Boolean!
-    street1: String!
-    street2: String
+    address: String!
     city: String!
     postcode: Int
     country: String!
@@ -17,11 +16,11 @@ type Mutation {
 
   updateAddress(
     id: ID!
-    street1: String
-    street2: String
+    address: String
     city: String
     postcode: Int
-    country: String
+    country: String,
+    name: String
   ): Address!
 
   deleteAddress(id: ID!): Address!

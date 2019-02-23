@@ -6,8 +6,7 @@ enum Permission {
 type Address {
   id: ID! @unique
   name: String!
-  street1: String!
-  street2: String
+  address: String!
   city: String!
   postcode: Int!
   country: String!

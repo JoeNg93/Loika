@@ -35,22 +35,16 @@ class AddNewAddressModal extends React.Component {
   };
 
   onPressSaveAddressForm = () => {
-    const {
+    const { name, address, postCode: postcode, city, phoneNumber } = this.state;
+    const newAddress = {
       name,
-      address: street1,
-      postCode: postcode,
-      city,
-      phoneNumber,
-    } = this.state;
-    const address = {
-      name,
-      street1,
+      address,
       city,
       phoneNumber,
       postcode: Number(postcode),
       id: Math.random().toString(36),
     };
-    this.props.addShippingAddress(address);
+    this.props.addShippingAddress(newAddress);
     this.props.onPressCloseModal();
   };
 

@@ -2,8 +2,7 @@ module.exports = {
         typeDefs: /* GraphQL */ `type Address {
   id: ID!
   name: String!
-  street1: String!
-  street2: String
+  address: String!
   city: String!
   postcode: Int!
   country: String!
@@ -19,8 +18,7 @@ type AddressConnection {
 
 input AddressCreateInput {
   name: String!
-  street1: String!
-  street2: String
+  address: String!
   city: String!
   postcode: Int!
   country: String!
@@ -48,10 +46,8 @@ enum AddressOrderByInput {
   id_DESC
   name_ASC
   name_DESC
-  street1_ASC
-  street1_DESC
-  street2_ASC
-  street2_DESC
+  address_ASC
+  address_DESC
   city_ASC
   city_DESC
   postcode_ASC
@@ -97,34 +93,20 @@ input AddressScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  street1: String
-  street1_not: String
-  street1_in: [String!]
-  street1_not_in: [String!]
-  street1_lt: String
-  street1_lte: String
-  street1_gt: String
-  street1_gte: String
-  street1_contains: String
-  street1_not_contains: String
-  street1_starts_with: String
-  street1_not_starts_with: String
-  street1_ends_with: String
-  street1_not_ends_with: String
-  street2: String
-  street2_not: String
-  street2_in: [String!]
-  street2_not_in: [String!]
-  street2_lt: String
-  street2_lte: String
-  street2_gt: String
-  street2_gte: String
-  street2_contains: String
-  street2_not_contains: String
-  street2_starts_with: String
-  street2_not_starts_with: String
-  street2_ends_with: String
-  street2_not_ends_with: String
+  address: String
+  address_not: String
+  address_in: [String!]
+  address_not_in: [String!]
+  address_lt: String
+  address_lte: String
+  address_gt: String
+  address_gte: String
+  address_contains: String
+  address_not_contains: String
+  address_starts_with: String
+  address_not_starts_with: String
+  address_ends_with: String
+  address_not_ends_with: String
   city: String
   city_not: String
   city_in: [String!]
@@ -184,8 +166,7 @@ input AddressScalarWhereInput {
 
 input AddressUpdateDataInput {
   name: String
-  street1: String
-  street2: String
+  address: String
   city: String
   postcode: Int
   country: String
@@ -195,8 +176,7 @@ input AddressUpdateDataInput {
 
 input AddressUpdateInput {
   name: String
-  street1: String
-  street2: String
+  address: String
   city: String
   postcode: Int
   country: String
@@ -206,8 +186,7 @@ input AddressUpdateInput {
 
 input AddressUpdateManyDataInput {
   name: String
-  street1: String
-  street2: String
+  address: String
   city: String
   postcode: Int
   country: String
@@ -228,8 +207,7 @@ input AddressUpdateManyInput {
 
 input AddressUpdateManyMutationInput {
   name: String
-  street1: String
-  street2: String
+  address: String
   city: String
   postcode: Int
   country: String
@@ -303,34 +281,20 @@ input AddressWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  street1: String
-  street1_not: String
-  street1_in: [String!]
-  street1_not_in: [String!]
-  street1_lt: String
-  street1_lte: String
-  street1_gt: String
-  street1_gte: String
-  street1_contains: String
-  street1_not_contains: String
-  street1_starts_with: String
-  street1_not_starts_with: String
-  street1_ends_with: String
-  street1_not_ends_with: String
-  street2: String
-  street2_not: String
-  street2_in: [String!]
-  street2_not_in: [String!]
-  street2_lt: String
-  street2_lte: String
-  street2_gt: String
-  street2_gte: String
-  street2_contains: String
-  street2_not_contains: String
-  street2_starts_with: String
-  street2_not_starts_with: String
-  street2_ends_with: String
-  street2_not_ends_with: String
+  address: String
+  address_not: String
+  address_in: [String!]
+  address_not_in: [String!]
+  address_lt: String
+  address_lte: String
+  address_gt: String
+  address_gte: String
+  address_contains: String
+  address_not_contains: String
+  address_starts_with: String
+  address_not_starts_with: String
+  address_ends_with: String
+  address_not_ends_with: String
   city: String
   city_not: String
   city_in: [String!]

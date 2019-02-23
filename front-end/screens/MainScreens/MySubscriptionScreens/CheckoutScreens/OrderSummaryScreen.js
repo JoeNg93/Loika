@@ -102,7 +102,7 @@ class OrderSummaryScreen extends React.Component {
       name,
       postcode,
       city,
-      street1,
+      address,
       phoneNumber,
     } = this.props.shippingAddress;
     const { deliveryTime, deliveryDayOfWeek } = this.props;
@@ -111,7 +111,7 @@ class OrderSummaryScreen extends React.Component {
       <View style={styles.shippedToContainer}>
         <ShippedToSummary
           name={name}
-          shippingAddress={{ city, postCode: postcode, address: street1 }}
+          shippingAddress={{ city, postCode: postcode, address }}
           phoneNumber={phoneNumber}
           deliveryDayOfWeek={deliveryDayOfWeek}
           deliveryTime={deliveryTime}
@@ -214,6 +214,7 @@ const mapStateToProps = state => ({
   deliveryTime: state.checkout.deliveryTime,
 });
 
-export default connect(mapStateToProps, { removeSubscriptionFromCart })(
-  OrderSummaryScreen
-);
+export default connect(
+  mapStateToProps,
+  { removeSubscriptionFromCart }
+)(OrderSummaryScreen);

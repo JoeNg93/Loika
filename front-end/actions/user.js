@@ -24,7 +24,7 @@ export const addShippingAddress = address => async dispatch => {
     //           city,
     //           country,
     //           postcode,
-    //           street1
+    //           address
     //         },
     //         email,
     //         name,
@@ -36,7 +36,7 @@ export const addShippingAddress = address => async dispatch => {
     //             city,
     //             country,
     //             postcode,
-    //             street1
+    //             address
     //           },
     //           deliveryDayOfWeek,
     //           deliveryTime,
@@ -48,7 +48,7 @@ export const addShippingAddress = address => async dispatch => {
     //             city,
     //             country,
     //             postcode,
-    //             street1
+    //             address
     //           },
     //           total
     //         },
@@ -59,7 +59,7 @@ export const addShippingAddress = address => async dispatch => {
     //           city,
     //           country,
     //           postcode,
-    //           street1
+    //           address
     //         }
     //       }
     //     }
@@ -98,7 +98,7 @@ export const addOrder = order => async dispatch => {
     //           city,
     //           country,
     //           postcode,
-    //           street1
+    //           address
     //         },
     //         email,
     //         name,
@@ -110,7 +110,7 @@ export const addOrder = order => async dispatch => {
     //             city,
     //             country,
     //             postcode,
-    //             street1
+    //             address
     //           },
     //           deliveryDayOfWeek,
     //           deliveryTime,
@@ -122,7 +122,7 @@ export const addOrder = order => async dispatch => {
     //             city,
     //             country,
     //             postcode,
-    //             street1
+    //             address
     //           },
     //           total
     //         },
@@ -133,7 +133,7 @@ export const addOrder = order => async dispatch => {
     //           city,
     //           country,
     //           postcode,
-    //           street1
+    //           address
     //         }
     //       }
     //     }
@@ -172,7 +172,7 @@ export const updateShippingAddress = (id, addressInfo) => async dispatch => {
     //           city,
     //           country,
     //           postcode,
-    //           street1
+    //           address
     //         },
     //         email,
     //         name,
@@ -184,7 +184,7 @@ export const updateShippingAddress = (id, addressInfo) => async dispatch => {
     //             city,
     //             country,
     //             postcode,
-    //             street1
+    //             address
     //           },
     //           deliveryDayOfWeek,
     //           deliveryTime,
@@ -196,7 +196,7 @@ export const updateShippingAddress = (id, addressInfo) => async dispatch => {
     //             city,
     //             country,
     //             postcode,
-    //             street1
+    //             address
     //           },
     //           total
     //         },
@@ -207,7 +207,7 @@ export const updateShippingAddress = (id, addressInfo) => async dispatch => {
     //           city,
     //           country,
     //           postcode,
-    //           street1
+    //           address
     //         }
     //       }
     //     }

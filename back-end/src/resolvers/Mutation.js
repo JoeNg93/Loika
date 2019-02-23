@@ -367,15 +367,12 @@ const Mutations = {
         name
         email
         billingAddress {
-          street1
-          street2
+          address
           city
           postcode
           country
         }
         shippingAddress {
-          street1
-          street2
           city
           postcode
           country
@@ -440,8 +437,7 @@ const Mutations = {
       billingAddress: {
         create: {
           isBillingAddress: true,
-          street1: user.billingAddress.street1,
-          street2: user.billingAddress.street2,
+          address: user.billingAddress.address,
           city: user.billingAddress.city,
           postcode: user.billingAddress.postcode,
           country: user.billingAddress.country,
@@ -450,8 +446,7 @@ const Mutations = {
       shippingAddress: {
         create: {
           isBillingAddress: false,
-          street1: user.shippingAddress.street1,
-          street2: user.shippingAddress.street2,
+          address: user.shippingAddress.address,
           city: user.shippingAddress.city,
           postcode: user.shippingAddress.postcode,
           country: user.shippingAddress.country,

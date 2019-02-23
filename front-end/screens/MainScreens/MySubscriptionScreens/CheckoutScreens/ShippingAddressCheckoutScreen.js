@@ -80,7 +80,7 @@ class ShippingAddressCheckoutScreen extends React.Component {
           name={addressDetails.name}
           phoneNumber={addressDetails.phoneNumber}
           shippingAddress={{
-            address: addressDetails.street1,
+            address: addressDetails.address,
             postCode: addressDetails.postcode,
             city: addressDetails.city,
           }}
