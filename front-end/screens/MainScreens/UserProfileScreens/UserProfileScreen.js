@@ -43,7 +43,7 @@ class UserProfileScreen extends React.Component {
     this.setState({ addressModalVisible: false });
   };
 
-  renderAddressSummaryList = (addressList) => {
+  renderAddressSummaryList = addressList => {
     return addressList.map(addressDetails => (
       <View key={addressDetails.id} style={styles.addressSummaryContainer}>
         <AddressSummary
@@ -52,7 +52,7 @@ class UserProfileScreen extends React.Component {
           phoneNumber={addressDetails.phoneNumber}
           shippingAddress={{
             address: addressDetails.address,
-            postCode: addressDetails.postcode,
+            postcode: addressDetails.postcode,
             city: addressDetails.city,
           }}
           hasSelectedButton={false}
@@ -67,9 +67,7 @@ class UserProfileScreen extends React.Component {
     const { name, email, shippingAddress, billingAddress } = this.props.user;
     return (
       <View style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContainerContent}
-        >
+        <ScrollView contentContainerStyle={styles.scrollContainerContent}>
           <View style={styles.bigCircle} />
           <View style={styles.namePictureContainer}>
             <Image
@@ -109,9 +107,7 @@ class UserProfileScreen extends React.Component {
                     color={Colors.mediumCarmine}
                     size={14}
                   />
-                  <Text style={styles.contactDetailsText}>
-                    {email}
-                  </Text>
+                  <Text style={styles.contactDetailsText}>{email}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
@@ -148,21 +144,19 @@ class UserProfileScreen extends React.Component {
 
             <View>
               <Text style={styles.sectionText}>BILLING ADDRESS</Text>
-              {
-                billingAddress && (
-                  <AddressSummary
-                    name={billingAddress.name}
-                    shippingAddress={{
-                      address: billingAddress.address,
-                      postCode: billingAddress.postcode,
-                      city: billingAddress.city,
-                    }}
-                    phoneNumber={billingAddress.phoneNumber}
-                    hasSelectedButton={false}
-                    canEditAddress={true}
-                  />
-                )
-              }
+              {billingAddress && (
+                <AddressSummary
+                  name={billingAddress.name}
+                  shippingAddress={{
+                    address: billingAddress.address,
+                    postcode: billingAddress.postcode,
+                    city: billingAddress.city,
+                  }}
+                  phoneNumber={billingAddress.phoneNumber}
+                  hasSelectedButton={false}
+                  canEditAddress={true}
+                />
+              )}
             </View>
           </View>
         </ScrollView>
@@ -263,7 +257,7 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewaySemiBold,
     ...commonStyles.textGrey,
     fontSize: 12,
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   },
 });
 
@@ -271,4 +265,7 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, {})(UserProfileScreen);
+export default connect(
+  mapStateToProps,
+  {}
+)(UserProfileScreen);
