@@ -41,7 +41,7 @@ class PaymentMethodModal extends React.Component {
       <Modal animationType="fade" transparent visible={this.props.visible}>
         <View style={styles.popupBackground}>
           <View style={styles.popupContainer}>
-            <Text style={styles.titleText}>Add new address</Text>
+            <Text style={styles.titleText}>Payment information</Text>
             <PaymentForm
               onPaymentInputEndEditing={this.onPaymentInputEndEditing}
             />
@@ -60,7 +60,7 @@ class PaymentMethodModal extends React.Component {
                 onPress={this.props.onPressCloseModal}
               />
               <Button
-                title={'Place order'}
+                title={'Pay'}
                 titleStyle={styles.buttonTitleDefaultStyle}
                 buttonStyle={[
                   styles.buttonDefaultStyle,
@@ -114,13 +114,14 @@ const styles = StyleSheet.create({
     ...commonStyles.textMediumCarmine,
     fontSize: 18,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 18,
   },
   buttonGroupContainer: {
     flexDirection: 'row',
     width: '82%',
     justifyContent: 'space-around',
-    marginTop: 24,
+    marginTop: 32,
+    marginBottom: 8
   },
   buttonTitleDefaultStyle: {
     ...commonStyles.fontRalewaySemiBold,
