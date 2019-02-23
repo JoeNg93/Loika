@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
   container: {
     width: width,
     flex: 1,
+    marginTop: 70,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -95,28 +96,26 @@ class DeliveryScheduleCheckoutScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <CheckoutStepProgress currentStep="2" />
+
         <View style={styles.contentContainer}>
-          <CheckoutStepProgress currentStep="2" />
+          <View style={styles.deliverySchedule}>
+            <DeliverySchedule
+              deliveryDayOfWeek={this.props.deliveryDayOfWeek}
+              deliveryTime={this.props.deliveryTime}
+              onPressChangeDeliveryDayOfWeek={
+                this.onPressChangeDeliveryDayOfWeek
+              }
+              onPressChangeDeliveryTime={this.onPressChangeDeliveryTime}
+              instructionText="*Delivery is scheduled every week during month"
+            />
+          </View>
 
-          <View style={styles.shedulingContainer}>
-            <View style={styles.deliverySchedule}>
-              <DeliverySchedule
-                deliveryDayOfWeek={this.props.deliveryDayOfWeek}
-                deliveryTime={this.props.deliveryTime}
-                onPressChangeDeliveryDayOfWeek={
-                  this.onPressChangeDeliveryDayOfWeek
-                }
-                onPressChangeDeliveryTime={this.onPressChangeDeliveryTime}
-                instructionText="*Delivery is scheduled every week during month"
-              />
-            </View>
-
-            <View style={styles.imageContainer}>
-              <Image
-                style={styles.image}
-                source={require('../../../../assets/images/slide3.png')}
-              />
-            </View>
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.image}
+              source={require('../../../../assets/images/slide3.png')}
+            />
           </View>
         </View>
 
@@ -138,7 +137,7 @@ const mapStateToProps = state => ({
   deliveryTime: state.checkout.deliveryTime,
 });
 
-export default connect(
-  mapStateToProps,
-  { setDeliveryDayOfWeek, setDeliveryTime }
-)(DeliveryScheduleCheckoutScreen);
+export default connect(mapStateToProps, {
+  setDeliveryDayOfWeek,
+  setDeliveryTime,
+})(DeliveryScheduleCheckoutScreen);
