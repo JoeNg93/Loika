@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 60
+    paddingHorizontal: 40
   },
   orderStatusTitle: {
     ...commonStyles.fontRalewaySemiBold,
@@ -59,12 +59,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginBottom: 22,
     marginTop: 55,
+    textAlign: 'center',
   },
   orderStatusSubtitle: {
     ...commonStyles.fontRalewayMedium,
     ...commonStyles.textBlack,
     fontSize: 18,
     marginBottom: 70,
+    textAlign: 'center',
   },
   orderStatusBtnStyle: {
     paddingVertical: 16,
