@@ -15,6 +15,7 @@ import CheckoutStepProgress from '../../../../components/CheckoutStepProgress';
 import ShippedToSummary from '../../../../components/ShippedToSummary';
 import SubscriptionSummary from '../../../../components/SubscriptionSummary';
 import TotalComponent from '../../../../components/TotalComponent';
+import PaymentMethodModal from '../../../../components/PaymentMethodModal';
 import Layout from '../../../../constants/Layout';
 import { removeSubscriptionFromCart } from '../../../../actions/checkout';
 
@@ -45,6 +46,7 @@ class OrderSummaryScreen extends React.Component {
   };
 
   state = {
+    paymentModalVisible: false,
     displayStripeCheckout: false,
   };
 
@@ -60,7 +62,15 @@ class OrderSummaryScreen extends React.Component {
   };
 
   onPressPayNow = () => {
-    this.setState({ displayStripeCheckout: true });
+    this.setState({ paymentModalVisible: true, displayStripeCheckout: true });
+  };
+
+  openPaymentModal = () => {
+    this.setState({ paymentModalVisible: true });
+  };
+
+  closePaymentModal = () => {
+    this.setState({ paymentModalVisible: false });
   };
 
   onPressRemoveSubscription = subscriptionId => {
@@ -138,6 +148,10 @@ class OrderSummaryScreen extends React.Component {
             onPress={this.onPressPayNow}
           />
         </View>
+        <PaymentMethodModal
+          visible={this.state.paymentModalVisible}
+          onPressCloseModal={this.closePaymentModal}
+        />
       </View>
     );
   }
@@ -200,7 +214,6 @@ const mapStateToProps = state => ({
   deliveryTime: state.checkout.deliveryTime,
 });
 
-export default connect(
-  mapStateToProps,
-  { removeSubscriptionFromCart }
-)(OrderSummaryScreen);
+export default connect(mapStateToProps, { removeSubscriptionFromCart })(
+  OrderSummaryScreen
+);
