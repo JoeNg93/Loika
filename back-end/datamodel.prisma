@@ -65,6 +65,7 @@ type Order {
   deliveryTime: String!
   deliveryDayOfWeek: String!
   paymentDate: DateTime!
+  cancelDate: DateTime
   total: Int!
   charge: String!
   createdAt: DateTime!
@@ -80,6 +81,6 @@ type OrderItem {
   mealPrice: Int!
   thumbnailImage: String
   largeImage: String
-  quantity: Int! @default(value: 1)
-  user: User
+  order: Order
+  size: Float!
 }

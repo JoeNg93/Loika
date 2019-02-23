@@ -13,6 +13,11 @@ const Query = {
 
     user.cart = await prisma.user({ id: ctx.request.userId }).cart();
     user.orders = await prisma.user({ id: ctx.request.userId }).orders();
+    for (let order of user.orders) {
+      order.shippingAddress = await prisma
+        .order({ id: order.id })
+        .shippingAddress();
+    }
     user.shippingAddress = await prisma
       .user({ id: ctx.request.userId })
       .shippingAddress();

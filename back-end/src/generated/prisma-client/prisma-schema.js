@@ -629,6 +629,7 @@ type Order {
   deliveryTime: String!
   deliveryDayOfWeek: String!
   paymentDate: DateTime!
+  cancelDate: DateTime
   total: Int!
   charge: String!
   createdAt: DateTime!
@@ -643,12 +644,13 @@ type OrderConnection {
 
 input OrderCreateInput {
   user: UserCreateOneWithoutOrdersInput!
-  items: OrderItemCreateManyInput
+  items: OrderItemCreateManyWithoutOrderInput
   billingAddress: AddressCreateOneInput!
   shippingAddress: AddressCreateOneInput!
   deliveryTime: String!
   deliveryDayOfWeek: String!
   paymentDate: DateTime!
+  cancelDate: DateTime
   total: Int!
   charge: String!
 }
@@ -658,13 +660,31 @@ input OrderCreateManyWithoutUserInput {
   connect: [OrderWhereUniqueInput!]
 }
 
-input OrderCreateWithoutUserInput {
-  items: OrderItemCreateManyInput
+input OrderCreateOneWithoutItemsInput {
+  create: OrderCreateWithoutItemsInput
+  connect: OrderWhereUniqueInput
+}
+
+input OrderCreateWithoutItemsInput {
+  user: UserCreateOneWithoutOrdersInput!
   billingAddress: AddressCreateOneInput!
   shippingAddress: AddressCreateOneInput!
   deliveryTime: String!
   deliveryDayOfWeek: String!
   paymentDate: DateTime!
+  cancelDate: DateTime
+  total: Int!
+  charge: String!
+}
+
+input OrderCreateWithoutUserInput {
+  items: OrderItemCreateManyWithoutOrderInput
+  billingAddress: AddressCreateOneInput!
+  shippingAddress: AddressCreateOneInput!
+  deliveryTime: String!
+  deliveryDayOfWeek: String!
+  paymentDate: DateTime!
+  cancelDate: DateTime
   total: Int!
   charge: String!
 }
@@ -683,8 +703,8 @@ type OrderItem {
   mealPrice: Int!
   thumbnailImage: String
   largeImage: String
-  quantity: Int!
-  user: User
+  order: Order
+  size: Float!
 }
 
 type OrderItemConnection {
@@ -701,13 +721,24 @@ input OrderItemCreateInput {
   mealPrice: Int!
   thumbnailImage: String
   largeImage: String
-  quantity: Int
-  user: UserCreateOneInput
+  order: OrderCreateOneWithoutItemsInput
+  size: Float!
 }
 
-input OrderItemCreateManyInput {
-  create: [OrderItemCreateInput!]
+input OrderItemCreateManyWithoutOrderInput {
+  create: [OrderItemCreateWithoutOrderInput!]
   connect: [OrderItemWhereUniqueInput!]
+}
+
+input OrderItemCreateWithoutOrderInput {
+  title: String!
+  shortDescription: String!
+  longDescription: String!
+  totalPrice: Int!
+  mealPrice: Int!
+  thumbnailImage: String
+  largeImage: String
+  size: Float!
 }
 
 type OrderItemEdge {
@@ -732,8 +763,8 @@ enum OrderItemOrderByInput {
   thumbnailImage_DESC
   largeImage_ASC
   largeImage_DESC
-  quantity_ASC
-  quantity_DESC
+  size_ASC
+  size_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -841,29 +872,17 @@ input OrderItemScalarWhereInput {
   largeImage_not_starts_with: String
   largeImage_ends_with: String
   largeImage_not_ends_with: String
-  quantity: Int
-  quantity_not: Int
-  quantity_in: [Int!]
-  quantity_not_in: [Int!]
-  quantity_lt: Int
-  quantity_lte: Int
-  quantity_gt: Int
-  quantity_gte: Int
+  size: Float
+  size_not: Float
+  size_in: [Float!]
+  size_not_in: [Float!]
+  size_lt: Float
+  size_lte: Float
+  size_gt: Float
+  size_gte: Float
   AND: [OrderItemScalarWhereInput!]
   OR: [OrderItemScalarWhereInput!]
   NOT: [OrderItemScalarWhereInput!]
-}
-
-input OrderItemUpdateDataInput {
-  title: String
-  shortDescription: String
-  longDescription: String
-  totalPrice: Int
-  mealPrice: Int
-  thumbnailImage: String
-  largeImage: String
-  quantity: Int
-  user: UserUpdateOneInput
 }
 
 input OrderItemUpdateInput {
@@ -874,8 +893,8 @@ input OrderItemUpdateInput {
   mealPrice: Int
   thumbnailImage: String
   largeImage: String
-  quantity: Int
-  user: UserUpdateOneInput
+  order: OrderUpdateOneWithoutItemsInput
+  size: Float
 }
 
 input OrderItemUpdateManyDataInput {
@@ -886,18 +905,7 @@ input OrderItemUpdateManyDataInput {
   mealPrice: Int
   thumbnailImage: String
   largeImage: String
-  quantity: Int
-}
-
-input OrderItemUpdateManyInput {
-  create: [OrderItemCreateInput!]
-  update: [OrderItemUpdateWithWhereUniqueNestedInput!]
-  upsert: [OrderItemUpsertWithWhereUniqueNestedInput!]
-  delete: [OrderItemWhereUniqueInput!]
-  connect: [OrderItemWhereUniqueInput!]
-  disconnect: [OrderItemWhereUniqueInput!]
-  deleteMany: [OrderItemScalarWhereInput!]
-  updateMany: [OrderItemUpdateManyWithWhereNestedInput!]
+  size: Float
 }
 
 input OrderItemUpdateManyMutationInput {
@@ -908,7 +916,18 @@ input OrderItemUpdateManyMutationInput {
   mealPrice: Int
   thumbnailImage: String
   largeImage: String
-  quantity: Int
+  size: Float
+}
+
+input OrderItemUpdateManyWithoutOrderInput {
+  create: [OrderItemCreateWithoutOrderInput!]
+  delete: [OrderItemWhereUniqueInput!]
+  connect: [OrderItemWhereUniqueInput!]
+  disconnect: [OrderItemWhereUniqueInput!]
+  update: [OrderItemUpdateWithWhereUniqueWithoutOrderInput!]
+  upsert: [OrderItemUpsertWithWhereUniqueWithoutOrderInput!]
+  deleteMany: [OrderItemScalarWhereInput!]
+  updateMany: [OrderItemUpdateManyWithWhereNestedInput!]
 }
 
 input OrderItemUpdateManyWithWhereNestedInput {
@@ -916,15 +935,26 @@ input OrderItemUpdateManyWithWhereNestedInput {
   data: OrderItemUpdateManyDataInput!
 }
 
-input OrderItemUpdateWithWhereUniqueNestedInput {
-  where: OrderItemWhereUniqueInput!
-  data: OrderItemUpdateDataInput!
+input OrderItemUpdateWithoutOrderDataInput {
+  title: String
+  shortDescription: String
+  longDescription: String
+  totalPrice: Int
+  mealPrice: Int
+  thumbnailImage: String
+  largeImage: String
+  size: Float
 }
 
-input OrderItemUpsertWithWhereUniqueNestedInput {
+input OrderItemUpdateWithWhereUniqueWithoutOrderInput {
   where: OrderItemWhereUniqueInput!
-  update: OrderItemUpdateDataInput!
-  create: OrderItemCreateInput!
+  data: OrderItemUpdateWithoutOrderDataInput!
+}
+
+input OrderItemUpsertWithWhereUniqueWithoutOrderInput {
+  where: OrderItemWhereUniqueInput!
+  update: OrderItemUpdateWithoutOrderDataInput!
+  create: OrderItemCreateWithoutOrderInput!
 }
 
 input OrderItemWhereInput {
@@ -1028,15 +1058,15 @@ input OrderItemWhereInput {
   largeImage_not_starts_with: String
   largeImage_ends_with: String
   largeImage_not_ends_with: String
-  quantity: Int
-  quantity_not: Int
-  quantity_in: [Int!]
-  quantity_not_in: [Int!]
-  quantity_lt: Int
-  quantity_lte: Int
-  quantity_gt: Int
-  quantity_gte: Int
-  user: UserWhereInput
+  order: OrderWhereInput
+  size: Float
+  size_not: Float
+  size_in: [Float!]
+  size_not_in: [Float!]
+  size_lt: Float
+  size_lte: Float
+  size_gt: Float
+  size_gte: Float
   AND: [OrderItemWhereInput!]
   OR: [OrderItemWhereInput!]
   NOT: [OrderItemWhereInput!]
@@ -1055,6 +1085,8 @@ enum OrderOrderByInput {
   deliveryDayOfWeek_DESC
   paymentDate_ASC
   paymentDate_DESC
+  cancelDate_ASC
+  cancelDate_DESC
   total_ASC
   total_DESC
   charge_ASC
@@ -1116,6 +1148,14 @@ input OrderScalarWhereInput {
   paymentDate_lte: DateTime
   paymentDate_gt: DateTime
   paymentDate_gte: DateTime
+  cancelDate: DateTime
+  cancelDate_not: DateTime
+  cancelDate_in: [DateTime!]
+  cancelDate_not_in: [DateTime!]
+  cancelDate_lt: DateTime
+  cancelDate_lte: DateTime
+  cancelDate_gt: DateTime
+  cancelDate_gte: DateTime
   total: Int
   total_not: Int
   total_in: [Int!]
@@ -1161,12 +1201,13 @@ input OrderScalarWhereInput {
 
 input OrderUpdateInput {
   user: UserUpdateOneRequiredWithoutOrdersInput
-  items: OrderItemUpdateManyInput
+  items: OrderItemUpdateManyWithoutOrderInput
   billingAddress: AddressUpdateOneRequiredInput
   shippingAddress: AddressUpdateOneRequiredInput
   deliveryTime: String
   deliveryDayOfWeek: String
   paymentDate: DateTime
+  cancelDate: DateTime
   total: Int
   charge: String
 }
@@ -1175,6 +1216,7 @@ input OrderUpdateManyDataInput {
   deliveryTime: String
   deliveryDayOfWeek: String
   paymentDate: DateTime
+  cancelDate: DateTime
   total: Int
   charge: String
 }
@@ -1183,6 +1225,7 @@ input OrderUpdateManyMutationInput {
   deliveryTime: String
   deliveryDayOfWeek: String
   paymentDate: DateTime
+  cancelDate: DateTime
   total: Int
   charge: String
 }
@@ -1203,13 +1246,35 @@ input OrderUpdateManyWithWhereNestedInput {
   data: OrderUpdateManyDataInput!
 }
 
-input OrderUpdateWithoutUserDataInput {
-  items: OrderItemUpdateManyInput
+input OrderUpdateOneWithoutItemsInput {
+  create: OrderCreateWithoutItemsInput
+  update: OrderUpdateWithoutItemsDataInput
+  upsert: OrderUpsertWithoutItemsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: OrderWhereUniqueInput
+}
+
+input OrderUpdateWithoutItemsDataInput {
+  user: UserUpdateOneRequiredWithoutOrdersInput
   billingAddress: AddressUpdateOneRequiredInput
   shippingAddress: AddressUpdateOneRequiredInput
   deliveryTime: String
   deliveryDayOfWeek: String
   paymentDate: DateTime
+  cancelDate: DateTime
+  total: Int
+  charge: String
+}
+
+input OrderUpdateWithoutUserDataInput {
+  items: OrderItemUpdateManyWithoutOrderInput
+  billingAddress: AddressUpdateOneRequiredInput
+  shippingAddress: AddressUpdateOneRequiredInput
+  deliveryTime: String
+  deliveryDayOfWeek: String
+  paymentDate: DateTime
+  cancelDate: DateTime
   total: Int
   charge: String
 }
@@ -1217,6 +1282,11 @@ input OrderUpdateWithoutUserDataInput {
 input OrderUpdateWithWhereUniqueWithoutUserInput {
   where: OrderWhereUniqueInput!
   data: OrderUpdateWithoutUserDataInput!
+}
+
+input OrderUpsertWithoutItemsInput {
+  update: OrderUpdateWithoutItemsDataInput!
+  create: OrderCreateWithoutItemsInput!
 }
 
 input OrderUpsertWithWhereUniqueWithoutUserInput {
@@ -1282,6 +1352,14 @@ input OrderWhereInput {
   paymentDate_lte: DateTime
   paymentDate_gt: DateTime
   paymentDate_gte: DateTime
+  cancelDate: DateTime
+  cancelDate_not: DateTime
+  cancelDate_in: [DateTime!]
+  cancelDate_not_in: [DateTime!]
+  cancelDate_lt: DateTime
+  cancelDate_lte: DateTime
+  cancelDate_gt: DateTime
+  cancelDate_gte: DateTime
   total: Int
   total_not: Int
   total_in: [Int!]
@@ -1672,11 +1750,6 @@ input UserCreateInput {
   orders: OrderCreateManyWithoutUserInput
 }
 
-input UserCreateOneInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreateOneWithoutCartInput {
   create: UserCreateWithoutCartInput
   connect: UserWhereUniqueInput
@@ -1751,22 +1824,6 @@ enum UserOrderByInput {
   updatedAt_DESC
 }
 
-input UserUpdateDataInput {
-  name: String
-  email: String
-  password: String
-  resetToken: String
-  resetTokenExpiry: Float
-  permissions: UserUpdatepermissionsInput
-  phone: String
-  billingAddress: AddressUpdateOneInput
-  shippingAddress: AddressUpdateManyInput
-  paymentId: String
-  avatar: String
-  cart: CartItemUpdateManyWithoutUserInput
-  orders: OrderUpdateManyWithoutUserInput
-}
-
 input UserUpdateInput {
   name: String
   email: String
@@ -1793,15 +1850,6 @@ input UserUpdateManyMutationInput {
   phone: String
   paymentId: String
   avatar: String
-}
-
-input UserUpdateOneInput {
-  create: UserCreateInput
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutCartInput {
@@ -1850,11 +1898,6 @@ input UserUpdateWithoutOrdersDataInput {
   paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
-}
-
-input UserUpsertNestedInput {
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
 }
 
 input UserUpsertWithoutCartInput {
