@@ -488,7 +488,7 @@ const Mutations = {
     }
 
     // 2. Check if the selected subscription is available
-    const oldOrder = await prisma.user({ id: userId }).orders({id: args.id})
+    const oldOrder = await prisma.user({ id: userId }).orders({id: args.orderId})
     if (!oldOrder) {
       throw new Error('Could not find this order.');
     }
