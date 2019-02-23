@@ -476,9 +476,9 @@ const Mutations = {
 
   /**
    * Cancel order
-   * @param {*} parent 
-   * @param {*} args 
-   * @param {*} ctx 
+   * @param {*} parent
+   * @param {*} args
+   * @param {*} ctx
    */
   async cancelOrder(parent, args, ctx) {
     // 1. Query the current user and make sure they are signed in
@@ -488,19 +488,21 @@ const Mutations = {
     }
 
     // 2. Check if the selected subscription is available
-    const oldOrder = await prisma.user({ id: userId }).orders({id: args.orderId})
+    const oldOrder = await prisma
+      .user({ id: userId })
+      .orders({ id: args.orderId });
     if (!oldOrder) {
       throw new Error('Could not find this order.');
     }
 
     // 3. Set the cancel date to today.
-    const order = await prisma.updateOrder({ 
+    const order = await prisma.updateOrder({
       data: {
-        cancelDate: new Date().toISOString()
-      }, 
+        cancelDate: new Date().toISOString(),
+      },
       where: {
-        id: oldOrder.id
-      }
+        id: oldOrder.id,
+      },
     });
 
     // 4. Return the order
