@@ -16,3 +16,5 @@ First of all, run `cd back-end/`in your Terminal, then do the steps below:
 1. Run `npm install` to install dependencies
 2. Run `npm run dev` to start the server, please keep it running
 3. Open your website at `localhost:4444` to use the Graphql Yoga playground.
+
+The Graphql Playground is live at https://loika-yoga-prod.herokuapp.com/
