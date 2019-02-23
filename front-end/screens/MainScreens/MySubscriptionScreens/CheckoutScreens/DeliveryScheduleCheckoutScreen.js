@@ -76,7 +76,7 @@ class DeliveryScheduleCheckoutScreen extends React.Component {
 
   componentDidMount() {
     this.props.setDeliveryDayOfWeek('MON');
-    this.props.setDeliveryTime('10:00 - 12:00');
+    this.props.setDeliveryTime('10:00-12:00');
   }
 
   onPressConfirmDeliverySchedule = () => {

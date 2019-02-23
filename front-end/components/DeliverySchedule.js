@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
 export default class DeliverySchedule extends React.Component {
   state = {
     dayPicked: 'WED',
-    timePicked: '10:00 - 12:00',
+    timePicked: '10:00-12:00',
   };
 
   // a cancer of a solution, but it's straightforward and it works, hopefully it doesn't need to be changed
@@ -196,38 +196,38 @@ export default class DeliverySchedule extends React.Component {
                 style={[
                   styles.timeButton,
                   { marginBottom: 34 },
-                  this._checkTimeClick('10:00 - 12:00', 'btn'),
+                  this._checkTimeClick('10:00-12:00', 'btn'),
                 ]}
                 onPress={() =>
-                  this.props.onPressChangeDeliveryTime('10:00 - 12:00')
+                  this.props.onPressChangeDeliveryTime('10:00-12:00')
                 }
               >
                 <Text
                   style={[
                     styles.timeButtonText,
-                    this._checkTimeClick('10:00 - 12:00', 'text'),
+                    this._checkTimeClick('10:00-12:00', 'text'),
                   ]}
                 >
-                  10:00 - 12:00
+                  10:00-12:00
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={[
                   styles.timeButton,
-                  this._checkTimeClick('14:00 - 16:00', 'btn'),
+                  this._checkTimeClick('14:00-16:00', 'btn'),
                 ]}
                 onPress={() =>
-                  this.props.onPressChangeDeliveryTime('14:00 - 16:00')
+                  this.props.onPressChangeDeliveryTime('14:00-16:00')
                 }
               >
                 <Text
                   style={[
                     styles.timeButtonText,
-                    this._checkTimeClick('14:00 - 16:00', 'text'),
+                    this._checkTimeClick('14:00-16:00', 'text'),
                   ]}
                 >
-                  14:00 - 16:00
+                  14:00-16:00
                 </Text>
               </TouchableOpacity>
             </View>
@@ -237,38 +237,38 @@ export default class DeliverySchedule extends React.Component {
                 style={[
                   styles.timeButton,
                   { marginBottom: 34 },
-                  this._checkTimeClick('12:00 - 14:00', 'btn'),
+                  this._checkTimeClick('12:00-14:00', 'btn'),
                 ]}
                 onPress={() =>
-                  this.props.onPressChangeDeliveryTime('12:00 - 14:00')
+                  this.props.onPressChangeDeliveryTime('12:00-14:00')
                 }
               >
                 <Text
                   style={[
                     styles.timeButtonText,
-                    this._checkTimeClick('12:00 - 14:00', 'text'),
+                    this._checkTimeClick('12:00-14:00', 'text'),
                   ]}
                 >
-                  12:00 - 14:00
+                  12:00-14:00
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={[
                   styles.timeButton,
-                  this._checkTimeClick('16:00 - 18:00', 'btn'),
+                  this._checkTimeClick('16:00-18:00', 'btn'),
                 ]}
                 onPress={() =>
-                  this.props.onPressChangeDeliveryTime('16:00 - 18:00')
+                  this.props.onPressChangeDeliveryTime('16:00-18:00')
                 }
               >
                 <Text
                   style={[
                     styles.timeButtonText,
-                    this._checkTimeClick('16:00 - 18:00', 'text'),
+                    this._checkTimeClick('16:00-18:00', 'text'),
                   ]}
                 >
-                  16:00 - 18:00
+                  16:00-18:00
                 </Text>
               </TouchableOpacity>
             </View>
@@ -292,7 +292,7 @@ DeliverySchedule.propTypes = {
 DeliverySchedule.defaultProps = {
   instructionText: '',
   deliveryDayOfWeek: 'Mon',
-  deliveryTime: '10:00 - 12:00',
+  deliveryTime: '10:00-12:00',
   onPressChangeDeliveryDayOfWeek: () => {},
   onPressChangeDeliveryTime: () => {},
 };
