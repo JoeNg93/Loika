@@ -17,6 +17,7 @@ import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import Carousel from './Carousel';
+import CartView from './CartView';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
 import { getAllSubscriptions } from '../../../../actions/subscription';
@@ -165,7 +166,7 @@ class SubscriptionSelectionScreen extends React.Component {
           style={{
             borderBottomColor: '#E1E1E1',
             borderBottomWidth: 1,
-            marginBottom: 10,
+            marginBottom: 14,
           }}
         />
       );
@@ -175,7 +176,7 @@ class SubscriptionSelectionScreen extends React.Component {
             <View style={styles.cartItem}>
               <Text style={styles.textInCart}>{subscription.title}</Text>
               <Text style={styles.cartSize}>{subscription.size}kg/box</Text>
-              <Text style={[styles.cartPrice, { top: -45 }]}>
+              <Text style={styles.cartPrice}>
                 {subscription.totalPrice} €
               </Text>
             </View>
@@ -183,7 +184,7 @@ class SubscriptionSelectionScreen extends React.Component {
               style={{
                 borderBottomColor: '#E1E1E1',
                 borderBottomWidth: 1,
-                marginBottom: 10,
+                marginBottom: 15,
               }}
             />
           </View>
@@ -365,46 +366,30 @@ class SubscriptionSelectionScreen extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  bigCircle: {
-    position: 'absolute',
-    width: 622,
-    height: 622,
-    left: -104,
-    top: -321,
-    borderRadius: 311,
-    backgroundColor: Colors.macaroniCheese,
-  },
   cart: {
     backgroundColor: Colors.white,
     padding: 20,
     height: 369,
     borderTopLeftRadius: 29,
     borderTopRightRadius: 29,
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 30,
+    paddingLeft: 25,
+    paddingRight: 27,
+    paddingTop: 25,
     overflow: 'visible',
   },
   cartModal: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    position: 'absolute',
+    width: 414,
+    height: 680,
+    left: 0,
+    top: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  clearButton: {
-    width: 62,
-    height: 22,
-    left: 336,
-    top: -35,
-    borderWidth: 1,
-    borderColor: Colors.macaroniCheese,
-    borderRadius: 13.5,
-    marginBottom: 16,
   },
   cartItem: {
     justifyContent: 'center',
   },
   cartPrice: {
-    top: -25,
+    top: -55,
     ...commonStyles.fontRalewayBold,
     fontWeight: 'bold',
     fontSize: 16,
@@ -425,12 +410,54 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.darkGrey,
   },
+  clearButton: {
+    width: 62,
+    height: 22,
+    left: 316,
+    top: -35,
+    borderWidth: 1,
+    borderColor: Colors.macaroniCheese,
+    borderRadius: 13.5,
+    marginBottom: 16,
+  },
   clearText: {
     ...commonStyles.fontRalewayBold,
     fontWeight: '600',
     fontSize: 12,
     textAlign: 'center',
     color: Colors.macaroniCheese,
+  },
+  textInCart: {
+    ...commonStyles.fontRalewayBold,
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  textInCart: {
+    ...commonStyles.fontRalewayBold,
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  orderButton: {
+    width: this.width,
+    height: 56,
+    backgroundColor: Colors.mediumCarmine,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bottom: {
+    top: 0,
+    height: 56,
+  },
+  bigCircle: {
+    position: 'absolute',
+    width: 622,
+    height: 622,
+    left: -104,
+    top: -321,
+    borderRadius: 311,
+    backgroundColor: Colors.macaroniCheese,
   },
   topBar: {
     flexDirection: 'row',
@@ -468,18 +495,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: -25,
   },
-  textInCart: {
-    ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-  textInCart: {
-    ...commonStyles.fontRalewayBold,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
   total: {
     ...commonStyles.fontRalewayBold,
     fontStyle: 'normal',
@@ -507,10 +522,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     ...commonStyles.textWhite,
-  },
-  bottom: {
-    justifyContent: 'flex-end',
-    height: 56,
   },
   priceTag: Platform.select({
     ios: {
