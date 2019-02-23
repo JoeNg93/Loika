@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
 
   popupContainer: {
-    backgroundColor: Colors.mainBackground,
+    backgroundColor: Colors.white,
     alignItems: 'center',
     height: 'auto',
     width: '80%',

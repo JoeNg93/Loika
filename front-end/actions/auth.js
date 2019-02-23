@@ -69,7 +69,7 @@ export const getUserProfile = () => async dispatch => {
                 city,
                 country,
                 postcode,
-                street1
+                address
               },
               deliveryDayOfWeek,
               deliveryTime,

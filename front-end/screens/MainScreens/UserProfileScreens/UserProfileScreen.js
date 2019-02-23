@@ -8,14 +8,168 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Icon, Button, CheckBox, colors } from 'react-native-elements';
-import AddressForm from '../../../components/AddressForm';
 import AddressSummary from '../../../components/AddressSummary';
 import AddNewAddressModal from '../../../components/AddNewAddressModal';
 import Colors from '../../../constants/Colors';
 import commonStyles from '../../../constants/commonStyles';
 import Layout from '../../../constants/Layout';
+import { connect } from 'react-redux';
 
 const width = Layout.window.width;
+
+class UserProfileScreen extends React.Component {
+  static navigationOptions = {
+    headerTitle: '',
+    headerBackTitle: null,
+    headerTransparent: true,
+    headerTitleStyle: {
+      ...commonStyles.fontRalewayBold,
+      fontSize: 18,
+    },
+    headerStyle: {
+      marginTop: 10,
+    },
+  };
+
+  state = {
+    addressModalVisible: false,
+  };
+
+  openAddressModal = () => {
+    this.setState({ addressModalVisible: true });
+  };
+
+  closeAddressModal = () => {
+    this.setState({ addressModalVisible: false });
+  };
+
+  renderAddressSummaryList = (addressList) => {
+    return addressList.map(addressDetails => (
+      <View key={addressDetails.id} style={styles.addressSummaryContainer}>
+        <AddressSummary
+          id={addressDetails.id}
+          name={addressDetails.name}
+          phoneNumber={addressDetails.phoneNumber}
+          shippingAddress={{
+            address: addressDetails.address,
+            postCode: addressDetails.postcode,
+            city: addressDetails.city,
+          }}
+          hasSelectedButton={false}
+          canEditAddress={true}
+          onPressSaveAddressForm={() => {}}
+        />
+      </View>
+    ));
+  };
+
+  render() {
+    const { name, email, shippingAddress, billingAddress } = this.props.user;
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainerContent}
+        >
+          <View style={styles.bigCircle} />
+          <View style={styles.namePictureContainer}>
+            <Image
+              style={styles.picture}
+              source={require('../../../assets/images/profilePic.png')}
+            />
+
+            <TouchableOpacity style={{ zIndex: 100 }}>
+              <Icon
+                name={'edit'}
+                size={17}
+                color={Colors.white}
+                containerStyle={styles.editIconContainer}
+              />
+            </TouchableOpacity>
+
+            <Text style={styles.profileNameText}>{name}</Text>
+          </View>
+
+          <View style={styles.addressesContainer}>
+            <View>
+              <Text style={styles.sectionText}>CONTACT DETAILS</Text>
+
+              <View style={styles.contactDetailsContainer}>
+                <TouchableOpacity style={{ zIndex: 100 }}>
+                  <Icon
+                    name={'edit'}
+                    size={12}
+                    color={Colors.white}
+                    containerStyle={styles.editContactsIconContainer}
+                  />
+                </TouchableOpacity>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Icon
+                    name="mail-outline"
+                    color={Colors.mediumCarmine}
+                    size={14}
+                  />
+                  <Text style={styles.contactDetailsText}>
+                    {email}
+                  </Text>
+                </View>
+
+                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                  <Icon
+                    name="phone-iphone"
+                    color={Colors.mediumCarmine}
+                    size={14}
+                  />
+                  <Text style={styles.contactDetailsText}>+35234525663</Text>
+                </View>
+              </View>
+            </View>
+
+            <View>
+              <Text style={styles.sectionText}>SHIPPING ADDRESS</Text>
+              <View>
+                {this.renderAddressSummaryList(shippingAddress)}
+                <Button
+                  type={'clear'}
+                  title={'Add new address'}
+                  icon={<Icon name={'add'} size={18} color={Colors.darkGrey} />}
+                  titleStyle={[styles.addAddressText, { marginLeft: 4 }]}
+                  buttonStyle={{ alignItems: 'center' }}
+                  containerStyle={styles.addNewAddressContainer}
+                  onPress={this.openAddressModal}
+                />
+                <AddNewAddressModal
+                  visible={this.state.addressModalVisible}
+                  onPressCloseModal={this.closeAddressModal}
+                  onPressSaveAddressForm={() => {}}
+                />
+              </View>
+            </View>
+
+            <View>
+              <Text style={styles.sectionText}>BILLING ADDRESS</Text>
+              {
+                billingAddress && (
+                  <AddressSummary
+                    name={billingAddress.name}
+                    shippingAddress={{
+                      address: billingAddress.address,
+                      postCode: billingAddress.postcode,
+                      city: billingAddress.city,
+                    }}
+                    phoneNumber={billingAddress.phoneNumber}
+                    hasSelectedButton={false}
+                    canEditAddress={true}
+                  />
+                )
+              }
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -48,7 +202,6 @@ const styles = StyleSheet.create({
     marginRight: 18,
   },
   editIconContainer: {
-    // check if this part works on iphone 6
     position: 'absolute',
     backgroundColor: Colors.mediumCarmine,
     borderRadius: 50,
@@ -72,6 +225,13 @@ const styles = StyleSheet.create({
     ...commonStyles.fontRalewaySemiBold,
     ...commonStyles.textGrey,
     fontSize: 12,
+  },
+  addressSummaryContainer: {
+    marginBottom: 14,
+  },
+  addNewAddressContainer: {
+    margin: 'auto',
+    marginTop: 12,
   },
   contactDetailsContainer: {
     width: 330,
@@ -99,129 +259,16 @@ const styles = StyleSheet.create({
     ...commonStyles.textBlack,
     fontSize: 12,
   },
-  addAddressButton: {
-    marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  addAdressText: {
+  addAddressText: {
     ...commonStyles.fontRalewaySemiBold,
     ...commonStyles.textGrey,
     fontSize: 12,
+    textTransform: 'uppercase'
   },
 });
 
-export default function UserProfileScreen(props) {
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollContainer}
-        contentContainerStyle={styles.scrollContainerContent}
-      >
-        <View style={styles.bigCircle} />
-        <View style={styles.namePictureContainer}>
-          <Image
-            style={styles.picture}
-            source={require('../../../assets/images/profilePic.png')}
-          />
+const mapStateToProps = state => ({
+  user: state.auth.user,
+});
 
-          <TouchableOpacity style={{ zIndex: 100 }}>
-            <Icon
-              name={'edit'}
-              size={17}
-              color={Colors.white}
-              containerStyle={styles.editIconContainer}
-            />
-          </TouchableOpacity>
-
-          <Text style={styles.profileNameText}>Robert Barker</Text>
-        </View>
-
-        <View style={styles.addressesContainer}>
-          <View>
-            <Text style={styles.sectionText}>CONTACT DETAILS</Text>
-
-            <View style={styles.contactDetailsContainer}>
-              <TouchableOpacity style={{ zIndex: 100 }}>
-                <Icon
-                  name={'edit'}
-                  size={12}
-                  color={Colors.white}
-                  containerStyle={styles.editContactsIconContainer}
-                />
-              </TouchableOpacity>
-
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Icon
-                  name="mail-outline"
-                  color={Colors.mediumCarmine}
-                  size={14}
-                />
-                <Text style={styles.contactDetailsText}>roberto@gmail.com</Text>
-              </View>
-
-              <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                <Icon
-                  name="phone-iphone"
-                  color={Colors.mediumCarmine}
-                  size={14}
-                />
-                <Text style={styles.contactDetailsText}>+35234525663</Text>
-              </View>
-            </View>
-          </View>
-
-          <View>
-            <Text style={styles.sectionText}>SHIPPING ADDRESS</Text>
-            <View>
-              <AddressSummary
-                name={'Thanh Dang'}
-                shippingAddress={{
-                  address: 'Kotkantie 1',
-                  postcode: 90130,
-                  city: 'Oulu',
-                }}
-                phoneNumber={'+358469430446'}
-                hasSelectedButton={false}
-                canEditAddress={true}
-              />
-              <View style={{ marginBottom: 25 }} />
-              <AddressSummary
-                name={'Thanh Dang'}
-                shippingAddress={{
-                  address: 'Kotkantie 1',
-                  postcode: 90130,
-                  city: 'Oulu',
-                }}
-                phoneNumber={'+358469430446'}
-                hasSelectedButton={false}
-                canEditAddress={true}
-              />
-
-              <TouchableOpacity style={styles.addAddressButton}>
-                <Icon name={'add'} size={13} color={Colors.darkGrey} />
-                <Text style={styles.addAdressText}>ADD NEW ADDRESS</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View>
-            <Text style={styles.sectionText}>BILLING ADDRESS</Text>
-            <AddressSummary
-              name={'Thanh Dang'}
-              shippingAddress={{
-                address: 'Kotkantie 1',
-                postcode: 90130,
-                city: 'Oulu',
-              }}
-              phoneNumber={'+358469430446'}
-              hasSelectedButton={false}
-              canEditAddress={true}
-            />
-          </View>
-        </View>
-      </ScrollView>
-    </View>
-  );
-}
+export default connect(mapStateToProps, {})(UserProfileScreen);
