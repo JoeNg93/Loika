@@ -42,7 +42,6 @@ class AddNewAddressModal extends React.Component {
       city,
       phoneNumber,
       postcode: Number(postcode),
-      id: Math.random().toString(36),
     };
     this.props.addShippingAddress(newAddress);
     this.props.onPressCloseModal();

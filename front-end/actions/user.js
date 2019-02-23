@@ -4,73 +4,41 @@ import axios from 'axios';
 import actionTypes from '../constants/actionTypes/user';
 import { baseURL } from '../utils/envConfig';
 
-export const addShippingAddress = address => async dispatch => {
+export const addShippingAddress = addressInfo => async dispatch => {
   dispatch({ type: actionTypes.ADD_SHIPPING_ADDRESS_PENDING });
   const accessToken = await AsyncStorage.getItem('accessToken');
-  console.log('TCL: accessToken', accessToken);
 
   try {
-    // const res = await axios.post(
-    //   baseURL,
-    //   {
-    //     query: `
-    //     query {
-    //       me {
-    //         id,
-    //         billingAddress {
-    //           id,
-    //           name,
-    //           phoneNumber,
-    //           city,
-    //           country,
-    //           postcode,
-    //           address
-    //         },
-    //         email,
-    //         name,
-    //         orders {
-    //           billingAddress {
-    //             id,
-    //             name,
-    //             phoneNumber,
-    //             city,
-    //             country,
-    //             postcode,
-    //             address
-    //           },
-    //           deliveryDayOfWeek,
-    //           deliveryTime,
-    //           paymentDate,
-    //           shippingAddress {
-    //             id,
-    //             name,
-    //             phoneNumber,
-    //             city,
-    //             country,
-    //             postcode,
-    //             address
-    //           },
-    //           total
-    //         },
-    //         shippingAddress {
-    //           id,
-    //           name,
-    //           phoneNumber,
-    //           city,
-    //           country,
-    //           postcode,
-    //           address
-    //         }
-    //       }
-    //     }
-    //   `,
-    //   },
-    //   { headers: { Authorization: accessToken } }
-    // );
+    const res = await axios.post(
+      baseURL,
+      {
+        query: `
+        mutation {
+          createAddress(
+            name: "${addressInfo.name}",
+            address: "${addressInfo.address}",
+            country: "Finland",
+            city: "${addressInfo.city}",
+            phoneNumber: "${addressInfo.phoneNumber}",
+            postcode: ${addressInfo.postcode},
+            isBillingAddress: false) {
+            id,
+            name,
+            address,
+            country,
+            city,
+            phoneNumber,
+            postcode
+          }
+        }
+      `,
+      },
+      { headers: { Authorization: accessToken } }
+    );
 
     dispatch({
       type: actionTypes.ADD_SHIPPING_ADDRESS_SUCCESS,
-      payload: address,
+      payload: res.data.data.createAddress,
     });
   } catch (err) {
     console.log('ERROR - addShippingAddress', err.response.data);

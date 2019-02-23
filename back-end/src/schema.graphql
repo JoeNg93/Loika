@@ -10,8 +10,10 @@ type Mutation {
     isBillingAddress: Boolean!
     address: String!
     city: String!
-    postcode: Int
-    country: String!
+    postcode: Int!
+    country: String!,
+    name: String!,
+    phoneNumber: String!
   ): Address!
 
   updateAddress(
