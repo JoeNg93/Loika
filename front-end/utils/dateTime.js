@@ -1,12 +1,4 @@
-const DAY_OF_WEEKS = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ],
+const DAY_OF_WEEKS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
   RANGES = [7, 14, 21, 28],
   DELIVERY_TIME_SEPARATOR = '-',
   DELIVERY_TIME_SUFFIX = ':00',
