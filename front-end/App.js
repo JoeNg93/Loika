@@ -55,6 +55,8 @@ export default class App extends React.Component {
         require('./assets/images/google.png'),
         require('./assets/images/twitter.png'),
         require('./assets/images/profilePic.png'),
+        require('./node_modules/react-native-credit-card-input/images/card-back.png'),
+        require('./node_modules/react-native-credit-card-input/images/card-front.png'),
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
