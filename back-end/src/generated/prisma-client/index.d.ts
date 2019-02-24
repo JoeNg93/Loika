@@ -395,6 +395,8 @@ export type OrderItemOrderByInput =
   | "largeImage_DESC"
   | "size_ASC"
   | "size_DESC"
+  | "tag_ASC"
+  | "tag_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1102,6 +1104,20 @@ export interface OrderItemWhereInput {
   size_lte?: Float;
   size_gt?: Float;
   size_gte?: Float;
+  tag?: String;
+  tag_not?: String;
+  tag_in?: String[] | String;
+  tag_not_in?: String[] | String;
+  tag_lt?: String;
+  tag_lte?: String;
+  tag_gt?: String;
+  tag_gte?: String;
+  tag_contains?: String;
+  tag_not_contains?: String;
+  tag_starts_with?: String;
+  tag_not_starts_with?: String;
+  tag_ends_with?: String;
+  tag_not_ends_with?: String;
   AND?: OrderItemWhereInput[] | OrderItemWhereInput;
   OR?: OrderItemWhereInput[] | OrderItemWhereInput;
   NOT?: OrderItemWhereInput[] | OrderItemWhereInput;
@@ -1244,6 +1260,7 @@ export interface OrderItemCreateWithoutOrderInput {
   thumbnailImage?: String;
   largeImage?: String;
   size: Float;
+  tag?: String;
 }
 
 export interface CartItemUpdateInput {
@@ -1538,6 +1555,7 @@ export interface OrderItemUpdateWithoutOrderDataInput {
   thumbnailImage?: String;
   largeImage?: String;
   size?: Float;
+  tag?: String;
 }
 
 export interface OrderItemUpsertWithWhereUniqueWithoutOrderInput {
@@ -1655,6 +1673,20 @@ export interface OrderItemScalarWhereInput {
   size_lte?: Float;
   size_gt?: Float;
   size_gte?: Float;
+  tag?: String;
+  tag_not?: String;
+  tag_in?: String[] | String;
+  tag_not_in?: String[] | String;
+  tag_lt?: String;
+  tag_lte?: String;
+  tag_gt?: String;
+  tag_gte?: String;
+  tag_contains?: String;
+  tag_not_contains?: String;
+  tag_starts_with?: String;
+  tag_not_starts_with?: String;
+  tag_ends_with?: String;
+  tag_not_ends_with?: String;
   AND?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
   OR?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
   NOT?: OrderItemScalarWhereInput[] | OrderItemScalarWhereInput;
@@ -1674,6 +1706,7 @@ export interface OrderItemUpdateManyDataInput {
   thumbnailImage?: String;
   largeImage?: String;
   size?: Float;
+  tag?: String;
 }
 
 export interface AddressUpdateOneRequiredInput {
@@ -1986,6 +2019,7 @@ export interface OrderItemCreateInput {
   largeImage?: String;
   order?: OrderCreateOneWithoutItemsInput;
   size: Float;
+  tag?: String;
 }
 
 export interface OrderCreateOneWithoutItemsInput {
@@ -2015,6 +2049,7 @@ export interface OrderItemUpdateInput {
   largeImage?: String;
   order?: OrderUpdateOneWithoutItemsInput;
   size?: Float;
+  tag?: String;
 }
 
 export interface OrderUpdateOneWithoutItemsInput {
@@ -2052,6 +2087,7 @@ export interface OrderItemUpdateManyMutationInput {
   thumbnailImage?: String;
   largeImage?: String;
   size?: Float;
+  tag?: String;
 }
 
 export interface SubscriptionUpdateInput {
@@ -2450,6 +2486,7 @@ export interface OrderItem {
   thumbnailImage?: String;
   largeImage?: String;
   size: Float;
+  tag?: String;
 }
 
 export interface OrderItemPromise extends Promise<OrderItem>, Fragmentable {
@@ -2463,6 +2500,7 @@ export interface OrderItemPromise extends Promise<OrderItem>, Fragmentable {
   largeImage: () => Promise<String>;
   order: <T = OrderPromise>() => T;
   size: () => Promise<Float>;
+  tag: () => Promise<String>;
 }
 
 export interface OrderItemSubscription
@@ -2478,6 +2516,7 @@ export interface OrderItemSubscription
   largeImage: () => Promise<AsyncIterator<String>>;
   order: <T = OrderSubscription>() => T;
   size: () => Promise<AsyncIterator<Float>>;
+  tag: () => Promise<AsyncIterator<String>>;
 }
 
 export interface CartItemConnection {

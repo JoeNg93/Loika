@@ -83,7 +83,19 @@ export const getUserProfile = () => async dispatch => {
                 postcode,
                 address
               },
-              total
+              total,
+              items {
+                id,
+                title,
+                shortDescription,
+                longDescription,
+                mealPrice,
+                totalPrice,
+                largeImage,
+                thumbnailImage,
+                size,
+                tag
+              }
             },
             shippingAddress {
               id,

@@ -82,4 +82,5 @@ type OrderItem {
   largeImage: String
   order: Order
   size: Float!
+  tag: String
 }

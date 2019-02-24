@@ -669,6 +669,7 @@ type OrderItem {
   largeImage: String
   order: Order
   size: Float!
+  tag: String
 }
 
 type OrderItemConnection {
@@ -687,6 +688,7 @@ input OrderItemCreateInput {
   largeImage: String
   order: OrderCreateOneWithoutItemsInput
   size: Float!
+  tag: String
 }
 
 input OrderItemCreateManyWithoutOrderInput {
@@ -703,6 +705,7 @@ input OrderItemCreateWithoutOrderInput {
   thumbnailImage: String
   largeImage: String
   size: Float!
+  tag: String
 }
 
 type OrderItemEdge {
@@ -729,6 +732,8 @@ enum OrderItemOrderByInput {
   largeImage_DESC
   size_ASC
   size_DESC
+  tag_ASC
+  tag_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -844,6 +849,20 @@ input OrderItemScalarWhereInput {
   size_lte: Float
   size_gt: Float
   size_gte: Float
+  tag: String
+  tag_not: String
+  tag_in: [String!]
+  tag_not_in: [String!]
+  tag_lt: String
+  tag_lte: String
+  tag_gt: String
+  tag_gte: String
+  tag_contains: String
+  tag_not_contains: String
+  tag_starts_with: String
+  tag_not_starts_with: String
+  tag_ends_with: String
+  tag_not_ends_with: String
   AND: [OrderItemScalarWhereInput!]
   OR: [OrderItemScalarWhereInput!]
   NOT: [OrderItemScalarWhereInput!]
@@ -859,6 +878,7 @@ input OrderItemUpdateInput {
   largeImage: String
   order: OrderUpdateOneWithoutItemsInput
   size: Float
+  tag: String
 }
 
 input OrderItemUpdateManyDataInput {
@@ -870,6 +890,7 @@ input OrderItemUpdateManyDataInput {
   thumbnailImage: String
   largeImage: String
   size: Float
+  tag: String
 }
 
 input OrderItemUpdateManyMutationInput {
@@ -881,6 +902,7 @@ input OrderItemUpdateManyMutationInput {
   thumbnailImage: String
   largeImage: String
   size: Float
+  tag: String
 }
 
 input OrderItemUpdateManyWithoutOrderInput {
@@ -908,6 +930,7 @@ input OrderItemUpdateWithoutOrderDataInput {
   thumbnailImage: String
   largeImage: String
   size: Float
+  tag: String
 }
 
 input OrderItemUpdateWithWhereUniqueWithoutOrderInput {
@@ -1031,6 +1054,20 @@ input OrderItemWhereInput {
   size_lte: Float
   size_gt: Float
   size_gte: Float
+  tag: String
+  tag_not: String
+  tag_in: [String!]
+  tag_not_in: [String!]
+  tag_lt: String
+  tag_lte: String
+  tag_gt: String
+  tag_gte: String
+  tag_contains: String
+  tag_not_contains: String
+  tag_starts_with: String
+  tag_not_starts_with: String
+  tag_ends_with: String
+  tag_not_ends_with: String
   AND: [OrderItemWhereInput!]
   OR: [OrderItemWhereInput!]
   NOT: [OrderItemWhereInput!]
