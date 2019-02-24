@@ -483,25 +483,26 @@ const Mutations = {
     }
 
     // 2. Check if the selected subscription is available
-    const oldOrder = await prisma
+    const orders = await prisma
       .user({ id: userId })
-      .orders({ id: args.orderId });
-    if (!oldOrder) {
+      .orders({ where: { id: args.orderId } });
+    const order = orders.length > 0 ? orders[0] : null;
+    if (!order) {
       throw new Error('Could not find this order.');
     }
 
     // 3. Set the cancel date to today.
-    const order = await prisma.updateOrder({
+    const updatedOrder = await prisma.updateOrder({
       data: {
         cancelDate: new Date().toISOString(),
       },
       where: {
-        id: oldOrder.id,
+        id: order.id,
       },
     });
 
     // 4. Return the order
-    return order;
+    return updatedOrder;
   },
 };
 
