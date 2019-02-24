@@ -17,6 +17,7 @@ const Query = {
       order.shippingAddress = await prisma
         .order({ id: order.id })
         .shippingAddress();
+      order.items = await prisma.order({ id: order.id }).items();
     }
     user.shippingAddress = await prisma
       .user({ id: ctx.request.userId })
