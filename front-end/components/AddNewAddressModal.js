@@ -21,7 +21,6 @@ class AddNewAddressModal extends React.Component {
 
   onAddressInputEndEditing = ({ type, value }) => {
     //Validate input here, then return error message to AddressForm
-    console.log(`${type}: ${value}`);
     this.setState({ [type]: value });
     //Validate form to see if save button should be enabled
     if (this.validateForm()) {

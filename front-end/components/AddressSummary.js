@@ -26,7 +26,6 @@ class AddressSummary extends React.Component {
 
   onAddressInputEndEditing = ({ type, value }) => {
     //Validate input here, then return error message to AddressForm
-    console.log(`${type}: ${value}`);
     this.setState({ [type]: value });
     //Validate form to see if save button should be enabled
     if (this.validateForm()) {
@@ -57,7 +56,6 @@ class AddressSummary extends React.Component {
       phoneNumber,
       postcode: Number(postcode),
     };
-    console.log('Updated addr: ', address);
     this.props.updateShippingAddress(this.props.id, newAddress);
     this.toggleEditMode();
   };

@@ -49,7 +49,6 @@ export const addShippingAddress = addressInfo => async dispatch => {
 export const addOrder = order => async dispatch => {
   dispatch({ type: actionTypes.ADD_ORDER_PENDING });
   const accessToken = await AsyncStorage.getItem('accessToken');
-  console.log('TCL: accessToken', accessToken);
 
   try {
     // const res = await axios.post(

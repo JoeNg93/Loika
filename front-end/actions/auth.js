@@ -40,7 +40,6 @@ export const fetchTokenFromStorage = () => async dispatch => {
 export const getUserProfile = () => async dispatch => {
   dispatch({ type: actionTypes.GET_USER_PROFILE_PENDING });
   const accessToken = await AsyncStorage.getItem('accessToken');
-  console.log('TCL: accessToken', accessToken);
 
   try {
     const res = await axios.post(
@@ -114,7 +113,6 @@ export const getUserProfile = () => async dispatch => {
     );
 
     const userInfo = res.data.data.me;
-    console.log('TCL: userInfo', userInfo);
     dispatch({ type: actionTypes.GET_USER_PROFILE_SUCCESS, payload: userInfo });
 
     return userInfo;
