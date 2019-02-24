@@ -51,7 +51,7 @@ class SubscriptionSelectionScreen extends React.Component {
               name={'shopping-basket'}
               size={22}
               color={Colors.mediumCarmine}
-              containerStyle={{marginTop: 2}}
+              containerStyle={{ marginTop: 2 }}
             />
             <View
               style={[
@@ -205,7 +205,9 @@ class SubscriptionSelectionScreen extends React.Component {
       );
       return items;
     } else {
-      return <Text style={styles.noItemText}>Your cart is currently empty.</Text>;
+      return (
+        <Text style={styles.noItemText}>Your cart is currently empty.</Text>
+      );
     }
   };
 

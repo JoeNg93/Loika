@@ -46,7 +46,11 @@ class SubscriptionDetailScreen extends React.Component {
 
   splitSampleContent = sampleContent => {
     let splitSampleContent = sampleContent.split(CONTENT_SEPARATOR);
-    return splitSampleContent.map( (text, index) => <Text key={index} style={styles.descriptionContent}>{text}</Text>);
+    return splitSampleContent.map((text, index) => (
+      <Text key={index} style={styles.descriptionContent}>
+        {text}
+      </Text>
+    ));
   };
 
   render() {
@@ -94,13 +98,13 @@ class SubscriptionDetailScreen extends React.Component {
         <View style={{ paddingHorizontal: 40 }}>
           <View>
             <Text style={styles.descriptionTitle}>ABOUT</Text>
-            <Text style={[styles.descriptionContent, {marginTop: 10}]}>
+            <Text style={[styles.descriptionContent, { marginTop: 10 }]}>
               {selectedSubscription.longDescription}
             </Text>
           </View>
           <View>
             <Text style={styles.descriptionTitle}>SAMPLE CONTENT</Text>
-            <View style={{marginTop: 10}}>
+            <View style={{ marginTop: 10 }}>
               {this.splitSampleContent(this.mockSampleContent)}
             </View>
           </View>
@@ -223,7 +227,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'center',
     paddingTop: 3,
-    marginTop: 88
+    marginTop: 88,
   },
   circle: {
     marginTop: 6,

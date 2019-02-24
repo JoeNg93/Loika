@@ -11,20 +11,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 40,
-    paddingHorizontal: 30
+    paddingHorizontal: 30,
   },
   scrollContainerContent: {
     justifyContent: 'center',
   },
   textContainer: {
     marginTop: 45,
-		marginBottom: 58,
+    marginBottom: 58,
   },
   mainText: {
-		...commonStyles.fontRalewayBold,
-		...commonStyles.textMediumCarmine,
-		fontSize: 24,
-	},
+    ...commonStyles.fontRalewayBold,
+    ...commonStyles.textMediumCarmine,
+    fontSize: 24,
+  },
 });
 
 
@@ -77,7 +77,7 @@ export default class OrderHistoryScreen extends React.Component {
         deliveryDayOfWeek: 'Wednesday',
         deliveryTime: '16:00-18:00',
         orderDate: '2019/02/08',
-        total: 388
+        total: 388,
       },
     ],
   };
@@ -105,7 +105,7 @@ export default class OrderHistoryScreen extends React.Component {
     });
   };
 
-  render () {
+  render() {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -115,11 +115,8 @@ export default class OrderHistoryScreen extends React.Component {
         <View style={styles.textContainer}>
           <Text style={styles.mainText}>Order History</Text>
         </View>
-        
-        <View>
-          {this.renderOrderBoxes()}
-        </View>
-          
+
+        <View>{this.renderOrderBoxes()}</View>
       </ScrollView>
     );
   }
