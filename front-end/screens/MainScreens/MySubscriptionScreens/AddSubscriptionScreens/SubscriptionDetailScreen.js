@@ -261,4 +261,7 @@ const mapStateToProps = state => ({
   selectedSubscription: state.checkout.selectedSubscription,
 });
 
-export default connect(mapStateToProps, null)(SubscriptionDetailScreen);
+export default connect(
+  mapStateToProps,
+  null
+)(SubscriptionDetailScreen);
