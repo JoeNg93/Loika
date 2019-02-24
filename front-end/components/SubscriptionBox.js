@@ -17,7 +17,7 @@ export default function SubscriptionBox({ subscriptionTitle, isActive }) {
         source={boxNameToImageMapper[subscriptionTitle]}
         style={{ height: 72, width: 67 }}
       />
-      <Text style={styles.subscriptionTitle}>{subscriptionTitle} Box</Text>
+      <Text style={styles.subscriptionTitle}>{subscriptionTitle}</Text>
     </View>
   );
 }

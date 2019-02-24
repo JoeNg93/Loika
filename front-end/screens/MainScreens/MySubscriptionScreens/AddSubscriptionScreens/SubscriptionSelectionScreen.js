@@ -14,8 +14,10 @@ import {
 import SideSwipe from 'react-native-sideswipe';
 import { Icon, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import Carousel from './Carousel';
+import Loader from '../../../../components/Loader';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
 import { getAllSubscriptions } from '../../../../actions/subscription';
@@ -234,8 +236,8 @@ class SubscriptionSelectionScreen extends React.Component {
     const { allSubscriptions } = this.props;
     const contentOffset = (width - Carousel.WIDTH) / 2;
 
-    if (allSubscriptions.length === 0) {
-      return null;
+    if (_.isEmpty(allSubscriptions)) {
+      return <Loader />;
     }
 
     return (
@@ -644,10 +646,13 @@ const mapStateToProps = state => ({
   selectedSubscription: state.checkout.selectedSubscription,
 });
 
-export default connect(mapStateToProps, {
-  getAllSubscriptions,
-  setSelectedSubscription,
-  addSubscriptionToCart,
-  removeSubscriptionFromCart,
-  cleanCart,
-})(SubscriptionSelectionScreen);
+export default connect(
+  mapStateToProps,
+  {
+    getAllSubscriptions,
+    setSelectedSubscription,
+    addSubscriptionToCart,
+    removeSubscriptionFromCart,
+    cleanCart,
+  }
+)(SubscriptionSelectionScreen);

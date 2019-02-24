@@ -25,7 +25,7 @@ export default function SubscriptionBox({
 
       <View style={styles.mainTextContainer}>
         <Text style={styles.orderDate}>Date: {orderDate}</Text>
-        <Text style={styles.orderID}>Order ID: #{orderID}</Text>
+        <Text style={styles.orderID}>Order ID: #{orderID.substring(0, 7)}</Text>
       </View>
 
       <View style={styles.divider} />
@@ -41,7 +41,7 @@ export default function SubscriptionBox({
 
 SubscriptionBox.propTypes = {
   orderDate: PropTypes.string,
-  orderID: PropTypes.number,
+  orderID: PropTypes.string,
   orderPrice: PropTypes.number,
   isActive: PropTypes.bool,
 };

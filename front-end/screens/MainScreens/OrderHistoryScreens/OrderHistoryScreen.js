@@ -1,11 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import OrderHistoryBox from '../../../components/OrderHistoryBox';
-import Colors from '../../../constants/Colors';
 import {
-  formatDate
-} from '../../../utils/dateTime';
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import { connect } from 'react-redux';
+import _ from 'lodash';
+
+import OrderHistoryBox from '../../../components/OrderHistoryBox';
+import { formatDate } from '../../../utils/dateTime';
+import { setSelectedOrder } from '../../../actions/order';
 import commonStyles from '../../../constants/commonStyles';
+import Loader from '../../../components/Loader';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,8 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
-
-export default class OrderHistoryScreen extends React.Component {
+class OrderHistoryScreen extends React.Component {
   static navigationOptions = {
     headerTitle: '',
     headerBackTitle: null,
@@ -82,23 +89,24 @@ export default class OrderHistoryScreen extends React.Component {
     ],
   };
 
-  onPressOrderHistoryDetails = () => {
+  onPressOrderHistoryDetails = order => {
+    this.props.setSelectedOrder(order);
     this.props.navigation.navigate('OrderHistoryDetails');
   };
 
   renderOrderBoxes = () => {
-    return this.state.orderHistory.map(order => {
+    return this.props.user.orders.map(order => {
       return (
         <TouchableOpacity
-          onPress={this.onPressOrderHistoryDetails}
-          key = {order.id}
+          onPress={() => this.onPressOrderHistoryDetails(order)}
+          key={order.id}
         >
           <OrderHistoryBox
-            key = {order.id}
+            key={order.id}
             orderID={order.id}
             orderPrice={order.total}
-            orderDate={formatDate(new Date(order.orderDate))}
-            isActive={order.isActive}
+            orderDate={formatDate(new Date(order.paymentDate))}
+            isActive={order.cancelDate === null}
           />
         </TouchableOpacity>
       );
@@ -106,6 +114,10 @@ export default class OrderHistoryScreen extends React.Component {
   };
 
   render() {
+    if (_.isEmpty(this.props.user)) {
+      return <Loader />;
+    }
+
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -121,3 +133,12 @@ export default class OrderHistoryScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.auth.user,
+});
+
+export default connect(
+  mapStateToProps,
+  { setSelectedOrder }
+)(OrderHistoryScreen);

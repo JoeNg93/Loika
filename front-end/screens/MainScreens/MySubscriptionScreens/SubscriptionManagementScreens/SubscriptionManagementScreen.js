@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import SubscriptionSummary from '../../../../components/SubscriptionSummary';
 import CancelConfirmModal from '../../../../components/CancelConfirmModal';
 import AddressSummary from '../../../../components/AddressSummary';
@@ -21,12 +23,14 @@ import {
 } from '../../../../utils/dateTime';
 import Colors from '../../../../constants/Colors';
 import Layout from '../../../../constants/Layout';
+import { setSelectedSubscription } from '../../../../actions/checkout';
+import { cancelOrder } from '../../../../actions/order';
 
 const width = Layout.window.width,
   horizontalPadding = 32,
   offset = 10;
 
-export default class SubscriptionManagementScreen extends React.Component {
+class SubscriptionManagementScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Subscriptions Management',
     headerBackTitle: null,
@@ -47,40 +51,6 @@ export default class SubscriptionManagementScreen extends React.Component {
   };
 
   state = {
-    // Fetch order according to order ID send from MySubscriptionScreen
-    fetchedOrder: {
-      id: 123,
-      isActive: true,
-      subscriptions: [
-        {
-          id: 1,
-          title: 'Mixed',
-          weight: 5,
-          price: 199,
-          pricePerMeal: 3.4,
-          isActive: true,
-        },
-        {
-          id: 2,
-          title: 'Vegan',
-          isActive: true,
-          weight: 5,
-          price: 199,
-          pricePerMeal: 3.4,
-        },
-      ],
-      name: 'Joe Nguyen',
-      phoneNumber: '+358469512914',
-      shippingAddress: {
-        address: 'Ylioppilaantie 10 B 25',
-        postcode: 90130,
-        city: 'Oulu',
-      },
-      deliveryDayOfWeek: 'Tuesday',
-      deliveryTime: '10:00-12:00',
-      orderDate: '2019/02/02',
-      total: 388,
-    },
     cancelDialogVisible: false,
   };
 
@@ -103,9 +73,10 @@ export default class SubscriptionManagementScreen extends React.Component {
     return formatDate(nextPaymentDate);
   };
 
-  onPressCancelAllSubscriptions = () => {};
-
-  onPressCancelSingleSubscription = () => {};
+  onPressCancelOrder = orderId => {
+    this.props.cancelOrder(orderId);
+    this.onPressCloseCancelDialogModal();
+  };
 
   onPressOpenCancelDialogModal = () => {
     this.setState({ cancelDialogVisible: true });
@@ -115,7 +86,8 @@ export default class SubscriptionManagementScreen extends React.Component {
     this.setState({ cancelDialogVisible: false });
   };
 
-  onPressSubscriptionDetails = () => {
+  onPressSubscriptionDetails = subscription => {
+    this.props.setSelectedSubscription(subscription);
     this.props.navigation.navigate('SubscriptionDetail');
   };
 
@@ -128,38 +100,38 @@ export default class SubscriptionManagementScreen extends React.Component {
   };
 
   renderSubscriptionSummaryList = () => {
-    return this.state.fetchedOrder.subscriptions.map((subscription, index) => (
+    const { selectedOrder } = this.props;
+    return selectedOrder.items.map((subscription, index) => (
       <TouchableOpacity
         key={index}
         style={[styles.sectionSummaryContainer, { alignItems: 'center' }]}
-        onPress={this.onPressSubscriptionDetails}
+        onPress={() => this.onPressSubscriptionDetails(subscription)}
       >
         <SubscriptionSummary
           boxName={subscription.title}
-          boxWeight={subscription.weight}
-          boxPrice={subscription.price}
-          pricePerMeal={subscription.pricePerMeal}
-          hasRemoveButton={subscription.isActive}
-          onPressRemoveSubscription={this.onPressCancelSingleSubscription}
+          boxWeight={subscription.size}
+          boxPrice={subscription.totalPrice}
+          pricePerMeal={subscription.mealPrice}
+          hasRemoveButton={false}
           containerWidth={width - horizontalPadding * 2 - offset}
-          modalTitle={'Hold on!'}
-          modalTextContent={`Are you sure that you want to cancel ${
-            subscription.title
-          } Box? Your subscription will end on ${this.getOrderEndSubscriptionDate(
-            this.state.fetchedOrder.orderDate
-          )} and you will lose your favourite box !`}
         />
       </TouchableOpacity>
     ));
   };
 
   renderAddressSummary = () => {
-    const { name, phoneNumber, shippingAddress } = this.state.fetchedOrder;
+    const {
+      selectedOrder: { shippingAddress },
+    } = this.props;
     return (
       <AddressSummary
-        shippingAddress={shippingAddress}
-        name={name}
-        phoneNumber={phoneNumber}
+        shippingAddress={{
+          address: shippingAddress.address,
+          postcode: shippingAddress.postcode,
+          city: shippingAddress.city,
+        }}
+        name={shippingAddress.name}
+        phoneNumber={shippingAddress.phoneNumber}
         hasSelectedButton={false}
         canEditAddress={false}
         containerWidth={width - horizontalPadding * 2 - offset}
@@ -168,24 +140,26 @@ export default class SubscriptionManagementScreen extends React.Component {
   };
 
   render() {
+    const { selectedOrder } = this.props;
+    const orderIsActive = selectedOrder.cancelDate === null;
     return (
       <View style={styles.mainContainer}>
-        {this.state.fetchedOrder && (
+        {selectedOrder && (
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ paddingRight: offset }}>
               <View style={styles.orderTitleContainer}>
                 <Text style={styles.orderTitle}>
-                  Order ID: #{this.state.fetchedOrder.id}
+                  Order ID: #{selectedOrder.id.substring(0, 7)}
                 </Text>
               </View>
               {/* Delivery Date - Payment Date Section */}
               <View style={styles.dateContainer}>
                 <Text style={styles.textDefaultStyle}>Next Delivery Date:</Text>
                 <Text style={[styles.textDefaultStyle, commonStyles.textBlack]}>
-                  {this.getOrderNextDeliveryDate(this.state.fetchedOrder)}
+                  {this.getOrderNextDeliveryDate(selectedOrder)}
                 </Text>
               </View>
-              {this.state.fetchedOrder.isActive ? (
+              {orderIsActive ? (
                 <View style={styles.dateContainer}>
                   <Text style={styles.textDefaultStyle}>
                     Next Payment Date:
@@ -194,16 +168,14 @@ export default class SubscriptionManagementScreen extends React.Component {
                     style={[styles.textDefaultStyle, commonStyles.textBlack]}
                   >
                     {this.getOrderEndSubscriptionDate(
-                      this.state.fetchedOrder.orderDate
+                      selectedOrder.paymentDate
                     )}
                   </Text>
                 </View>
               ) : (
                 <Text style={styles.endSubscriptionText}>
                   *Your subscription will end on{' '}
-                  {this.getOrderEndSubscriptionDate(
-                    this.state.fetchedOrder.orderDate
-                  )}
+                  {this.getOrderEndSubscriptionDate(selectedOrder.paymentDate)}
                 </Text>
               )}
             </View>
@@ -213,7 +185,7 @@ export default class SubscriptionManagementScreen extends React.Component {
                 <Text style={styles.textDefaultStyle}>
                   {'Subscriptions'.toUpperCase()}
                 </Text>
-                {this.state.fetchedOrder.isActive && (
+                {orderIsActive && (
                   <Button
                     type={'clear'}
                     title={'Cancel subscriptions'}
@@ -236,20 +208,17 @@ export default class SubscriptionManagementScreen extends React.Component {
                 )}
                 <CancelConfirmModal
                   visible={this.state.cancelDialogVisible}
-                  onPressCancelSubscription={
-                    this.props.onPressRemoveSubscription
+                  onPressCancelSubscription={() =>
+                    this.onPressCancelOrder(selectedOrder.id)
                   }
                   onPressCloseModal={this.onPressCloseCancelDialogModal}
                   modalTitle={'Hold on!'}
                   modalTextContent={`Are you sure that you want to cancel all subscriptions? Your subscriptions will end on ${this.getOrderEndSubscriptionDate(
-                    this.state.fetchedOrder.orderDate
+                    selectedOrder.paymentDate
                   )} and you will lose your favourite boxes!`}
                 />
               </View>
-              <View>
-                {this.state.fetchedOrder.subscriptions &&
-                  this.renderSubscriptionSummaryList()}
-              </View>
+              <View>{this.renderSubscriptionSummaryList()}</View>
             </View>
             {/* Shipping Address Summary Section */}
             <View>
@@ -267,7 +236,7 @@ export default class SubscriptionManagementScreen extends React.Component {
                     (Changes are only possible for next order)
                   </Text>
                 </View>
-                {this.state.fetchedOrder.isActive && (
+                {orderIsActive && (
                   <Button
                     type={'clear'}
                     title={'Change'}
@@ -290,8 +259,7 @@ export default class SubscriptionManagementScreen extends React.Component {
                 )}
               </View>
               <View style={styles.summaryBox}>
-                {this.state.fetchedOrder.shippingAddress &&
-                  this.renderAddressSummary()}
+                {this.renderAddressSummary()}
               </View>
             </View>
             {/* Delivery Schedule Summary Section */}
@@ -310,7 +278,7 @@ export default class SubscriptionManagementScreen extends React.Component {
                     (Changes are only possible for next order)
                   </Text>
                 </View>
-                {this.state.fetchedOrder.isActive && (
+                {orderIsActive && (
                   <Button
                     type={'clear'}
                     title={'Change'}
@@ -341,8 +309,8 @@ export default class SubscriptionManagementScreen extends React.Component {
                       size={14}
                     />
                     <Text style={styles.deliveryScheduleText}>
-                      {`${this.state.fetchedOrder.deliveryDayOfWeek}, around ${
-                        this.state.fetchedOrder.deliveryTime
+                      {`${selectedOrder.deliveryDayOfWeek}, around ${
+                        selectedOrder.deliveryTime
                       }`}
                     </Text>
                   </View>
@@ -351,7 +319,7 @@ export default class SubscriptionManagementScreen extends React.Component {
             </View>
             {/* Total */}
             <View style={styles.totalPriceContainer}>
-              <TotalComponent price={this.state.fetchedOrder.total} />
+              <TotalComponent price={selectedOrder.total} />
             </View>
           </ScrollView>
         )}
@@ -429,3 +397,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 });
+
+const mapStateToProps = state => ({
+  selectedOrder: state.order.selectedOrder,
+});
+
+export default connect(
+  mapStateToProps,
+  { setSelectedSubscription, cancelOrder }
+)(SubscriptionManagementScreen);

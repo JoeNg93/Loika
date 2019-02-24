@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
+import _ from 'lodash';
+import moment from 'moment';
 
 import SubscriptionBox from '../../../components/SubscriptionBox';
 import commonStyles from '../../../constants/commonStyles';
@@ -21,7 +23,10 @@ import {
 } from '../../../utils/dateTime';
 import Colors from '../../../constants/Colors';
 import Layout from '../../../constants/Layout';
+import Loader from '../../../components/Loader';
 import { getUserProfile } from '../../../actions/auth';
+import { setSelectedOrder } from '../../../actions/order';
+import { setSelectedSubscription } from '../../../actions/checkout';
 
 const width = Layout.window.width;
 
@@ -105,56 +110,67 @@ class MySubscriptionScreen extends React.Component {
     this.props.navigation.navigate('AddSubscription');
   };
 
-  onPressManageSubscription = orderId => {
+  onPressManageSubscription = order => {
+    this.props.setSelectedOrder(order);
     this.props.navigation.navigate('SubscriptionManagement');
   };
 
-  onPressSubscriptionDetails = () => {
+  onPressSubscriptionDetails = subscription => {
+    this.props.setSelectedSubscription(subscription);
     this.props.navigation.navigate('SubscriptionDetail');
   };
 
   renderSubscriptionListPerOrder = () => {
-    return this.state.currentOrders.map(order => (
-      <View key={order.id} style={styles.subscriptionOrderContainer}>
-        <Text style={styles.deliveryDateTitle}>
-          Next Delivery Date: {this.getOrderNextDeliveryDate(order)}
-        </Text>
-        {!order.isActive && (
-          <Text style={styles.endSubscriptionText}>
-            *Your subscription will end on{' '}
-            {this.getOrderEndSubscriptionDate(order.orderDate)}
+    return this.props.user.orders
+      .filter(
+        o =>
+          o.cancelDate === null ||
+          moment().diff(moment(o.cancelDate), 'months') === 0
+      )
+      .map(order => (
+        <View key={order.id} style={styles.subscriptionOrderContainer}>
+          <Text style={styles.deliveryDateTitle}>
+            Next Delivery Date: {this.getOrderNextDeliveryDate(order)}
           </Text>
-        )}
-        <View style={styles.subscriptionBoxContainer}>
-          {order.subscriptions &&
-            this.renderSubscriptionBoxes(order.subscriptions)}
+          {order.cancelDate !== null && (
+            <Text style={styles.endSubscriptionText}>
+              *Your subscription will end on{' '}
+              {this.getOrderEndSubscriptionDate(order.paymentDate)}
+            </Text>
+          )}
+          <View style={styles.subscriptionBoxContainer}>
+            {order.items &&
+              this.renderSubscriptionBoxes(
+                order.items,
+                order.cancelDate === null
+              )}
+          </View>
+          <Button
+            type={'clear'}
+            title={'Manage your subscriptions'}
+            icon={
+              <Icon name={'chevron-right'} size={18} color={Colors.darkGrey} />
+            }
+            iconRight={true}
+            titleStyle={[styles.manageButtonText, { marginRight: 2 }]}
+            buttonStyle={{ alignItems: 'center' }}
+            containerStyle={styles.manageButtonContainer}
+            onPress={() => this.onPressManageSubscription(order)}
+          />
         </View>
-        <Button
-          type={'clear'}
-          title={'Manage your subscriptions'}
-          icon={
-            <Icon name={'chevron-right'} size={18} color={Colors.darkGrey} />
-          }
-          iconRight={true}
-          titleStyle={[styles.manageButtonText, { marginRight: 2 }]}
-          buttonStyle={{ alignItems: 'center' }}
-          containerStyle={styles.manageButtonContainer}
-          onPress={() => this.onPressManageSubscription(order.id)}
-        />
-      </View>
-    ));
+      ));
   };
 
-  renderSubscriptionBoxes = subscriptionList => {
+  renderSubscriptionBoxes = (subscriptionList, isOrderActive) => {
     return subscriptionList.map(subscription => {
       return (
         <TouchableOpacity
-          onPress={this.onPressSubscriptionDetails}
+          onPress={() => this.onPressSubscriptionDetails(subscription)}
           key={subscription.id}
         >
           <SubscriptionBox
             subscriptionTitle={subscription.title}
-            isActive={subscription.isActive}
+            isActive={isOrderActive}
           />
         </TouchableOpacity>
       );
@@ -162,9 +178,15 @@ class MySubscriptionScreen extends React.Component {
   };
 
   render() {
+    const { user } = this.props;
+
+    if (_.isEmpty(user)) {
+      return <Loader />;
+    }
+
     return (
       <View style={styles.mainContainer}>
-        {this.state.currentOrders && this.state.currentOrders.length > 0 ? (
+        {user.orders && user.orders.length > 0 ? (
           <View
             style={{
               paddingLeft: 32,
@@ -297,7 +319,11 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = state => ({
+  user: state.auth.user,
+});
+
 export default connect(
-  null,
-  { getUserProfile }
+  mapStateToProps,
+  { getUserProfile, setSelectedOrder, setSelectedSubscription }
 )(MySubscriptionScreen);

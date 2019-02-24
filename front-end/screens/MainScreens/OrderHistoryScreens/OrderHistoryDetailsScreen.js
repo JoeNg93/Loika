@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import SubscriptionSummary from '../../../components/SubscriptionSummary';
 import ShippedToSummary from '../../../components/ShippedToSummary';
 import TotalComponent from '../../../components/TotalComponent';
@@ -15,13 +17,14 @@ import commonStyles from '../../../constants/commonStyles';
 import { getDeliveryDatesPerMonth, formatDate } from '../../../utils/dateTime';
 import Colors from '../../../constants/Colors';
 import Layout from '../../../constants/Layout';
+import { setSelectedSubscription } from '../../../actions/checkout';
 
 const width = Layout.window.width,
   horizontalPadding = 32,
   offset = 10,
   locale = 'fi-FI';
 
-export default class OrderHistoryDetailsScreen extends React.Component {
+class OrderHistoryDetailsScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Order details',
     headerBackTitle: null,
@@ -38,43 +41,6 @@ export default class OrderHistoryDetailsScreen extends React.Component {
     },
     headerStyle: {
       marginTop: 10,
-    },
-  };
-
-  state = {
-    // Fetch order according to order ID send from MySubscriptionScreen
-    fetchedOrder: {
-      id: 123,
-      isActive: true,
-      subscriptions: [
-        {
-          id: 1,
-          title: 'Mixed',
-          weight: 5,
-          price: 199,
-          pricePerMeal: 3.4,
-          isActive: true,
-        },
-        {
-          id: 2,
-          title: 'Vegan',
-          isActive: true,
-          weight: 5,
-          price: 199,
-          pricePerMeal: 3.4,
-        },
-      ],
-      name: 'Joe Nguyen',
-      shippingAddress: {
-        address: 'Ylioppilaantie 10 B 25',
-        postcode: 90130,
-        city: 'Oulu',
-      },
-      phoneNumber: '+358469512914',
-      deliveryDayOfWeek: 'Tuesday',
-      deliveryTime: '10:00-12:00',
-      orderDate: '2019/02/02',
-      total: 388,
     },
   };
 
@@ -103,22 +69,24 @@ export default class OrderHistoryDetailsScreen extends React.Component {
     ));
   };
 
-  onPressSubscriptionDetails = () => {
+  onPressSubscriptionDetails = subscription => {
+    this.props.setSelectedSubscription(subscription);
     this.props.navigation.navigate('SubscriptionDetail');
   };
 
   renderSubscriptionSummaryList = () => {
-    return this.state.fetchedOrder.subscriptions.map((subscription, index) => (
+    const { selectedOrder } = this.props;
+    return selectedOrder.items.map((subscription, index) => (
       <TouchableOpacity
         key={index}
         style={[styles.sectionSummaryContainer, { alignItems: 'center' }]}
-        onPress={this.onPressSubscriptionDetails}
+        onPress={() => this.onPressSubscriptionDetails(subscription)}
       >
         <SubscriptionSummary
           boxName={subscription.title}
-          boxWeight={subscription.weight}
-          boxPrice={subscription.price}
-          pricePerMeal={subscription.pricePerMeal}
+          boxWeight={subscription.size}
+          boxPrice={subscription.totalPrice}
+          pricePerMeal={subscription.mealPrice}
           hasRemoveButton={false}
           containerWidth={width - horizontalPadding * 2 - offset}
         />
@@ -128,17 +96,17 @@ export default class OrderHistoryDetailsScreen extends React.Component {
 
   renderShippedToAddress() {
     const {
-      name,
-      shippingAddress,
-      phoneNumber,
-      deliveryTime,
-      deliveryDayOfWeek,
-    } = this.state.fetchedOrder;
+      selectedOrder: { shippingAddress, deliveryDayOfWeek, deliveryTime },
+    } = this.props;
     return (
       <ShippedToSummary
-        name={name}
-        shippingAddress={shippingAddress}
-        phoneNumber={phoneNumber}
+        name={shippingAddress.name}
+        shippingAddress={{
+          address: shippingAddress.address,
+          postcode: shippingAddress.postcode,
+          city: shippingAddress.city,
+        }}
+        phoneNumber={shippingAddress.phoneNumber}
         deliveryDayOfWeek={deliveryDayOfWeek}
         deliveryTime={deliveryTime}
         hasChangeButton={false}
@@ -147,62 +115,58 @@ export default class OrderHistoryDetailsScreen extends React.Component {
   }
 
   render() {
+    const { selectedOrder } = this.props;
     return (
       <View style={styles.mainContainer}>
-        {this.state.fetchedOrder && (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ paddingRight: offset }}>
-              <View style={styles.orderTitleContainer}>
-                <Text style={styles.orderTitle}>
-                  Order ID: #{this.state.fetchedOrder.id}
-                </Text>
-              </View>
-              {/* Delivery Date - Payment Date Section */}
-              <View style={styles.dateContainer}>
-                <Text style={styles.textDefaultStyle}>Order Date:</Text>
-                <Text style={[styles.textDefaultStyle, commonStyles.textBlack]}>
-                  {this.renderOrderDate(this.state.fetchedOrder.orderDate)}
-                </Text>
-              </View>
-              <View style={styles.dateContainer}>
-                <Text style={styles.textDefaultStyle}>Delivery Date:</Text>
-                <View style={styles.deliveryDateContainer}>
-                  {this.renderDeliveryDatesPerMonth(
-                    this.state.fetchedOrder.orderDate,
-                    this.state.fetchedOrder.deliveryDayOfWeek
-                  )}
-                </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{ paddingRight: offset }}>
+            <View style={styles.orderTitleContainer}>
+              <Text style={styles.orderTitle}>
+                Order ID: #{selectedOrder.id.substring(0, 7)}
+              </Text>
+            </View>
+            {/* Delivery Date - Payment Date Section */}
+            <View style={styles.dateContainer}>
+              <Text style={styles.textDefaultStyle}>Order Date:</Text>
+              <Text style={[styles.textDefaultStyle, commonStyles.textBlack]}>
+                {this.renderOrderDate(selectedOrder.paymentDate)}
+              </Text>
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.textDefaultStyle}>Delivery Date:</Text>
+              <View style={styles.deliveryDateContainer}>
+                {this.renderDeliveryDatesPerMonth(
+                  selectedOrder.paymentDate,
+                  selectedOrder.deliveryDayOfWeek
+                )}
               </View>
             </View>
-            {/* Order Summary Section */}
-            <View>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.textDefaultStyle}>
-                  {'Subscriptions'.toUpperCase()}
-                </Text>
-              </View>
-              <View>
-                {this.state.fetchedOrder.subscriptions &&
-                  this.renderSubscriptionSummaryList()}
-              </View>
+          </View>
+          {/* Order Summary Section */}
+          <View>
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.textDefaultStyle}>
+                {'Subscriptions'.toUpperCase()}
+              </Text>
             </View>
-            {/* Shipping Address and Delivery Schedule Summary Section */}
-            <View>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.textDefaultStyle}>
-                  {'Shipped to'.toUpperCase()}
-                </Text>
-              </View>
-              <View style={styles.shippedToContainer}>
-                {this.renderShippedToAddress()}
-              </View>
+            <View>{this.renderSubscriptionSummaryList()}</View>
+          </View>
+          {/* Shipping Address and Delivery Schedule Summary Section */}
+          <View>
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.textDefaultStyle}>
+                {'Shipped to'.toUpperCase()}
+              </Text>
             </View>
-            {/* Total */}
-            <View style={styles.totalPriceContainer}>
-              <TotalComponent price={this.state.fetchedOrder.total} />
+            <View style={styles.shippedToContainer}>
+              {this.renderShippedToAddress()}
             </View>
-          </ScrollView>
-        )}
+          </View>
+          {/* Total */}
+          <View style={styles.totalPriceContainer}>
+            <TotalComponent price={selectedOrder.total} />
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -260,3 +224,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 });
+
+const mapStateToProps = state => ({
+  selectedOrder: state.order.selectedOrder,
+});
+
+export default connect(
+  mapStateToProps,
+  { setSelectedSubscription }
+)(OrderHistoryDetailsScreen);

@@ -19,9 +19,9 @@ import ChangeShippingAddressScreen from './MySubscriptionScreens/SubscriptionMan
 import ShippingAddressCheckoutScreen from './MySubscriptionScreens/CheckoutScreens/ShippingAddressCheckoutScreen';
 import DeliveryScheduleCheckoutScreen from './MySubscriptionScreens/CheckoutScreens/DeliveryScheduleCheckoutScreen';
 import OrderSummaryScreen from './MySubscriptionScreens/CheckoutScreens/OrderSummaryScreen';
-import OrderHistoryDetailsScreen from "./OrderHistoryScreens/OrderHistoryDetailsScreen";
-import OrderSuccessScreen from "./MySubscriptionScreens/CheckoutScreens/OrderSuccessScreen";
-import OrderErrorScreen from "./MySubscriptionScreens/CheckoutScreens/OrderErrorScreen";
+import OrderHistoryDetailsScreen from './OrderHistoryScreens/OrderHistoryDetailsScreen';
+import OrderSuccessScreen from './MySubscriptionScreens/CheckoutScreens/OrderSuccessScreen';
+import OrderErrorScreen from './MySubscriptionScreens/CheckoutScreens/OrderErrorScreen';
 
 const MySubscriptionStack = createStackNavigator(
   {
@@ -61,7 +61,8 @@ MySubscriptionStack.navigationOptions = ({ navigation }) => {
 
 const OrderHistoryStack = createStackNavigator({
   Home: OrderHistoryScreen,
-  OrderHistoryDetails: OrderHistoryDetailsScreen
+  SubscriptionDetail: SubscriptionDetailScreen,
+  OrderHistoryDetails: OrderHistoryDetailsScreen,
 });
 
 OrderHistoryStack.navigationOptions = {

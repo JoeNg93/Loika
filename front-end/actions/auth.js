@@ -61,18 +61,11 @@ export const getUserProfile = () => async dispatch => {
             email,
             name,
             orders {
-              billingAddress {
-                id,
-                name,
-                phoneNumber,
-                city,
-                country,
-                postcode,
-                address
-              },
+              id,
               deliveryDayOfWeek,
               deliveryTime,
               paymentDate,
+              cancelDate,
               shippingAddress {
                 id,
                 name,

@@ -1,4 +1,5 @@
 import actionTypes from '../constants/actionTypes/auth';
+import orderActionTypes from '../constants/actionTypes/order';
 import userActionTypes from '../constants/actionTypes/user';
 
 const INITIAL_STATE = {
@@ -37,6 +38,19 @@ export default (state = INITIAL_STATE, { type, payload }) => {
           shippingAddress: state.user.shippingAddress.map(addr =>
             addr.id === payload.id ? payload : addr
           ),
+        },
+      };
+    case orderActionTypes.CANCEL_ORDER_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          orders: state.user.orders.map(o => {
+            if (o.id === payload.id) {
+              o.cancelDate = payload.cancelDate;
+            }
+            return o;
+          }),
         },
       };
     default:

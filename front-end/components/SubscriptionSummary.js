@@ -36,9 +36,7 @@ export default class SubscriptionSummary extends React.Component {
             </TouchableOpacity>
             <CancelConfirmModal
               visible={this.state.cancelDialogVisible}
-              onPressCancelSubscription={() =>
-                this.props.onPressRemoveSubscription(this.props.id)
-              }
+              onPressCancelSubscription={this.onPressRemoveSubscription}
               onPressCloseModal={this.onPressCloseCancelDialogModal}
               modalTitle={this.props.modalTitle}
               modalTextContent={this.props.modalTextContent}

@@ -7,13 +7,16 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { Icon, Button, CheckBox, colors } from 'react-native-elements';
+import { Icon, Button } from 'react-native-elements';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+
 import AddressSummary from '../../../components/AddressSummary';
 import AddNewAddressModal from '../../../components/AddNewAddressModal';
 import Colors from '../../../constants/Colors';
 import commonStyles from '../../../constants/commonStyles';
 import Layout from '../../../constants/Layout';
-import { connect } from 'react-redux';
+import Loader from '../../../components/Loader';
 
 const width = Layout.window.width;
 
@@ -65,6 +68,11 @@ class UserProfileScreen extends React.Component {
 
   render() {
     const { name, email, shippingAddress, billingAddress } = this.props.user;
+
+    if (_.isEmpty(this.props.user)) {
+      return <Loader />;
+    }
+
     return (
       <View style={styles.container}>
         <ScrollView
