@@ -2,11 +2,12 @@ import React from 'react';
 import { StyleSheet, Modal, View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
-import PaymentForm from './PaymentForm';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import commonStyles from '../constants/commonStyles';
+import { CreditCardInput } from 'react-native-credit-card-input';
 
 class PaymentMethodModal extends React.Component {
   state = {
@@ -17,19 +18,19 @@ class PaymentMethodModal extends React.Component {
     cvv: '',
   };
 
-  onPaymentInputEndEditing = ({ type, value }) => {
-    //Validate input here, then return error message to PaymentForm
-    console.log(`${type}: ${value}`);
-    this.setState({ [type]: value });
-    //Validate form to see if save button should be enabled
-    if (this.validateForm()) {
-      this.setState({ saveButtonEnabled: true });
+  onPaymentInputChange = formData => {
+    if (
+      !_.includes(formData.status, 'incomplete')
+    ) {
+      const {name, number, expiry, cvc} = formData.values;
+      this.setState({
+        saveButtonEnabled : true,
+        cardName: name,
+        cardNumber: number,
+        expiredDate: expiry,
+        cvv: cvc,
+      });
     }
-  };
-
-  validateForm = () => {
-    // Check if all form input is filled (not empty)
-    return true;
   };
 
   onPressSavePaymentForm = () => {
@@ -42,9 +43,32 @@ class PaymentMethodModal extends React.Component {
         <View style={styles.popupBackground}>
           <View style={styles.popupContainer}>
             <Text style={styles.titleText}>Payment information</Text>
-            <PaymentForm
-              onPaymentInputEndEditing={this.onPaymentInputEndEditing}
-            />
+            <View style={{ width: '80%', height: '62%', marginTop: 12 }}>
+              <CreditCardInput
+                autofocus
+                onChange={this.onPaymentInputChange}
+                cardFontFamily={'raleway-semibold'}
+                inputStyle={{
+                  ...commonStyles.fontRalewayMedium,
+                  ...commonStyles.black,
+                  fontSize: 12,
+                }}
+                labelStyle={{
+                  ...commonStyles.fontRalewaySemiBold,
+                  ...commonStyles.black,
+                  fontSize: 12,
+                }}
+                inputContainerStyle={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: Colors.darkGrey,
+                  marginTop: 20,
+                  marginLeft: 0,
+                }}
+                cardScale={0.85}
+                invalidColor={Colors.mediumCarmine}
+                requiresName={true}
+              />
+            </View>
             <View style={styles.buttonGroupContainer}>
               <Button
                 type={'outline'}
@@ -96,22 +120,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.6);',
   },
-
   popupContainer: {
     backgroundColor: Colors.white,
     alignItems: 'center',
-    height: 'auto',
+    height: '63%',
     width: '80%',
-    paddingVertical: 34,
-    paddingHorizontal: 8,
+    paddingTop: 28,
+    paddingHorizontal: 10,
     borderRadius: 16,
     shadowOffset: { width: 4, height: 4 },
     shadowColor: '#878787',
     shadowOpacity: 0.25,
+    borderTopWidth: 26,
+    borderTopColor: '#6930b4',
   },
   titleText: {
     ...commonStyles.fontRalewaySemiBold,
-    ...commonStyles.textMediumCarmine,
+    ...commonStyles.textBlack,
     fontSize: 18,
     textAlign: 'center',
     marginBottom: 18,
@@ -121,7 +146,6 @@ const styles = StyleSheet.create({
     width: '82%',
     justifyContent: 'space-around',
     marginTop: 32,
-    marginBottom: 8
   },
   buttonTitleDefaultStyle: {
     ...commonStyles.fontRalewaySemiBold,
