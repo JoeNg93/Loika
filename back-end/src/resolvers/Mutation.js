@@ -504,6 +504,36 @@ const Mutations = {
     // 4. Return the order
     return updatedOrder;
   },
+
+  async changeOrderDeliverySchedule(parent, args, ctx) {
+    // 1. Query the current user and make sure they are signed in
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error('You must be signed in to cancel orders.');
+    }
+
+    // 2. Check if the selected subscription is available
+    const orders = await prisma
+      .user({ id: userId })
+      .orders({ where: { id: args.orderId } });
+    const order = orders.length > 0 ? orders[0] : null;
+    if (!order) {
+      throw new Error('Could not find this order.');
+    }
+
+    // 3. Update order delivery schedule
+    const updatedData = { ...args };
+    delete updatedData.orderId;
+    const updatedOrder = await prisma.updateOrder({
+      data: updatedData,
+      where: {
+        id: order.id,
+      },
+    });
+
+    // 4. Return the order
+    return updatedOrder;
+  },
 };
 
 module.exports = Mutations;
