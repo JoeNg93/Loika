@@ -13,12 +13,7 @@ import { connect } from 'react-redux';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
 import Layout from '../../../../constants/Layout';
-
-const boxNameToImageMapper = {
-  'vegan box': require('../../../../assets/images/vegan.png'),
-  'mixed box': require('../../../../assets/images/mixed.png'),
-  'meat box': require('../../../../assets/images/meat.png'),
-};
+import { boxNameToImageMapper } from '../../../../utils/mapper';
 
 const width = Layout.window.width,
   CONTENT_SEPARATOR = ',';
@@ -69,9 +64,7 @@ class SubscriptionDetailScreen extends React.Component {
         <View style={styles.topContainer}>
           <Image
             style={styles.image}
-            source={
-              boxNameToImageMapper[selectedSubscription.title.toLowerCase()]
-            }
+            source={boxNameToImageMapper[selectedSubscription.title]}
           />
           <View style={styles.priceTag}>
             <Text style={styles.priceText}>
