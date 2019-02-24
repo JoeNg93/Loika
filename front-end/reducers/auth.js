@@ -53,6 +53,20 @@ export default (state = INITIAL_STATE, { type, payload }) => {
           }),
         },
       };
+    case orderActionTypes.CHANGE_ORDER_DELIVERY_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          orders: state.user.orders.map(o => {
+            if (o.id === payload.id) {
+              o.deliveryTime = payload.deliveryTime;
+              o.deliveryDayOfWeek = payload.deliveryDayOfWeek;
+            }
+            return o;
+          }),
+        },
+      };
     default:
       return state;
   }

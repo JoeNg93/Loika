@@ -19,6 +19,15 @@ export default (state = INITIAL_STATE, { type, payload }) => {
           cancelDate: payload.cancelDate,
         },
       };
+    case actionTypes.CHANGE_ORDER_DELIVERY_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        selectedOrder: {
+          ...state.selectedOrder,
+          deliveryDayOfWeek: payload.deliveryDayOfWeek,
+          deliveryTime: payload.deliveryTime,
+        },
+      };
     default:
       return state;
   }

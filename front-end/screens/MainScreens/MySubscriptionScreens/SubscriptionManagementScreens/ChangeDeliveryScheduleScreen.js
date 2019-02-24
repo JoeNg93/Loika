@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet, View, TouchableHighlight, Image } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import Colors from '../../../../constants/Colors';
 import DeliverySchedule from '../../../../components/DeliverySchedule';
 import commonStyles from '../../../../constants/commonStyles';
 import Layout from '../../../../constants/Layout';
+import { changeOrderDeliverySchedule } from '../../../../actions/order';
 
 const width = Layout.window.width;
 
-export default class ChangeDeliveryScheduleScreen extends React.Component {
+class ChangeDeliveryScheduleScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Change delivery schedule',
     headerTransparent: true,
@@ -27,12 +30,43 @@ export default class ChangeDeliveryScheduleScreen extends React.Component {
     },
   };
 
+  state = {
+    deliveryDayOfWeek: '',
+    deliveryTime: '',
+  };
+
+  componentDidMount() {
+    const { deliveryDayOfWeek, deliveryTime } = this.props.selectedOrder;
+    this.setState({ deliveryDayOfWeek, deliveryTime });
+  }
+
+  onPressChangeDeliverySchedule(orderId, deliveryDayOfWeek, deliveryTime) {
+    this.props.changeOrderDeliverySchedule(
+      orderId,
+      deliveryDayOfWeek,
+      deliveryTime
+    );
+    this.props.navigation.goBack();
+  }
+
   render() {
+    const { deliveryDayOfWeek, deliveryTime } = this.state;
+    const { selectedOrder } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.contentContainer}>
           <View style={styles.deliverySchedule}>
-            <DeliverySchedule instructionText="*Delivery schedule will be change for next order" />
+            <DeliverySchedule
+              deliveryDayOfWeek={deliveryDayOfWeek}
+              deliveryTime={deliveryTime}
+              onPressChangeDeliveryDayOfWeek={deliveryDayOfWeek =>
+                this.setState({ deliveryDayOfWeek })
+              }
+              onPressChangeDeliveryTime={deliveryTime =>
+                this.setState({ deliveryTime })
+              }
+              instructionText="*Delivery schedule will be change for next order"
+            />
           </View>
 
           <View style={styles.imageContainer}>
@@ -48,7 +82,13 @@ export default class ChangeDeliveryScheduleScreen extends React.Component {
             title={'Confirm changes'}
             titleStyle={styles.mainButtonTitle}
             buttonStyle={styles.mainButtonStyle}
-            onPress={() => {}}
+            onPress={() =>
+              this.onPressChangeDeliverySchedule(
+                selectedOrder.id,
+                deliveryDayOfWeek,
+                deliveryTime
+              )
+            }
           />
         </View>
       </View>
@@ -92,3 +132,12 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 });
+
+const mapStateToProps = state => ({
+  selectedOrder: state.order.selectedOrder,
+});
+
+export default connect(
+  mapStateToProps,
+  { changeOrderDeliverySchedule }
+)(ChangeDeliveryScheduleScreen);

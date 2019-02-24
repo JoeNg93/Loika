@@ -19,7 +19,6 @@ export const cancelOrder = orderId => async dispatch => {
         query: `
         mutation {
           cancelOrder(orderId: "${orderId}") {
-            id,
             cancelDate
           }
         }
@@ -28,13 +27,50 @@ export const cancelOrder = orderId => async dispatch => {
       { headers: { Authorization: accessToken } }
     );
 
-    const { id, cancelDate } = res.data.data.cancelOrder;
+    const { cancelDate } = res.data.data.cancelOrder;
     dispatch({
       type: actionTypes.CANCEL_ORDER_SUCCESS,
-      payload: { id, cancelDate },
+      payload: { id: orderId, cancelDate },
     });
   } catch (err) {
     console.log('ERROR cancelOrder: ', err.response.data);
     dispatch({ type: actionTypes.CANCEL_ORDER_FAIL });
+  }
+};
+
+export const changeOrderDeliverySchedule = (
+  orderId,
+  deliveryDayOfWeek,
+  deliveryTime
+) => async dispatch => {
+  dispatch({ type: actionTypes.CHANGE_ORDER_DELIVERY_SCHEDULE_PENDING });
+  const accessToken = await AsyncStorage.getItem('accessToken');
+
+  try {
+    const res = await axios.post(
+      baseURL,
+      {
+        query: `
+        mutation {
+          changeOrderDeliverySchedule(
+            orderId: "${orderId}",
+            deliveryDayOfWeek: "${deliveryDayOfWeek}",
+            deliveryTime: "${deliveryTime}"
+            ) {
+            id
+          }
+        }
+      `,
+      },
+      { headers: { Authorization: accessToken } }
+    );
+
+    dispatch({
+      type: actionTypes.CHANGE_ORDER_DELIVERY_SCHEDULE_SUCCESS,
+      payload: { id: orderId, deliveryDayOfWeek, deliveryTime },
+    });
+  } catch (err) {
+    console.log('ERROR changeOrderDeliverySchedule: ', err.response.data);
+    dispatch({ type: actionTypes.CHANGE_ORDER_DELIVERY_SCHEDULE_FAIL });
   }
 };
