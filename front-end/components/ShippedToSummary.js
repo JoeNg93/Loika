@@ -5,17 +5,9 @@ import { Divider, Icon } from 'react-native-elements';
 
 import commonStyles from '../constants/commonStyles';
 import Colors from '../constants/Colors';
+import { dayOfWeekAbbrMapper } from '../utils/mapper';
 
 const ICON_SIZE = 14;
-
-const dayOfWeekAbbrMapper = {
-  MON: 'Monday',
-  TUE: 'Tuesday',
-  WED: 'Wednesday',
-  THU: 'Thursday',
-  FRI: 'Friday',
-  SAT: 'Saturday',
-};
 
 export default function ShippedToSummary({
   name,

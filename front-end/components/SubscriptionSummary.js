@@ -1,17 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
-import CancelConfirmModal from './CancelConfirmModal';
 import PropTypes from 'prop-types';
 
 import commonStyles from '../constants/commonStyles';
 import Colors from '../constants/Colors';
-
-const boxNameToImageMapper = {
-  'vegan box': require('../assets/images/vegan.png'),
-  'mixed box': require('../assets/images/mixed.png'),
-  'meat box': require('../assets/images/meat.png'),
-};
+import CancelConfirmModal from './CancelConfirmModal';
+import { boxNameToImageMapper } from '../utils/mapper';
 
 export default class SubscriptionSummary extends React.Component {
   state = {
@@ -58,7 +53,7 @@ export default class SubscriptionSummary extends React.Component {
         >
           <View style={styles.boxImageContainer}>
             <Image
-              source={boxNameToImageMapper[this.props.boxName.toLowerCase()]}
+              source={boxNameToImageMapper[this.props.boxName]}
               style={{ height: 72, width: 67 }}
             />
           </View>

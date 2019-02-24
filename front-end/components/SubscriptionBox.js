@@ -2,13 +2,8 @@ import React from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import Colors from '../constants/Colors';
 import commonStyles from '../constants/commonStyles';
+import { boxNameToImageMapper } from '../utils/mapper';
 import PropTypes from 'prop-types';
-
-const subscriptionImageMapper = {
-  mixed: require('../assets/images/mixed.png'),
-  vegan: require('../assets/images/vegan.png'),
-  meat: require('../assets/images/meat.png'),
-};
 
 export default function SubscriptionBox({ subscriptionTitle, isActive }) {
   return (
@@ -19,7 +14,7 @@ export default function SubscriptionBox({ subscriptionTitle, isActive }) {
       ]}
     >
       <Image
-        source={subscriptionImageMapper[subscriptionTitle.toLowerCase()]}
+        source={boxNameToImageMapper[subscriptionTitle]}
         style={{ height: 72, width: 67 }}
       />
       <Text style={styles.subscriptionTitle}>{subscriptionTitle} Box</Text>

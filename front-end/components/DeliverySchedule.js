@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 
 export default class DeliverySchedule extends React.Component {
   state = {
-    dayPicked: 'WED',
+    dayPicked: 'Wed',
     timePicked: '10:00-12:00',
   };
 
@@ -121,66 +121,66 @@ export default class DeliverySchedule extends React.Component {
       <View style={styles.container}>
         <View style={styles.dayPickerContainer}>
           <TouchableOpacity
-            style={[styles.dayButton, this._checkDayClick('MON', 'btn')]}
-            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('MON')}
+            style={[styles.dayButton, this._checkDayClick('Mon', 'btn')]}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('Mon')}
           >
             <Text
-              style={[styles.dayButtonText, this._checkDayClick('MON', 'text')]}
+              style={[styles.dayButtonText, this._checkDayClick('Mon', 'text')]}
             >
               MON
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.dayButton, this._checkDayClick('TUE', 'btn')]}
-            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('TUE')}
+            style={[styles.dayButton, this._checkDayClick('Tue', 'btn')]}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('Tue')}
           >
             <Text
-              style={[styles.dayButtonText, this._checkDayClick('TUE', 'text')]}
+              style={[styles.dayButtonText, this._checkDayClick('Tue', 'text')]}
             >
               TUE
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.dayButton, this._checkDayClick('WED', 'btn')]}
-            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('WED')}
+            style={[styles.dayButton, this._checkDayClick('Wed', 'btn')]}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('Wed')}
           >
             <Text
-              style={[styles.dayButtonText, this._checkDayClick('WED', 'text')]}
+              style={[styles.dayButtonText, this._checkDayClick('Wed', 'text')]}
             >
               WED
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.dayButton, this._checkDayClick('THU', 'btn')]}
-            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('THU')}
+            style={[styles.dayButton, this._checkDayClick('Thu', 'btn')]}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('Thu')}
           >
             <Text
-              style={[styles.dayButtonText, this._checkDayClick('THU', 'text')]}
+              style={[styles.dayButtonText, this._checkDayClick('Thu', 'text')]}
             >
               THU
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.dayButton, this._checkDayClick('FRI', 'btn')]}
-            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('FRI')}
+            style={[styles.dayButton, this._checkDayClick('Fri', 'btn')]}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('Fri')}
           >
             <Text
-              style={[styles.dayButtonText, this._checkDayClick('FRI', 'text')]}
+              style={[styles.dayButtonText, this._checkDayClick('Fri', 'text')]}
             >
               FRI
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.dayButton, this._checkDayClick('SAT', 'btn')]}
-            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('SAT')}
+            style={[styles.dayButton, this._checkDayClick('Sat', 'btn')]}
+            onPress={() => this.props.onPressChangeDeliveryDayOfWeek('Sat')}
           >
             <Text
-              style={[styles.dayButtonText, this._checkDayClick('SAT', 'text')]}
+              style={[styles.dayButtonText, this._checkDayClick('Sat', 'text')]}
             >
               SAT
             </Text>
