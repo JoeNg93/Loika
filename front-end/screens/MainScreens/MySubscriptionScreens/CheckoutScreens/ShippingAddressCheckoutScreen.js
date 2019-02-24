@@ -157,7 +157,7 @@ class ShippingAddressCheckoutScreen extends React.Component {
     console.log(this.props.user);
     return (
       <View style={styles.mainContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <CheckoutStepProgress currentStep="1" />
 
           <View style={{ marginTop: 34 }}>

@@ -170,7 +170,7 @@ class MySubscriptionScreen extends React.Component {
               paddingLeft: 32,
             }}
           >
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
               <Text style={styles.mainTitle}>Current subscriptions</Text>
               {this.renderSubscriptionListPerOrder()}
             </ScrollView>

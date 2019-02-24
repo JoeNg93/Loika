@@ -108,6 +108,7 @@ export default class OrderHistoryScreen extends React.Component {
   render () {
     return (
       <ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainerContent}
         style={styles.container}
       >

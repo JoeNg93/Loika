@@ -87,7 +87,7 @@ export default class ChangeShippingAddressScreen extends React.Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ marginTop: 34 }}>
             <Text style={styles.titleText}>Shipping address</Text>
             {this.state.fetchShippingAddresses && (

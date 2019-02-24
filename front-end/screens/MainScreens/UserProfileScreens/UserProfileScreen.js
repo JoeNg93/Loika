@@ -67,7 +67,10 @@ class UserProfileScreen extends React.Component {
     const { name, email, shippingAddress, billingAddress } = this.props.user;
     return (
       <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContainerContent}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContainerContent}
+        >
           <View style={styles.bigCircle} />
           <View style={styles.namePictureContainer}>
             <Image

@@ -58,7 +58,10 @@ class SubscriptionDetailScreen extends React.Component {
     }
 
     return (
-      <ScrollView style={styles.mainContainer}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.mainContainer}
+      >
         <View style={styles.topContainer}>
           <Image
             style={styles.image}

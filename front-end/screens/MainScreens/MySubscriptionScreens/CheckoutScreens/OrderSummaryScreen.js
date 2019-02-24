@@ -126,7 +126,10 @@ class OrderSummaryScreen extends React.Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-        <ScrollView style={{ paddingHorizontal: 30 }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ paddingHorizontal: 30 }}
+        >
           <CheckoutStepProgress currentStep="3" />
           <View style={styles.orderedSubscriptionsContainer}>
             <Text style={styles.titleText}>Subscriptions Ordered</Text>

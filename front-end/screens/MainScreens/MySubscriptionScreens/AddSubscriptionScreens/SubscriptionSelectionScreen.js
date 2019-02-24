@@ -335,7 +335,10 @@ class SubscriptionSelectionScreen extends React.Component {
               }}
             />
             <View style={{ bottom: 0 }}>
-              <ScrollView style={styles.cart}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={styles.cart}
+              >
                 <View>
                   <View style={styles.cartTitleContainer}>
                     <View style={{ flexDirection: 'row' }}>

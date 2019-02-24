@@ -171,7 +171,7 @@ export default class SubscriptionManagementScreen extends React.Component {
     return (
       <View style={styles.mainContainer}>
         {this.state.fetchedOrder && (
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ paddingRight: offset }}>
               <View style={styles.orderTitleContainer}>
                 <Text style={styles.orderTitle}>
