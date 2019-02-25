@@ -33,7 +33,7 @@ class AddNewAddressModal extends React.Component {
     return true;
   };
 
-  onPressSaveAddressForm = () => {
+  onPressSaveAddressForm = async () => {
     const { name, address, postcode, city, phoneNumber } = this.state;
     const newAddress = {
       name,
@@ -42,7 +42,9 @@ class AddNewAddressModal extends React.Component {
       phoneNumber,
       postcode: Number(postcode),
     };
-    this.props.addShippingAddress(newAddress);
+    const addressId = await this.props.addShippingAddress(newAddress);
+    console.log('TCL: onPressSaveAddressForm -> addressId', addressId);
+    this.props.onFinishAddingNewAddress(addressId);
     this.props.onPressCloseModal();
   };
 
@@ -92,12 +94,14 @@ AddNewAddressModal.propTypes = {
   visible: PropTypes.bool,
   onPressCloseModal: PropTypes.func,
   onPressSaveAddressForm: PropTypes.func,
+  onFinishAddingNewAddress: PropTypes.func,
 };
 
 AddNewAddressModal.defaultProps = {
   visible: true,
   onPressCloseModal: () => {},
   onPressSaveAddressForm: () => {},
+  onFinishAddingNewAddress: () => {},
 };
 
 const styles = StyleSheet.create({

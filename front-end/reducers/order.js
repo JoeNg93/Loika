@@ -28,6 +28,14 @@ export default (state = INITIAL_STATE, { type, payload }) => {
           deliveryTime: payload.deliveryTime,
         },
       };
+    case actionTypes.CHANGE_ORDER_SHIPPING_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        selectedOrder: {
+          ...state.selectedOrder,
+          shippingAddress: payload.shippingAddress,
+        },
+      };
     default:
       return state;
   }

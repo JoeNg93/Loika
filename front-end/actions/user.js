@@ -36,10 +36,14 @@ export const addShippingAddress = addressInfo => async dispatch => {
       { headers: { Authorization: accessToken } }
     );
 
+    const { createAddress } = res.data.data;
+    const addressId = createAddress.id;
     dispatch({
       type: actionTypes.ADD_SHIPPING_ADDRESS_SUCCESS,
-      payload: res.data.data.createAddress,
+      payload: createAddress,
     });
+
+    return addressId;
   } catch (err) {
     console.log('ERROR - addShippingAddress', err.response.data);
     dispatch({ type: actionTypes.ADD_SHIPPING_ADDRESS_FAIL });

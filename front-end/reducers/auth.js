@@ -67,6 +67,19 @@ export default (state = INITIAL_STATE, { type, payload }) => {
           }),
         },
       };
+    case orderActionTypes.CHANGE_ORDER_SHIPPING_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          orders: state.user.orders.map(o => {
+            if (o.id === payload.id) {
+              o.shippingAddress = payload.shippingAddress;
+            }
+            return o;
+          }),
+        },
+      };
     default:
       return state;
   }

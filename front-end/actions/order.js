@@ -74,3 +74,48 @@ export const changeOrderDeliverySchedule = (
     dispatch({ type: actionTypes.CHANGE_ORDER_DELIVERY_SCHEDULE_FAIL });
   }
 };
+
+export const changeOrderShippingAddress = (
+  orderId,
+  addressId
+) => async dispatch => {
+  dispatch({ type: actionTypes.CHANGE_ORDER_SHIPPING_ADDRESS_PENDING });
+  const accessToken = await AsyncStorage.getItem('accessToken');
+
+  try {
+    const res = await axios.post(
+      baseURL,
+      {
+        query: `
+        mutation {
+          changeOrderShippingAddress(
+            orderId: "${orderId}",
+            addressId: "${addressId}"
+            ) {
+            shippingAddress {
+              id,
+              name,
+              phoneNumber,
+              city,
+              country,
+              postcode,
+              address
+            }
+          }
+        }
+      `,
+      },
+      { headers: { Authorization: accessToken } }
+    );
+
+    const shippingAddress =
+      res.data.data.changeOrderShippingAddress.shippingAddress;
+    dispatch({
+      type: actionTypes.CHANGE_ORDER_SHIPPING_ADDRESS_SUCCESS,
+      payload: { id: orderId, shippingAddress },
+    });
+  } catch (err) {
+    console.log('ERROR changeOrderShippingAddress: ', err.response.data);
+    dispatch({ type: actionTypes.CHANGE_ORDER_SHIPPING_ADDRESS_FAIL });
+  }
+};

@@ -7,15 +7,18 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+
 import AddressSummary from '../../../../components/AddressSummary';
 import AddNewAddressModal from '../../../../components/AddNewAddressModal';
 import Colors from '../../../../constants/Colors';
 import commonStyles from '../../../../constants/commonStyles';
 import Layout from '../../../../constants/Layout';
+import { changeOrderShippingAddress } from '../../../../actions/order';
 
 const width = Layout.window.width;
 
-export default class ChangeShippingAddressScreen extends React.Component {
+class ChangeShippingAddressScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Change shipping address',
     headerTransparent: true,
@@ -35,41 +38,32 @@ export default class ChangeShippingAddressScreen extends React.Component {
   };
 
   state = {
-    fetchShippingAddresses: [
-      {
-        name: 'Thanh Dang',
-        shippingAddress: {
-          address: 'Kotkantie 1',
-          postcode: 90100,
-          city: 'Oulu',
-        },
-        phoneNumber: '+3581233453232',
-        isSelected: true,
-      },
-      {
-        name: 'Robert Barker',
-        shippingAddress: {
-          address: 'Kajaanintie 38A',
-          postcode: 90130,
-          city: 'Oulu',
-        },
-        phoneNumber: '+3581233453232',
-      },
-    ],
     addressModalVisible: false,
   };
 
-  addressIndex = 0;
-
-  renderAddressSummaryList = (addressList, hasSelectedButton = true) => {
+  renderAddressSummaryList = addressList => {
+    const { selectedOrder, changeOrderShippingAddress } = this.props;
     return addressList.map(addressDetails => (
-      <View key={this.addressIndex++} style={styles.addressSummaryContainer}>
+      <View key={addressDetails.id} style={styles.addressSummaryContainer}>
         <AddressSummary
-          {...addressDetails}
-          hasSelectedButton={hasSelectedButton}
-          canEditAddress={false}
-          isButtonSelected={addressDetails.isSelected}
-          onPressSelectedButton={() => {}}
+          id={addressDetails.id}
+          name={addressDetails.name}
+          phoneNumber={addressDetails.phoneNumber}
+          shippingAddress={{
+            address: addressDetails.address,
+            postcode: addressDetails.postcode,
+            city: addressDetails.city,
+          }}
+          hasSelectedButton={true}
+          isButtonSelected={
+            addressDetails.id === selectedOrder.shippingAddress.id
+          }
+          onPressSelectedButton={() =>
+            this.props.changeOrderShippingAddress(
+              selectedOrder.id,
+              addressDetails.id
+            )
+          }
         />
       </View>
     ));
@@ -84,16 +78,15 @@ export default class ChangeShippingAddressScreen extends React.Component {
   };
 
   render() {
+    const { user, selectedOrder, changeOrderShippingAddress } = this.props;
     return (
       <View style={styles.mainContainer}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ marginTop: 34 }}>
             <Text style={styles.titleText}>Shipping address</Text>
-            {this.state.fetchShippingAddresses && (
+            {user.shippingAddress.length > 0 && (
               <View>
-                {this.renderAddressSummaryList(
-                  this.state.fetchShippingAddresses
-                )}
+                {this.renderAddressSummaryList(user.shippingAddress)}
                 <Button
                   type={'clear'}
                   title={'Add new address'}
@@ -106,7 +99,9 @@ export default class ChangeShippingAddressScreen extends React.Component {
                 <AddNewAddressModal
                   visible={this.state.addressModalVisible}
                   onPressCloseModal={this.closeAddressModal}
-                  onPressSaveAddressForm={() => {}}
+                  onFinishAddingNewAddress={addressId =>
+                    changeOrderShippingAddress(selectedOrder.id, addressId)
+                  }
                 />
               </View>
             )}
@@ -169,3 +164,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  selectedOrder: state.order.selectedOrder,
+});
+
+export default connect(
+  mapStateToProps,
+  { changeOrderShippingAddress }
+)(ChangeShippingAddressScreen);
