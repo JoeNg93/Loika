@@ -84,7 +84,7 @@ class ShippingAddressCheckoutScreen extends React.Component {
             city: addressDetails.city,
           }}
           hasSelectedButton={hasSelectedButton}
-          canEditAddress={true}
+          canEditAddress={false}
           isButtonSelected={addressDetails.id === this.props.shippingAddress.id}
           onPressSelectedButton={id => {
             const shippingAddress = this.props.user.shippingAddress.find(
@@ -95,7 +95,6 @@ class ShippingAddressCheckoutScreen extends React.Component {
               this.props.setSelectedBillingAddress(shippingAddress);
             }
           }}
-          onPressSaveAddressForm={() => {}}
         />
       </View>
     ));

@@ -67,10 +67,9 @@ export default class ChangeShippingAddressScreen extends React.Component {
         <AddressSummary
           {...addressDetails}
           hasSelectedButton={hasSelectedButton}
-          canEditAddress={true}
+          canEditAddress={false}
           isButtonSelected={addressDetails.isSelected}
           onPressSelectedButton={() => {}}
-          onPressSaveAddressForm={() => {}}
         />
       </View>
     ));
