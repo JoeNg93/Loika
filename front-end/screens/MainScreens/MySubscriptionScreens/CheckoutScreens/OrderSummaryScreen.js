@@ -75,6 +75,12 @@ class OrderSummaryScreen extends React.Component {
   };
 
   onPressRemoveSubscription = subscriptionId => {
+    if (this.props.shoppingCart.length === 1) {
+      this.props.removeSubscriptionFromCart(subscriptionId);
+      this.props.navigation.navigate('AddSubscription');
+      return;
+    }
+
     this.props.removeSubscriptionFromCart(subscriptionId);
   };
 

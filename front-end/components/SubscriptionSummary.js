@@ -21,6 +21,11 @@ export default class SubscriptionSummary extends React.Component {
     this.setState({ cancelDialogVisible: false });
   };
 
+  onPressRemoveSubscription = subscriptionId => {
+    this.props.onPressRemoveSubscription(subscriptionId);
+    this.onPressCloseCancelDialogModal();
+  };
+
   render() {
     return (
       <View style={{ width: this.props.containerWidth }}>
@@ -36,7 +41,9 @@ export default class SubscriptionSummary extends React.Component {
             </TouchableOpacity>
             <CancelConfirmModal
               visible={this.state.cancelDialogVisible}
-              onPressCancelSubscription={this.onPressRemoveSubscription}
+              onPressCancelSubscription={() =>
+                this.onPressRemoveSubscription(this.props.id)
+              }
               onPressCloseModal={this.onPressCloseCancelDialogModal}
               modalTitle={this.props.modalTitle}
               modalTextContent={this.props.modalTextContent}

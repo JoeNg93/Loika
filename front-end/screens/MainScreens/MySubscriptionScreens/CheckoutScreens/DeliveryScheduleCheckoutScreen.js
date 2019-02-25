@@ -77,7 +77,7 @@ class DeliveryScheduleCheckoutScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.props.setDeliveryDayOfWeek('MON');
+    this.props.setDeliveryDayOfWeek('Mon');
     this.props.setDeliveryTime('10:00-12:00');
   }
 
@@ -137,7 +137,10 @@ const mapStateToProps = state => ({
   deliveryTime: state.checkout.deliveryTime,
 });
 
-export default connect(mapStateToProps, {
-  setDeliveryDayOfWeek,
-  setDeliveryTime,
-})(DeliveryScheduleCheckoutScreen);
+export default connect(
+  mapStateToProps,
+  {
+    setDeliveryDayOfWeek,
+    setDeliveryTime,
+  }
+)(DeliveryScheduleCheckoutScreen);
