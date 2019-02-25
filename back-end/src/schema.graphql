@@ -60,6 +60,7 @@ type Mutation {
   createOrder(token: String!, deliveryTime: String!, deliveryDayOfWeek: String!): Order!
   cancelOrder(orderId: String!): Order!
   changeOrderDeliverySchedule(orderId: String!, deliveryTime: String, deliveryDayOfWeek: String): Order!
+  changeOrderShippingAddress(orderId: String!, addressId: String!): Order!
 }
 
 type Query {

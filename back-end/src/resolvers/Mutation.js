@@ -509,10 +509,12 @@ const Mutations = {
     // 1. Query the current user and make sure they are signed in
     const { userId } = ctx.request;
     if (!userId) {
-      throw new Error('You must be signed in to cancel orders.');
+      throw new Error(
+        'You must be signed in to change order delivery schedule.'
+      );
     }
 
-    // 2. Check if the selected subscription is available
+    // 2. Check if the selected order is available
     const orders = await prisma
       .user({ id: userId })
       .orders({ where: { id: args.orderId } });
@@ -530,6 +532,50 @@ const Mutations = {
         id: order.id,
       },
     });
+
+    // 4. Return the order
+    return updatedOrder;
+  },
+
+  async changeOrderShippingAddress(parent, args, ctx) {
+    // 1. Query the current user and make sure they are signed in
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error(
+        'You must be signed in to change order shipping address.'
+      );
+    }
+
+    // 2. Check if the selected order is available
+    const orders = await prisma
+      .user({ id: userId })
+      .orders({ where: { id: args.orderId } });
+    const order = orders.length > 0 ? orders[0] : null;
+    if (!order) {
+      throw new Error('Could not find this order.');
+    }
+
+    // 3. Update order delivery schedule
+    const updatedOrder = await prisma.updateOrder({
+      data: {
+        shippingAddress: {
+          connect: {
+            id: args.addressId,
+          },
+        },
+      },
+      where: {
+        id: order.id,
+      },
+    });
+
+    updatedOrder.shippingAddress = await prisma
+      .order({ id: order.id })
+      .shippingAddress();
+    updatedOrder.billingAddress = await prisma
+      .order({ id: order.id })
+      .billingAddress();
+    updatedOrder.items = await prisma.order({ id: order.id }).items();
 
     // 4. Return the order
     return updatedOrder;
