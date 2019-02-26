@@ -5,6 +5,8 @@ import {
   createBottomTabNavigator,
 } from 'react-navigation';
 
+import Colors from '../../constants/Colors';
+
 import TabBarIcon from '../../components/TabBarIcon';
 
 import MySubscriptionScreen from './MySubscriptionScreens/MySubscriptionScreen';
@@ -36,11 +38,7 @@ MySubscriptionStack.navigationOptions = ({ navigation }) => {
   const tabBarIcon = ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={Platform.OS === 'ios' ? `ios-basket` : 'md-basket'}
     />
   );
   const tabBarVisible = navigation.state.index === 0 ? true : false;
@@ -57,7 +55,7 @@ OrderHistoryStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-clipboard' : 'md-clipboard'}
     />
   ),
 };
@@ -71,7 +69,7 @@ UserProfileStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'}
     />
   ),
 };
