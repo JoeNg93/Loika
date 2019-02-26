@@ -1,11 +1,12 @@
 import React from 'react';
-import { Platform } from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator,
 } from 'react-navigation';
+import { Icon } from 'react-native-elements';
 
-import TabBarIcon from '../../components/TabBarIcon';
+import Colors from '../../constants/Colors';
+import commonStyles from '../../constants/commonStyles';
 
 import MySubscriptionScreen from './MySubscriptionScreens/MySubscriptionScreen';
 import SubscriptionSelectionScreen from './MySubscriptionScreens/AddSubscriptionScreens/SubscriptionSelectionScreen';
@@ -45,13 +46,11 @@ const MySubscriptionStack = createStackNavigator(
 MySubscriptionStack.navigationOptions = ({ navigation }) => {
   const tabBarLabel = 'Subscriptions';
   const tabBarIcon = ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+    <Icon
+      type="material-community"
+      name="shopping"
+      size={24}
+      color={focused ? Colors.mediumCarmine : Colors.lightGrey}
     />
   );
   const tabBarVisible = navigation.state.index === 0 ? true : false;
@@ -68,9 +67,11 @@ const OrderHistoryStack = createStackNavigator({
 OrderHistoryStack.navigationOptions = {
   tabBarLabel: 'Order History',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+    <Icon
+      type="material-community"
+      name="clipboard-outline"
+      size={27}
+      color={focused ? Colors.mediumCarmine : Colors.lightGrey}
     />
   ),
 };
@@ -82,15 +83,34 @@ const UserProfileStack = createStackNavigator({
 UserProfileStack.navigationOptions = {
   tabBarLabel: 'User Profile',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+    <Icon
+      name={'person'}
+      size={27}
+      color={focused ? Colors.mediumCarmine : Colors.lightGrey}
     />
   ),
 };
 
-export default createBottomTabNavigator({
-  MySubscriptionStack,
-  OrderHistoryStack,
-  UserProfileStack,
-});
+export default createBottomTabNavigator(
+  {
+    MySubscriptionStack,
+    OrderHistoryStack,
+    UserProfileStack,
+  },
+  {
+    defaultNavigationOptions: {
+      tabBarOptions: {
+        activeTintColor: Colors.mediumCarmine,
+        inactiveTintColor: Colors.lightGrey,
+        // Style for each label
+        labelStyle: [commonStyles.fontRalewayMedium, { fontSize: 10 }],
+        // Tab bar style
+        style: {
+          height: 56,
+          paddingTop: 6,
+          paddingBottom: 3,
+        },
+      },
+    },
+  }
+);
