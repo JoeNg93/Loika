@@ -1,7 +1,7 @@
 export const boxNameToImageMapper = {
-  'Vegan Box': require('../assets/images/vegan.png'),
-  'Mixed Box': require('../assets/images/mixed.png'),
-  'Meat Box': require('../assets/images/meat.png'),
+  'Veggies Box': require('../assets/images/vegan.png'),
+  'Milk Box': require('../assets/images/mixed.png'),
+  'Meaty Box': require('../assets/images/meat.png'),
 };
 
 export const dayOfWeekAbbrMapper = {
