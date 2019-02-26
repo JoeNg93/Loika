@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, AsyncStorage } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 
+import commonStyles from '../../constants/commonStyles';
+import Colors from '../../constants/Colors';
+
 const styles = StyleSheet.create({
   mainContent: {
     display: 'flex',
@@ -34,14 +37,14 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   text: {
-    color: '#000000',
+    color: Colors.black,
     fontSize: 14,
     backgroundColor: 'transparent',
+    lineHeight: 20,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#282828',
+    color: Colors.black,
     backgroundColor: 'transparent',
     marginBottom: 20,
   },
@@ -66,33 +69,33 @@ const styles = StyleSheet.create({
 const slides = [
   {
     key: 'somethun',
-    title: 'Subscribe to our plan',
+    title: 'Choose your box today!',
     text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt eiusmod tempor eiusmod tempor',
+      'View our selections and get yourself produces straight from the reliable trusty local farmers! Simply click on the box to see what you would get inside and get to know exactly where your food comes from and who made it!',
     image: require('../../assets/images/slide1.png'),
     imageStyle: styles.image,
   },
   {
     key: 'somethun1',
-    title: 'We pick it up from farm',
+    title: 'We travel to the farm',
     text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt eiusmod tempor eiusmod tempor',
+      'Once you have placed an order just sit back and we will happily drive to farms to get your produces for you. We will make a quick stop at our warehouse to repackage the food and make sure there is nothing but fresh, quality produces awaiting you!',
     image: require('../../assets/images/slide2.png'),
     imageStyle: styles.image2,
   },
   {
     key: 'somethun2',
-    title: 'We deliver it to you',
+    title: 'Arrival at your doorstep',
     text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt eiusmod tempor eiusmod tempor',
+      'We will quickly get on the road to bring you the produces at your most convenient hour that you have chosen. On time and as fresh as it could be!',
     image: require('../../assets/images/slide3.png'),
     imageStyle: styles.image3,
   },
   {
     key: 'somethun3',
-    title: 'Enjoy the freshness',
+    title: 'Get your food fresh online',
     text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt eiusmod tempor eiusmod tempor',
+      'Shop with us for better food supplies at a better price to support your local suppliers! What are you waiting for?',
     image: require('../../assets/images/slide4.png'),
     imageStyle: styles.image4,
     hidePagination: true,
@@ -114,8 +117,12 @@ class OnboardingScreen extends Component {
     >
       <Image style={styles.image} source={props.image} />
       <View style={styles.TextContainer}>
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.text}>{props.text}</Text>
+        <Text style={[styles.title, commonStyles.fontRalewayBold]}>
+          {props.title}
+        </Text>
+        <Text style={[styles.text, commonStyles.fontRalewayRegular]}>
+          {props.text}
+        </Text>
       </View>
     </View>
   );
