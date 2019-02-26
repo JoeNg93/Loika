@@ -57,7 +57,7 @@ type Mutation {
   removeFromCart(id: ID!): CartItem
 
   # order
-  createOrder(token: String!, deliveryTime: String!, deliveryDayOfWeek: String!): Order!
+  createOrder(billingAddressId: String!, shippingAddressId: String!, deliveryDayOfWeek: String!, deliveryTime: String!, subscriptionIds: [String!]!, total: Int!, cardNumber: String, expirationDate: String, cvv: String): Order!
   cancelOrder(orderId: String!): Order!
   changeOrderDeliverySchedule(orderId: String!, deliveryTime: String, deliveryDayOfWeek: String): Order!
   changeOrderShippingAddress(orderId: String!, addressId: String!): Order!

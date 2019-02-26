@@ -18,6 +18,7 @@ import TotalComponent from '../../../../components/TotalComponent';
 import PaymentMethodModal from '../../../../components/PaymentMethodModal';
 import Layout from '../../../../constants/Layout';
 import { removeSubscriptionFromCart } from '../../../../actions/checkout';
+import { createOrder } from '../../../../actions/user';
 
 const width = Layout.window.width;
 
@@ -48,7 +49,8 @@ class OrderSummaryScreen extends React.Component {
 
   state = {
     paymentModalVisible: false,
-    displayStripeCheckout: false,
+    payNowButtonEnabled: true,
+    payNowButtonTitle: 'Pay now',
   };
 
   getTotalPrice = () => {
@@ -62,8 +64,37 @@ class OrderSummaryScreen extends React.Component {
     this.props.navigation.navigate('DeliveryScheduleCheckout');
   };
 
-  onPressPayNow = () => {
-    this.setState({ paymentModalVisible: true, displayStripeCheckout: true });
+  onPressPayNow = async () => {
+    if (this.props.user.paymentCustomerId) {
+      // User already has payment info
+      this.setState({
+        payNowButtonEnabled: false,
+        payNowButtonTitle: 'Processing...',
+      });
+      const {
+        shoppingCart,
+        deliveryDayOfWeek,
+        deliveryTime,
+        billingAddress,
+        shippingAddress,
+      } = this.props;
+      const subscriptionIds = shoppingCart.map(s => s.id);
+      const billingAddressId = billingAddress.id;
+      const shippingAddressId = shippingAddress.id;
+      const total = this.getTotalPrice();
+      await this.props.createOrder({
+        billingAddressId,
+        shippingAddressId,
+        deliveryDayOfWeek,
+        deliveryTime,
+        subscriptionIds,
+        total,
+      });
+      this.props.navigation.navigate('Home');
+    } else {
+      // User doesnt have payment info yet
+      this.setState({ paymentModalVisible: true });
+    }
   };
 
   openPaymentModal = () => {
@@ -152,15 +183,21 @@ class OrderSummaryScreen extends React.Component {
         </ScrollView>
         <View style={styles.payButtonContainer}>
           <Button
-            title="Pay now"
+            title={this.state.payNowButtonTitle}
             titleStyle={styles.mainButtonTitle}
-            buttonStyle={styles.mainButtonStyle}
+            buttonStyle={[
+              styles.mainButtonStyle,
+              this.state.payNowButtonEnabled
+                ? styles.activeButton
+                : styles.disabledButton,
+            ]}
             onPress={this.onPressPayNow}
           />
         </View>
         <PaymentMethodModal
           visible={this.state.paymentModalVisible}
           onPressCloseModal={this.closePaymentModal}
+          onFinishPayment={() => this.props.navigation.navigate('Home')}
         />
       </View>
     );
@@ -213,6 +250,12 @@ const styles = StyleSheet.create({
   spaceHolderContainer: {
     marginTop: 112,
   },
+  activeButton: {
+    backgroundColor: Colors.mediumCarmine,
+  },
+  disabledButton: {
+    backgroundColor: Colors.darkGrey,
+  },
 });
 
 const mapStateToProps = state => ({
@@ -226,5 +269,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { removeSubscriptionFromCart }
+  { removeSubscriptionFromCart, createOrder }
 )(OrderSummaryScreen);

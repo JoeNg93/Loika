@@ -97,7 +97,8 @@ export const getUserProfile = () => async dispatch => {
               country,
               postcode,
               address
-            }
+            },
+            paymentCustomerId
           }
         }
       `,

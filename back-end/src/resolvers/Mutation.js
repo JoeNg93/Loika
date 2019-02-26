@@ -361,111 +361,103 @@ const Mutations = {
       throw new Error('You must be signed in to complete this order.');
     }
 
-    const userFragment = `
-      fragment user on User {
-        id
-        name
-        email
-        billingAddress {
-          address
-          city
-          postcode
-          country
-        }
-        shippingAddress {
-          city
-          postcode
-          country
-        }
-        cart {
-          id
-        }
-      }
-    `;
+    console.log(args);
 
-    const user = await prisma.user({ id: userId }).$fragment(userFragment);
+    const {
+      billingAddressId,
+      shippingAddressId,
+      deliveryDayOfWeek,
+      deliveryTime,
+      subscriptionIds,
+      total,
+      cardNumber,
+      expirationDate,
+      cvv,
+    } = args;
 
-    // 2. recalculate the total for the price
-    const userWithCartItems = `
-      fragment userWithCartItems on CartItem {
-        id
-        quantity
-        item {
-          id
-          title
-          shortDescription
-          longDescription
-          totalPrice
-          mealPrice
-          thumbnailImage
-          largeImage
-        }
-      }
-    `;
+    const user = await prisma.user({ id: userId });
+    if (!user.paymentCustomerId) {
+      // Create user payment info on Stripe
+      const [expMonth, expYear] = expirationDate.split('/');
+      const token = await stripe.tokens.create({
+        card: {
+          // Hard-coded test card number
+          number: '4242424242424242',
+          exp_month: Number(expMonth),
+          exp_year: Number(expYear),
+          cvc: cvv,
+        },
+      });
 
-    let cartItems = await prisma
-      .user({ id: userId })
-      .cart()
-      .$fragment(userWithCartItems);
-    const amount = cartItems.reduce(
-      (tally, cartItem) => tally + cartItem.item.totalPrice * cartItem.quantity,
-      0
-    );
+      console.log('Stripe token: ', token.id);
 
-    // 3. Create the stripe charge (turn token into $$$)
-    const charge = await stripe.charges.create({
-      amount,
-      currency: 'EUR',
-      source: args.token,
-    });
+      const customer = await stripe.customers.create({
+        email: user.email,
+        source: token.id, // obtained with Stripe.js
+      });
 
-    // 4. Convert the CartItems to OrderItems
-    const orderItems = cartItems.map(cartItem => {
-      const orderItem = {
-        ...cartItem.item,
-        quantity: cartItem.quantity,
-        user: { connect: { id: userId } },
-      };
+      console.log('Customer id: ', customer.id);
+      await prisma.updateUser({
+        where: { id: userId },
+        data: { paymentCustomerId: customer.id },
+      });
+      user.paymentCustomerId = customer.id;
+    }
+
+    let orderItems = [];
+    for (let subscriptionsId of subscriptionIds) {
+      // Create order item
+      const subscription = await prisma.subscription({ id: subscriptionsId });
+      const orderItem = { ...subscription };
       delete orderItem.id;
-      return orderItem;
-    });
+      delete orderItem.createdAt;
+      delete orderItem.updatedAt;
+      orderItems.push(orderItem);
+    }
 
-    // 5. create the Order
     const order = await prisma.createOrder({
       user: { connect: { id: userId } },
       items: { create: orderItems },
       billingAddress: {
-        create: {
-          isBillingAddress: true,
-          address: user.billingAddress.address,
-          city: user.billingAddress.city,
-          postcode: user.billingAddress.postcode,
-          country: user.billingAddress.country,
+        connect: {
+          id: billingAddressId,
         },
       },
       shippingAddress: {
-        create: {
-          isBillingAddress: false,
-          address: user.shippingAddress.address,
-          city: user.shippingAddress.city,
-          postcode: user.shippingAddress.postcode,
-          country: user.shippingAddress.country,
+        connect: {
+          id: shippingAddressId,
         },
       },
-      deliveryTime: args.deliveryTime,
-      deliveryDayOfWeek: args.deliveryDayOfWeek,
+      deliveryTime: deliveryTime,
+      deliveryDayOfWeek: deliveryDayOfWeek,
       paymentDate: new Date().toISOString(),
-      total: amount,
-      charge,
+      total: total,
     });
 
-    // 6. Clean up - clear the users cart, delete cartItems
-    const cartItemIds = user.cart.map(cartItem => cartItem.id);
-    await prisma.deleteManyCartItems({
-      id_in: cartItemIds,
+    const boxNameToPlanIdMapper = {
+      'Veggies Box': 'veggies_box_monthly',
+      'Milk Box': 'milk_box_monthly',
+      'Meaty Box': 'meaty_box_monthly',
+    };
+    const planIds = orderItems.map(o => ({
+      plan: boxNameToPlanIdMapper[o.title],
+    }));
+    const subscription = await stripe.subscriptions.create({
+      customer: user.paymentCustomerId,
+      items: planIds,
     });
 
-    // 7. Return the Order to the client
+    console.log(subscription);
+    await prisma.updateOrder({
+      where: { id: order.id },
+      data: { paymentSubscriptionId: subscription.id },
+    });
+
+    order.shippingAddress = await prisma
+      .order({ id: order.id })
+      .shippingAddress();
+    order.items = await prisma.order({ id: order.id }).items();
+
     return order;
   },
 
@@ -490,6 +482,9 @@ const Mutations = {
     if (!order) {
       throw new Error('Could not find this order.');
     }
+
+    // Cancel order on Stripe
+    await stripe.subscriptions.del(order.paymentSubscriptionId);
 
     // 3. Set the cancel date to today.
     const updatedOrder = await prisma.updateOrder({

@@ -8,33 +8,64 @@ import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import commonStyles from '../constants/commonStyles';
 import { CreditCardInput } from 'react-native-credit-card-input';
+import { createOrder } from '../actions/user';
 
 class PaymentMethodModal extends React.Component {
   state = {
     saveButtonEnabled: false,
     cardName: '',
     cardNumber: '',
-    expiredDate: '',
+    expirationDate: '',
     cvv: '',
+    buttonTitle: 'Pay',
   };
 
   onPaymentInputChange = formData => {
-    if (
-      !_.includes(formData.status, 'incomplete')
-    ) {
-      const {name, number, expiry, cvc} = formData.values;
+    if (!_.includes(formData.status, 'incomplete')) {
+      const { name, number, expiry, cvc } = formData.values;
       this.setState({
-        saveButtonEnabled : true,
+        saveButtonEnabled: true,
         cardName: name,
         cardNumber: number,
-        expiredDate: expiry,
+        expirationDate: expiry,
         cvv: cvc,
       });
     }
   };
 
-  onPressSavePaymentForm = () => {
+  onPressSavePaymentForm = async () => {
+    this.setState({ saveButtonEnabled: false, buttonTitle: 'Processing...' });
+    const { cardNumber, expirationDate, cvv } = this.state;
+    const {
+      shoppingCart,
+      deliveryDayOfWeek,
+      deliveryTime,
+      billingAddress,
+      shippingAddress,
+    } = this.props;
+    const subscriptionIds = shoppingCart.map(s => s.id);
+    const billingAddressId = billingAddress.id;
+    const shippingAddressId = shippingAddress.id;
+    const total = shoppingCart.reduce(
+      (prev, curr) => prev + curr.totalPrice,
+      0
+    );
+    const paymentInfo = {
+      cardNumber,
+      cvv,
+      expirationDate,
+    };
+    await this.props.createOrder({
+      billingAddressId,
+      shippingAddressId,
+      deliveryDayOfWeek,
+      deliveryTime,
+      subscriptionIds,
+      total,
+      paymentInfo,
+    });
     this.props.onPressCloseModal();
+    this.props.onFinishPayment();
   };
 
   render() {
@@ -84,7 +115,7 @@ class PaymentMethodModal extends React.Component {
                 onPress={this.props.onPressCloseModal}
               />
               <Button
-                title={'Pay'}
+                title={this.state.buttonTitle}
                 titleStyle={styles.buttonTitleDefaultStyle}
                 buttonStyle={[
                   styles.buttonDefaultStyle,
@@ -105,11 +136,13 @@ class PaymentMethodModal extends React.Component {
 PaymentMethodModal.propTypes = {
   visible: PropTypes.bool,
   onPressCloseModal: PropTypes.func,
+  onFinishPayment: PropTypes.func,
 };
 
 PaymentMethodModal.defaultProps = {
   visible: true,
   onPressCloseModal: () => {},
+  onFinishPayment: () => {},
 };
 
 const styles = StyleSheet.create({
@@ -168,4 +201,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, {})(PaymentMethodModal);
+const mapStateToProps = state => ({
+  shoppingCart: state.checkout.shoppingCart,
+  shippingAddress: state.checkout.shippingAddress,
+  billingAddress: state.checkout.billingAddress,
+  deliveryDayOfWeek: state.checkout.deliveryDayOfWeek,
+  deliveryTime: state.checkout.deliveryTime,
+});
+
+export default connect(
+  mapStateToProps,
+  { createOrder }
+)(PaymentMethodModal);

@@ -25,12 +25,13 @@ type User {
   phone: String
   billingAddress: Address @relation(name: "UserBillingAddress")
   shippingAddress: [Address!] @relation(name: "UserShippingAddresses")
-  paymentId: String
   avatar: String
   cart: [CartItem!]!
   orders: [Order!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+
+  paymentCustomerId: String
 }
 
 type CartItem {
@@ -66,9 +67,10 @@ type Order {
   paymentDate: DateTime!
   cancelDate: DateTime
   total: Int!
-  charge: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+
+  paymentSubscriptionId: String!
 }
 
 type OrderItem {
@@ -80,7 +82,7 @@ type OrderItem {
   mealPrice: Int!
   thumbnailImage: String
   largeImage: String
-  order: Order
+  order: Order!
   size: Float!
   tag: String
 }

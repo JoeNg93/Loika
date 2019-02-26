@@ -369,12 +369,12 @@ export type OrderOrderByInput =
   | "cancelDate_DESC"
   | "total_ASC"
   | "total_DESC"
-  | "charge_ASC"
-  | "charge_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "paymentSubscriptionId_ASC"
+  | "paymentSubscriptionId_DESC";
 
 export type OrderItemOrderByInput =
   | "id_ASC"
@@ -443,14 +443,14 @@ export type UserOrderByInput =
   | "resetTokenExpiry_DESC"
   | "phone_ASC"
   | "phone_DESC"
-  | "paymentId_ASC"
-  | "paymentId_DESC"
   | "avatar_ASC"
   | "avatar_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "paymentCustomerId_ASC"
+  | "paymentCustomerId_DESC";
 
 export type AddressWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
@@ -831,20 +831,6 @@ export interface UserWhereInput {
   shippingAddress_every?: AddressWhereInput;
   shippingAddress_some?: AddressWhereInput;
   shippingAddress_none?: AddressWhereInput;
-  paymentId?: String;
-  paymentId_not?: String;
-  paymentId_in?: String[] | String;
-  paymentId_not_in?: String[] | String;
-  paymentId_lt?: String;
-  paymentId_lte?: String;
-  paymentId_gt?: String;
-  paymentId_gte?: String;
-  paymentId_contains?: String;
-  paymentId_not_contains?: String;
-  paymentId_starts_with?: String;
-  paymentId_not_starts_with?: String;
-  paymentId_ends_with?: String;
-  paymentId_not_ends_with?: String;
   avatar?: String;
   avatar_not?: String;
   avatar_in?: String[] | String;
@@ -881,6 +867,20 @@ export interface UserWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  paymentCustomerId?: String;
+  paymentCustomerId_not?: String;
+  paymentCustomerId_in?: String[] | String;
+  paymentCustomerId_not_in?: String[] | String;
+  paymentCustomerId_lt?: String;
+  paymentCustomerId_lte?: String;
+  paymentCustomerId_gt?: String;
+  paymentCustomerId_gte?: String;
+  paymentCustomerId_contains?: String;
+  paymentCustomerId_not_contains?: String;
+  paymentCustomerId_starts_with?: String;
+  paymentCustomerId_not_starts_with?: String;
+  paymentCustomerId_ends_with?: String;
+  paymentCustomerId_not_ends_with?: String;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
@@ -959,20 +959,6 @@ export interface OrderWhereInput {
   total_lte?: Int;
   total_gt?: Int;
   total_gte?: Int;
-  charge?: String;
-  charge_not?: String;
-  charge_in?: String[] | String;
-  charge_not_in?: String[] | String;
-  charge_lt?: String;
-  charge_lte?: String;
-  charge_gt?: String;
-  charge_gte?: String;
-  charge_contains?: String;
-  charge_not_contains?: String;
-  charge_starts_with?: String;
-  charge_not_starts_with?: String;
-  charge_ends_with?: String;
-  charge_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -989,6 +975,20 @@ export interface OrderWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  paymentSubscriptionId?: String;
+  paymentSubscriptionId_not?: String;
+  paymentSubscriptionId_in?: String[] | String;
+  paymentSubscriptionId_not_in?: String[] | String;
+  paymentSubscriptionId_lt?: String;
+  paymentSubscriptionId_lte?: String;
+  paymentSubscriptionId_gt?: String;
+  paymentSubscriptionId_gte?: String;
+  paymentSubscriptionId_contains?: String;
+  paymentSubscriptionId_not_contains?: String;
+  paymentSubscriptionId_starts_with?: String;
+  paymentSubscriptionId_not_starts_with?: String;
+  paymentSubscriptionId_ends_with?: String;
+  paymentSubscriptionId_not_ends_with?: String;
   AND?: OrderWhereInput[] | OrderWhereInput;
   OR?: OrderWhereInput[] | OrderWhereInput;
   NOT?: OrderWhereInput[] | OrderWhereInput;
@@ -1208,9 +1208,9 @@ export interface UserCreateWithoutCartInput {
   phone?: String;
   billingAddress?: AddressCreateOneInput;
   shippingAddress?: AddressCreateManyInput;
-  paymentId?: String;
   avatar?: String;
   orders?: OrderCreateManyWithoutUserInput;
+  paymentCustomerId?: String;
 }
 
 export interface UserCreatepermissionsInput {
@@ -1241,7 +1241,7 @@ export interface OrderCreateWithoutUserInput {
   paymentDate: DateTimeInput;
   cancelDate?: DateTimeInput;
   total: Int;
-  charge: String;
+  paymentSubscriptionId: String;
 }
 
 export interface OrderItemCreateManyWithoutOrderInput {
@@ -1312,9 +1312,9 @@ export interface UserUpdateWithoutCartDataInput {
   phone?: String;
   billingAddress?: AddressUpdateOneInput;
   shippingAddress?: AddressUpdateManyInput;
-  paymentId?: String;
   avatar?: String;
   orders?: OrderUpdateManyWithoutUserInput;
+  paymentCustomerId?: String;
 }
 
 export interface UserUpdatepermissionsInput {
@@ -1519,7 +1519,7 @@ export interface OrderUpdateWithoutUserDataInput {
   paymentDate?: DateTimeInput;
   cancelDate?: DateTimeInput;
   total?: Int;
-  charge?: String;
+  paymentSubscriptionId?: String;
 }
 
 export interface OrderItemUpdateManyWithoutOrderInput {
@@ -1789,20 +1789,6 @@ export interface OrderScalarWhereInput {
   total_lte?: Int;
   total_gt?: Int;
   total_gte?: Int;
-  charge?: String;
-  charge_not?: String;
-  charge_in?: String[] | String;
-  charge_not_in?: String[] | String;
-  charge_lt?: String;
-  charge_lte?: String;
-  charge_gt?: String;
-  charge_gte?: String;
-  charge_contains?: String;
-  charge_not_contains?: String;
-  charge_starts_with?: String;
-  charge_not_starts_with?: String;
-  charge_ends_with?: String;
-  charge_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -1819,6 +1805,20 @@ export interface OrderScalarWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  paymentSubscriptionId?: String;
+  paymentSubscriptionId_not?: String;
+  paymentSubscriptionId_in?: String[] | String;
+  paymentSubscriptionId_not_in?: String[] | String;
+  paymentSubscriptionId_lt?: String;
+  paymentSubscriptionId_lte?: String;
+  paymentSubscriptionId_gt?: String;
+  paymentSubscriptionId_gte?: String;
+  paymentSubscriptionId_contains?: String;
+  paymentSubscriptionId_not_contains?: String;
+  paymentSubscriptionId_starts_with?: String;
+  paymentSubscriptionId_not_starts_with?: String;
+  paymentSubscriptionId_ends_with?: String;
+  paymentSubscriptionId_not_ends_with?: String;
   AND?: OrderScalarWhereInput[] | OrderScalarWhereInput;
   OR?: OrderScalarWhereInput[] | OrderScalarWhereInput;
   NOT?: OrderScalarWhereInput[] | OrderScalarWhereInput;
@@ -1835,7 +1835,7 @@ export interface OrderUpdateManyDataInput {
   paymentDate?: DateTimeInput;
   cancelDate?: DateTimeInput;
   total?: Int;
-  charge?: String;
+  paymentSubscriptionId?: String;
 }
 
 export interface UserUpsertWithoutCartInput {
@@ -1857,7 +1857,7 @@ export interface OrderCreateInput {
   paymentDate: DateTimeInput;
   cancelDate?: DateTimeInput;
   total: Int;
-  charge: String;
+  paymentSubscriptionId: String;
 }
 
 export interface UserCreateOneWithoutOrdersInput {
@@ -1875,9 +1875,9 @@ export interface UserCreateWithoutOrdersInput {
   phone?: String;
   billingAddress?: AddressCreateOneInput;
   shippingAddress?: AddressCreateManyInput;
-  paymentId?: String;
   avatar?: String;
   cart?: CartItemCreateManyWithoutUserInput;
+  paymentCustomerId?: String;
 }
 
 export interface CartItemCreateManyWithoutUserInput {
@@ -1900,7 +1900,7 @@ export interface OrderUpdateInput {
   paymentDate?: DateTimeInput;
   cancelDate?: DateTimeInput;
   total?: Int;
-  charge?: String;
+  paymentSubscriptionId?: String;
 }
 
 export interface UserUpdateOneRequiredWithoutOrdersInput {
@@ -1920,9 +1920,9 @@ export interface UserUpdateWithoutOrdersDataInput {
   phone?: String;
   billingAddress?: AddressUpdateOneInput;
   shippingAddress?: AddressUpdateManyInput;
-  paymentId?: String;
   avatar?: String;
   cart?: CartItemUpdateManyWithoutUserInput;
+  paymentCustomerId?: String;
 }
 
 export interface CartItemUpdateManyWithoutUserInput {
@@ -2006,7 +2006,7 @@ export interface OrderUpdateManyMutationInput {
   paymentDate?: DateTimeInput;
   cancelDate?: DateTimeInput;
   total?: Int;
-  charge?: String;
+  paymentSubscriptionId?: String;
 }
 
 export interface OrderItemCreateInput {
@@ -2017,7 +2017,7 @@ export interface OrderItemCreateInput {
   mealPrice: Int;
   thumbnailImage?: String;
   largeImage?: String;
-  order?: OrderCreateOneWithoutItemsInput;
+  order: OrderCreateOneWithoutItemsInput;
   size: Float;
   tag?: String;
 }
@@ -2036,7 +2036,7 @@ export interface OrderCreateWithoutItemsInput {
   paymentDate: DateTimeInput;
   cancelDate?: DateTimeInput;
   total: Int;
-  charge: String;
+  paymentSubscriptionId: String;
 }
 
 export interface OrderItemUpdateInput {
@@ -2047,17 +2047,15 @@ export interface OrderItemUpdateInput {
   mealPrice?: Int;
   thumbnailImage?: String;
   largeImage?: String;
-  order?: OrderUpdateOneWithoutItemsInput;
+  order?: OrderUpdateOneRequiredWithoutItemsInput;
   size?: Float;
   tag?: String;
 }
 
-export interface OrderUpdateOneWithoutItemsInput {
+export interface OrderUpdateOneRequiredWithoutItemsInput {
   create?: OrderCreateWithoutItemsInput;
   update?: OrderUpdateWithoutItemsDataInput;
   upsert?: OrderUpsertWithoutItemsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
   connect?: OrderWhereUniqueInput;
 }
 
@@ -2070,7 +2068,7 @@ export interface OrderUpdateWithoutItemsDataInput {
   paymentDate?: DateTimeInput;
   cancelDate?: DateTimeInput;
   total?: Int;
-  charge?: String;
+  paymentSubscriptionId?: String;
 }
 
 export interface OrderUpsertWithoutItemsInput {
@@ -2124,10 +2122,10 @@ export interface UserCreateInput {
   phone?: String;
   billingAddress?: AddressCreateOneInput;
   shippingAddress?: AddressCreateManyInput;
-  paymentId?: String;
   avatar?: String;
   cart?: CartItemCreateManyWithoutUserInput;
   orders?: OrderCreateManyWithoutUserInput;
+  paymentCustomerId?: String;
 }
 
 export interface UserUpdateInput {
@@ -2140,10 +2138,10 @@ export interface UserUpdateInput {
   phone?: String;
   billingAddress?: AddressUpdateOneInput;
   shippingAddress?: AddressUpdateManyInput;
-  paymentId?: String;
   avatar?: String;
   cart?: CartItemUpdateManyWithoutUserInput;
   orders?: OrderUpdateManyWithoutUserInput;
+  paymentCustomerId?: String;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -2154,8 +2152,8 @@ export interface UserUpdateManyMutationInput {
   resetTokenExpiry?: Float;
   permissions?: UserUpdatepermissionsInput;
   phone?: String;
-  paymentId?: String;
   avatar?: String;
+  paymentCustomerId?: String;
 }
 
 export interface NodeNode {
@@ -2304,10 +2302,10 @@ export interface User {
   resetTokenExpiry?: Float;
   permissions: Permission[];
   phone?: String;
-  paymentId?: String;
   avatar?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  paymentCustomerId?: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -2331,7 +2329,6 @@ export interface UserPromise extends Promise<User>, Fragmentable {
       last?: Int;
     }
   ) => T;
-  paymentId: () => Promise<String>;
   avatar: () => Promise<String>;
   cart: <T = FragmentableArray<CartItem>>(
     args?: {
@@ -2357,6 +2354,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   ) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  paymentCustomerId: () => Promise<String>;
 }
 
 export interface UserSubscription
@@ -2382,7 +2380,6 @@ export interface UserSubscription
       last?: Int;
     }
   ) => T;
-  paymentId: () => Promise<AsyncIterator<String>>;
   avatar: () => Promise<AsyncIterator<String>>;
   cart: <T = Promise<AsyncIterator<CartItemSubscription>>>(
     args?: {
@@ -2408,6 +2405,7 @@ export interface UserSubscription
   ) => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  paymentCustomerId: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Order {
@@ -2417,9 +2415,9 @@ export interface Order {
   paymentDate: DateTimeOutput;
   cancelDate?: DateTimeOutput;
   total: Int;
-  charge: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  paymentSubscriptionId: String;
 }
 
 export interface OrderPromise extends Promise<Order>, Fragmentable {
@@ -2443,9 +2441,9 @@ export interface OrderPromise extends Promise<Order>, Fragmentable {
   paymentDate: () => Promise<DateTimeOutput>;
   cancelDate: () => Promise<DateTimeOutput>;
   total: () => Promise<Int>;
-  charge: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  paymentSubscriptionId: () => Promise<String>;
 }
 
 export interface OrderSubscription
@@ -2471,9 +2469,9 @@ export interface OrderSubscription
   paymentDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   cancelDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   total: () => Promise<AsyncIterator<Int>>;
-  charge: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  paymentSubscriptionId: () => Promise<AsyncIterator<String>>;
 }
 
 export interface OrderItem {

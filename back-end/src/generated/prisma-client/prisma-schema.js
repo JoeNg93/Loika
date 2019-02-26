@@ -595,9 +595,9 @@ type Order {
   paymentDate: DateTime!
   cancelDate: DateTime
   total: Int!
-  charge: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  paymentSubscriptionId: String!
 }
 
 type OrderConnection {
@@ -616,7 +616,7 @@ input OrderCreateInput {
   paymentDate: DateTime!
   cancelDate: DateTime
   total: Int!
-  charge: String!
+  paymentSubscriptionId: String!
 }
 
 input OrderCreateManyWithoutUserInput {
@@ -638,7 +638,7 @@ input OrderCreateWithoutItemsInput {
   paymentDate: DateTime!
   cancelDate: DateTime
   total: Int!
-  charge: String!
+  paymentSubscriptionId: String!
 }
 
 input OrderCreateWithoutUserInput {
@@ -650,7 +650,7 @@ input OrderCreateWithoutUserInput {
   paymentDate: DateTime!
   cancelDate: DateTime
   total: Int!
-  charge: String!
+  paymentSubscriptionId: String!
 }
 
 type OrderEdge {
@@ -667,7 +667,7 @@ type OrderItem {
   mealPrice: Int!
   thumbnailImage: String
   largeImage: String
-  order: Order
+  order: Order!
   size: Float!
   tag: String
 }
@@ -686,7 +686,7 @@ input OrderItemCreateInput {
   mealPrice: Int!
   thumbnailImage: String
   largeImage: String
-  order: OrderCreateOneWithoutItemsInput
+  order: OrderCreateOneWithoutItemsInput!
   size: Float!
   tag: String
 }
@@ -876,7 +876,7 @@ input OrderItemUpdateInput {
   mealPrice: Int
   thumbnailImage: String
   largeImage: String
-  order: OrderUpdateOneWithoutItemsInput
+  order: OrderUpdateOneRequiredWithoutItemsInput
   size: Float
   tag: String
 }
@@ -1090,12 +1090,12 @@ enum OrderOrderByInput {
   cancelDate_DESC
   total_ASC
   total_DESC
-  charge_ASC
-  charge_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  paymentSubscriptionId_ASC
+  paymentSubscriptionId_DESC
 }
 
 input OrderScalarWhereInput {
@@ -1165,20 +1165,6 @@ input OrderScalarWhereInput {
   total_lte: Int
   total_gt: Int
   total_gte: Int
-  charge: String
-  charge_not: String
-  charge_in: [String!]
-  charge_not_in: [String!]
-  charge_lt: String
-  charge_lte: String
-  charge_gt: String
-  charge_gte: String
-  charge_contains: String
-  charge_not_contains: String
-  charge_starts_with: String
-  charge_not_starts_with: String
-  charge_ends_with: String
-  charge_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1195,6 +1181,20 @@ input OrderScalarWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  paymentSubscriptionId: String
+  paymentSubscriptionId_not: String
+  paymentSubscriptionId_in: [String!]
+  paymentSubscriptionId_not_in: [String!]
+  paymentSubscriptionId_lt: String
+  paymentSubscriptionId_lte: String
+  paymentSubscriptionId_gt: String
+  paymentSubscriptionId_gte: String
+  paymentSubscriptionId_contains: String
+  paymentSubscriptionId_not_contains: String
+  paymentSubscriptionId_starts_with: String
+  paymentSubscriptionId_not_starts_with: String
+  paymentSubscriptionId_ends_with: String
+  paymentSubscriptionId_not_ends_with: String
   AND: [OrderScalarWhereInput!]
   OR: [OrderScalarWhereInput!]
   NOT: [OrderScalarWhereInput!]
@@ -1210,7 +1210,7 @@ input OrderUpdateInput {
   paymentDate: DateTime
   cancelDate: DateTime
   total: Int
-  charge: String
+  paymentSubscriptionId: String
 }
 
 input OrderUpdateManyDataInput {
@@ -1219,7 +1219,7 @@ input OrderUpdateManyDataInput {
   paymentDate: DateTime
   cancelDate: DateTime
   total: Int
-  charge: String
+  paymentSubscriptionId: String
 }
 
 input OrderUpdateManyMutationInput {
@@ -1228,7 +1228,7 @@ input OrderUpdateManyMutationInput {
   paymentDate: DateTime
   cancelDate: DateTime
   total: Int
-  charge: String
+  paymentSubscriptionId: String
 }
 
 input OrderUpdateManyWithoutUserInput {
@@ -1247,12 +1247,10 @@ input OrderUpdateManyWithWhereNestedInput {
   data: OrderUpdateManyDataInput!
 }
 
-input OrderUpdateOneWithoutItemsInput {
+input OrderUpdateOneRequiredWithoutItemsInput {
   create: OrderCreateWithoutItemsInput
   update: OrderUpdateWithoutItemsDataInput
   upsert: OrderUpsertWithoutItemsInput
-  delete: Boolean
-  disconnect: Boolean
   connect: OrderWhereUniqueInput
 }
 
@@ -1265,7 +1263,7 @@ input OrderUpdateWithoutItemsDataInput {
   paymentDate: DateTime
   cancelDate: DateTime
   total: Int
-  charge: String
+  paymentSubscriptionId: String
 }
 
 input OrderUpdateWithoutUserDataInput {
@@ -1277,7 +1275,7 @@ input OrderUpdateWithoutUserDataInput {
   paymentDate: DateTime
   cancelDate: DateTime
   total: Int
-  charge: String
+  paymentSubscriptionId: String
 }
 
 input OrderUpdateWithWhereUniqueWithoutUserInput {
@@ -1369,20 +1367,6 @@ input OrderWhereInput {
   total_lte: Int
   total_gt: Int
   total_gte: Int
-  charge: String
-  charge_not: String
-  charge_in: [String!]
-  charge_not_in: [String!]
-  charge_lt: String
-  charge_lte: String
-  charge_gt: String
-  charge_gte: String
-  charge_contains: String
-  charge_not_contains: String
-  charge_starts_with: String
-  charge_not_starts_with: String
-  charge_ends_with: String
-  charge_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1399,6 +1383,20 @@ input OrderWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  paymentSubscriptionId: String
+  paymentSubscriptionId_not: String
+  paymentSubscriptionId_in: [String!]
+  paymentSubscriptionId_not_in: [String!]
+  paymentSubscriptionId_lt: String
+  paymentSubscriptionId_lte: String
+  paymentSubscriptionId_gt: String
+  paymentSubscriptionId_gte: String
+  paymentSubscriptionId_contains: String
+  paymentSubscriptionId_not_contains: String
+  paymentSubscriptionId_starts_with: String
+  paymentSubscriptionId_not_starts_with: String
+  paymentSubscriptionId_ends_with: String
+  paymentSubscriptionId_not_ends_with: String
   AND: [OrderWhereInput!]
   OR: [OrderWhereInput!]
   NOT: [OrderWhereInput!]
@@ -1721,12 +1719,12 @@ type User {
   phone: String
   billingAddress: Address
   shippingAddress(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address!]
-  paymentId: String
   avatar: String
   cart(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartItem!]
   orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
   createdAt: DateTime!
   updatedAt: DateTime!
+  paymentCustomerId: String
 }
 
 type UserConnection {
@@ -1745,10 +1743,10 @@ input UserCreateInput {
   phone: String
   billingAddress: AddressCreateOneInput
   shippingAddress: AddressCreateManyInput
-  paymentId: String
   avatar: String
   cart: CartItemCreateManyWithoutUserInput
   orders: OrderCreateManyWithoutUserInput
+  paymentCustomerId: String
 }
 
 input UserCreateOneWithoutCartInput {
@@ -1775,9 +1773,9 @@ input UserCreateWithoutCartInput {
   phone: String
   billingAddress: AddressCreateOneInput
   shippingAddress: AddressCreateManyInput
-  paymentId: String
   avatar: String
   orders: OrderCreateManyWithoutUserInput
+  paymentCustomerId: String
 }
 
 input UserCreateWithoutOrdersInput {
@@ -1790,9 +1788,9 @@ input UserCreateWithoutOrdersInput {
   phone: String
   billingAddress: AddressCreateOneInput
   shippingAddress: AddressCreateManyInput
-  paymentId: String
   avatar: String
   cart: CartItemCreateManyWithoutUserInput
+  paymentCustomerId: String
 }
 
 type UserEdge {
@@ -1815,14 +1813,14 @@ enum UserOrderByInput {
   resetTokenExpiry_DESC
   phone_ASC
   phone_DESC
-  paymentId_ASC
-  paymentId_DESC
   avatar_ASC
   avatar_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  paymentCustomerId_ASC
+  paymentCustomerId_DESC
 }
 
 input UserUpdateInput {
@@ -1835,10 +1833,10 @@ input UserUpdateInput {
   phone: String
   billingAddress: AddressUpdateOneInput
   shippingAddress: AddressUpdateManyInput
-  paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
   orders: OrderUpdateManyWithoutUserInput
+  paymentCustomerId: String
 }
 
 input UserUpdateManyMutationInput {
@@ -1849,8 +1847,8 @@ input UserUpdateManyMutationInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   phone: String
-  paymentId: String
   avatar: String
+  paymentCustomerId: String
 }
 
 input UserUpdateOneRequiredWithoutCartInput {
@@ -1881,9 +1879,9 @@ input UserUpdateWithoutCartDataInput {
   phone: String
   billingAddress: AddressUpdateOneInput
   shippingAddress: AddressUpdateManyInput
-  paymentId: String
   avatar: String
   orders: OrderUpdateManyWithoutUserInput
+  paymentCustomerId: String
 }
 
 input UserUpdateWithoutOrdersDataInput {
@@ -1896,9 +1894,9 @@ input UserUpdateWithoutOrdersDataInput {
   phone: String
   billingAddress: AddressUpdateOneInput
   shippingAddress: AddressUpdateManyInput
-  paymentId: String
   avatar: String
   cart: CartItemUpdateManyWithoutUserInput
+  paymentCustomerId: String
 }
 
 input UserUpsertWithoutCartInput {
@@ -2008,20 +2006,6 @@ input UserWhereInput {
   shippingAddress_every: AddressWhereInput
   shippingAddress_some: AddressWhereInput
   shippingAddress_none: AddressWhereInput
-  paymentId: String
-  paymentId_not: String
-  paymentId_in: [String!]
-  paymentId_not_in: [String!]
-  paymentId_lt: String
-  paymentId_lte: String
-  paymentId_gt: String
-  paymentId_gte: String
-  paymentId_contains: String
-  paymentId_not_contains: String
-  paymentId_starts_with: String
-  paymentId_not_starts_with: String
-  paymentId_ends_with: String
-  paymentId_not_ends_with: String
   avatar: String
   avatar_not: String
   avatar_in: [String!]
@@ -2058,6 +2042,20 @@ input UserWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  paymentCustomerId: String
+  paymentCustomerId_not: String
+  paymentCustomerId_in: [String!]
+  paymentCustomerId_not_in: [String!]
+  paymentCustomerId_lt: String
+  paymentCustomerId_lte: String
+  paymentCustomerId_gt: String
+  paymentCustomerId_gte: String
+  paymentCustomerId_contains: String
+  paymentCustomerId_not_contains: String
+  paymentCustomerId_starts_with: String
+  paymentCustomerId_not_starts_with: String
+  paymentCustomerId_ends_with: String
+  paymentCustomerId_not_ends_with: String
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

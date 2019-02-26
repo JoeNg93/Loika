@@ -50,75 +50,135 @@ export const addShippingAddress = addressInfo => async dispatch => {
   }
 };
 
-export const addOrder = order => async dispatch => {
+export const createOrder = ({
+  billingAddressId,
+  shippingAddressId,
+  deliveryDayOfWeek,
+  deliveryTime,
+  subscriptionIds,
+  total,
+  paymentInfo,
+  cardNumber,
+  expirationDate,
+  cvv,
+}) => async dispatch => {
   dispatch({ type: actionTypes.ADD_ORDER_PENDING });
   const accessToken = await AsyncStorage.getItem('accessToken');
+  let subscriptionIdsString = '';
+  subscriptionIdsString += '[';
+  for (let subscriptionId of subscriptionIds) {
+    subscriptionIdsString += `"${subscriptionId}",`;
+  }
+  subscriptionIdsString =
+    subscriptionIdsString.substr(0, subscriptionIdsString.length - 1) + ']';
+
+  console.log(subscriptionIdsString);
+
+  let query;
+  if (paymentInfo) {
+    const { cardNumber, expirationDate, cvv } = paymentInfo;
+    query = `
+      mutation {
+        createOrder(
+          billingAddressId: "${billingAddressId}",
+          shippingAddressId: "${shippingAddressId}",
+          deliveryDayOfWeek: "${deliveryDayOfWeek}",
+          deliveryTime: "${deliveryTime}",
+          subscriptionIds: ${subscriptionIdsString},
+          total: ${total},
+          cardNumber: "${cardNumber}",
+          expirationDate: "${expirationDate}",
+          cvv: "${cvv}"
+        ) {
+          id,
+          deliveryDayOfWeek,
+          deliveryTime,
+          paymentDate,
+          cancelDate,
+          shippingAddress {
+            id,
+            name,
+            phoneNumber,
+            city,
+            country,
+            postcode,
+            address
+          },
+          total,
+          items {
+            id,
+            title,
+            shortDescription,
+            longDescription,
+            mealPrice,
+            totalPrice,
+            largeImage,
+            thumbnailImage,
+            size,
+            tag
+          }
+        }
+      }
+    `;
+  } else {
+    query = `
+      mutation {
+        createOrder(
+          billingAddressId: "${billingAddressId}",
+          shippingAddressId: "${shippingAddressId}",
+          deliveryDayOfWeek: "${deliveryDayOfWeek}",
+          deliveryTime: "${deliveryTime}",
+          subscriptionIds: ${subscriptionIdsString},
+          total: ${total}
+        ) {
+          id,
+          deliveryDayOfWeek,
+          deliveryTime,
+          paymentDate,
+          cancelDate,
+          shippingAddress {
+            id,
+            name,
+            phoneNumber,
+            city,
+            country,
+            postcode,
+            address
+          },
+          total,
+          items {
+            id,
+            title,
+            shortDescription,
+            longDescription,
+            mealPrice,
+            totalPrice,
+            largeImage,
+            thumbnailImage,
+            size,
+            tag
+          }
+        }
+      }
+    `;
+  }
 
   try {
-    // const res = await axios.post(
-    //   baseURL,
-    //   {
-    //     query: `
-    //     query {
-    //       me {
-    //         id,
-    //         billingAddress {
-    //           id,
-    //           name,
-    //           phoneNumber,
-    //           city,
-    //           country,
-    //           postcode,
-    //           address
-    //         },
-    //         email,
-    //         name,
-    //         orders {
-    //           billingAddress {
-    //             id,
-    //             name,
-    //             phoneNumber,
-    //             city,
-    //             country,
-    //             postcode,
-    //             address
-    //           },
-    //           deliveryDayOfWeek,
-    //           deliveryTime,
-    //           paymentDate,
-    //           shippingAddress {
-    //             id,
-    //             name,
-    //             phoneNumber,
-    //             city,
-    //             country,
-    //             postcode,
-    //             address
-    //           },
-    //           total
-    //         },
-    //         shippingAddress {
-    //           id,
-    //           name,
-    //           phoneNumber,
-    //           city,
-    //           country,
-    //           postcode,
-    //           address
-    //         }
-    //       }
-    //     }
-    //   `,
-    //   },
-    //   { headers: { Authorization: accessToken } }
-    // );
+    const res = await axios.post(
+      baseURL,
+      {
+        query,
+      },
+      { headers: { Authorization: accessToken } }
+    );
 
+    const { createOrder } = res.data.data;
     dispatch({
       type: actionTypes.ADD_ORDER_SUCCESS,
-      payload: order,
+      payload: createOrder,
     });
   } catch (err) {
-    console.log('ERROR - addOrder', err.response.data);
+    console.log('ERROR createOrder: ', err.response.data);
     dispatch({ type: actionTypes.ADD_ORDER_FAIL });
   }
 };
