@@ -34,7 +34,7 @@ const MySubscriptionStack = createStackNavigator(
 );
 
 MySubscriptionStack.navigationOptions = ({ navigation }) => {
-  const tabBarLabel = 'Subscriptions';
+  const tabBarLabel = 'Subscription';
   const tabBarIcon = ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -51,7 +51,7 @@ const OrderHistoryStack = createStackNavigator({
 });
 
 OrderHistoryStack.navigationOptions = {
-  tabBarLabel: 'Order History',
+  tabBarLabel: 'Your order',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -65,7 +65,7 @@ const UserProfileStack = createStackNavigator({
 });
 
 UserProfileStack.navigationOptions = {
-  tabBarLabel: 'User Profile',
+  tabBarLabel: 'Profile',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
