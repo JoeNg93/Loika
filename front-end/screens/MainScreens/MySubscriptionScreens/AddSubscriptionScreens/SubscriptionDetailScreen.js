@@ -92,13 +92,13 @@ class SubscriptionDetailScreen extends React.Component {
           <View>
             <Text style={styles.descriptionTitle}>ABOUT</Text>
             <Text style={[styles.descriptionContent, { marginTop: 10 }]}>
-              {selectedSubscription.longDescription}
+              {selectedSubscription.shortDescription}
             </Text>
           </View>
           <View>
             <Text style={styles.descriptionTitle}>SAMPLE CONTENT</Text>
             <View style={{ marginTop: 10 }}>
-              {this.splitSampleContent(this.mockSampleContent)}
+              {this.splitSampleContent(selectedSubscription.longDescription)}
             </View>
           </View>
         </View>
