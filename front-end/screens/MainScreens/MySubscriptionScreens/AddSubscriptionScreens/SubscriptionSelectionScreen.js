@@ -33,6 +33,7 @@ const width = Layout.window.width;
 
 class SubscriptionSelectionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
+    const numOfItems = navigation.getParam('items');
     return {
       headerTitle: 'Choose your subscription',
       headerBackTitle: null,
@@ -66,9 +67,7 @@ class SubscriptionSelectionScreen extends React.Component {
                   borderRadius: 5.5,
                 },
                 {
-                  opacity: navigation.getParam('opacity')
-                    ? navigation.getParam('opacity')
-                    : 0,
+                  opacity: numOfItems ? 1 : 0,
                 },
               ]}
             >
@@ -80,7 +79,7 @@ class SubscriptionSelectionScreen extends React.Component {
                   ...commonStyles.textMediumCarmine,
                 }}
               >
-                {navigation.getParam('items')}
+                {numOfItems}
               </Text>
             </View>
           </View>
