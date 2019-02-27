@@ -27,7 +27,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         ...state,
         user: {
           ...state.user,
-          orders: [...state.user.orders, payload],
+          orders: [payload, ...state.user.orders],
         },
       };
     case userActionTypes.UPDATE_SHIPPING_ADDRESS_SUCCESS:
