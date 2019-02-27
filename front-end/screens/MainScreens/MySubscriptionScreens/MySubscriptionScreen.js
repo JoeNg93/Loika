@@ -185,12 +185,21 @@ class MySubscriptionScreen extends React.Component {
     }
 
     return (
-      <View style={styles.mainContainer}>
+      <View
+        style={[
+          styles.mainContainer,
+          user.orders &&
+            user.orders.length === 0 && { justifyContent: 'center' },
+        ]}
+      >
         {user.orders && user.orders.length > 0 ? (
           <View
-            style={{
-              paddingLeft: 32,
-            }}
+            style={[
+              {
+                paddingLeft: 32,
+              },
+              styles.mainContainer,
+            ]}
           >
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text style={styles.mainTitle}>Current subscriptions</Text>
@@ -234,7 +243,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: width,
-    justifyContent: 'center',
     marginTop: 40,
   },
   mainTitle: {

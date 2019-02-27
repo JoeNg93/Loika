@@ -6,7 +6,9 @@ import {
   Dimensions,
   Image,
   Platform,
+  TouchableHighlight,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import { boxNameToImageMapper } from '../../../../utils/mapper';
@@ -37,17 +39,14 @@ export default class SweetCarousel extends React.Component {
           },
         ]}
       >
-        <TouchableOpacity
-          onPress={() => onPressBoxImage(index)}
-          activeOpacity={1}
-        >
+        <TouchableWithoutFeedback onPressIn={() => onPressBoxImage(index)}>
           <View>
             <Image
               style={styles.image}
               source={boxNameToImageMapper[box.title]}
             />
           </View>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
     );
   }
