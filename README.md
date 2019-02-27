@@ -12,8 +12,7 @@ Loika took inspiration from the modern trend of food produces. There has been a 
 
 ## Technology Stack
 
-
-
+![TechStack](techStack.PNG)
 ## How to run the project
 
 ### Frontend
