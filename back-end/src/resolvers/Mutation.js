@@ -415,6 +415,19 @@ const Mutations = {
       orderItems.push(orderItem);
     }
 
+    const boxNameToPlanIdMapper = {
+      'Veggies Box': 'veggies_box_monthly',
+      'Milk Box': 'milk_box_monthly',
+      'Meaty Box': 'meaty_box_monthly',
+    };
+    const planIds = orderItems.map(o => ({
+      plan: boxNameToPlanIdMapper[o.title],
+    }));
+    const subscription = await stripe.subscriptions.create({
+      customer: user.paymentCustomerId,
+      items: planIds,
+    });
+
     const order = await prisma.createOrder({
       user: { connect: { id: userId } },
       items: { create: orderItems },
@@ -432,25 +445,7 @@ const Mutations = {
       deliveryDayOfWeek: deliveryDayOfWeek,
       paymentDate: new Date().toISOString(),
       total: total,
-    });
-
-    const boxNameToPlanIdMapper = {
-      'Veggies Box': 'veggies_box_monthly',
-      'Milk Box': 'milk_box_monthly',
-      'Meaty Box': 'meaty_box_monthly',
-    };
-    const planIds = orderItems.map(o => ({
-      plan: boxNameToPlanIdMapper[o.title],
-    }));
-    const subscription = await stripe.subscriptions.create({
-      customer: user.paymentCustomerId,
-      items: planIds,
-    });
-
-    console.log(subscription);
-    await prisma.updateOrder({
-      where: { id: order.id },
-      data: { paymentSubscriptionId: subscription.id },
+      paymentSubscriptionId: subscription.id,
     });
 
     order.shippingAddress = await prisma
