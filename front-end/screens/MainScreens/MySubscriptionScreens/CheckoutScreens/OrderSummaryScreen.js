@@ -197,7 +197,7 @@ class OrderSummaryScreen extends React.Component {
         <PaymentMethodModal
           visible={this.state.paymentModalVisible}
           onPressCloseModal={this.closePaymentModal}
-          onFinishPayment={() => this.props.navigation.navigate('Home')}
+          onFinishPayment={() => this.props.navigation.navigate('OrderSuccess')}
         />
       </View>
     );
